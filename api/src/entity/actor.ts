@@ -13,7 +13,7 @@ export class Actor {
     @Column({nullable : false})
     language: string;
 
-    @ManyToMany(() => Card)
+    @ManyToMany(() => Card, card => card.actors)
     @JoinTable()
     cards: Card[];
 

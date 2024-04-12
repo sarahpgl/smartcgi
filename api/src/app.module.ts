@@ -12,6 +12,14 @@ import { Card_Content } from './entity/card_content';
 import { Practice_Card } from './entity/practice_card';
 import { Best_Practice_Card } from './entity/best_practice_card';
 import { Bad_Practice_Card } from './entity/bad_practice_card';
+import { Green_IT_Booklet } from './entity/green_it_booklet';
+import { Game } from './entity/game';
+import { Question } from './entity/question';
+import { Question_Content } from './entity/question_content';
+import { Question_Answer } from './entity/question_answer';
+import { User_Game } from './entity/user_game';
+import { User } from './entity/user';
+import { CardModule } from './card/card.module';
 
 @Module({
   imports: [
@@ -33,10 +41,18 @@ import { Bad_Practice_Card } from './entity/bad_practice_card';
         Card_Content,
         Practice_Card,
         Best_Practice_Card, 
-        Bad_Practice_Card
+        Bad_Practice_Card,
+        Green_IT_Booklet,
+        Game,
+        Question,
+        Question_Content,
+        Question_Answer,
+        User_Game,
+        User
       ],
       synchronize: true
-    })
+    }),
+    CardModule
   ],
   controllers: [AppController],
   providers: [AppService],

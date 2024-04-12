@@ -5,5 +5,5 @@ import { Practice_Card } from "./practice_card";
 export class Best_Practice_Card extends Practice_Card {
 
     @Column({nullable: false})
-    carbon: number;
+    carbon_loss: number;
 }

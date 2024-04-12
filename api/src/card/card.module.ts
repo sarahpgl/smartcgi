@@ -1,0 +1,26 @@
+import { Module } from '@nestjs/common';
+import { CardService } from './card.service';
+import { CardController } from './card.controller';
+import { Card } from 'src/entity/card';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Best_Practice_Card } from 'src/entity/best_practice_card';
+import { Bad_Practice_Card } from 'src/entity/bad_practice_card';
+import { Training_Card } from 'src/entity/training_card';
+import { Expert_Card } from 'src/entity/expert_card';
+import { Card_Content } from 'src/entity/card_content';
+import { Actor } from 'src/entity/actor';
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([Card]),
+    TypeOrmModule.forFeature([Best_Practice_Card]),
+    TypeOrmModule.forFeature([Bad_Practice_Card]),
+    TypeOrmModule.forFeature([Training_Card]),
+    TypeOrmModule.forFeature([Expert_Card]),
+    TypeOrmModule.forFeature([Card_Content]),
+    TypeOrmModule.forFeature([Actor]),
+  ],
+  providers: [CardService],
+  controllers: [CardController]
+})
+export class CardModule {}
