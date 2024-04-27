@@ -1,5 +1,5 @@
 {
-  "name": "front",
+  "name": "@smart/front",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@smart/shared": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.7.5"

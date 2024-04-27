@@ -1,0 +1,16 @@
+{
+  "name": "@ldelcourt/smart",
+  "private": true,
+  "version": "1.0.0",
+  "author": "Sarah Pignol, Thibaut Chantrel, Gregoire Muller, Jade Leroux, Meije PigeonnAT",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "workspaces/*"
+    ]
+  },
+  "scripts": {
+    "client": "npm run dev --workspace=@smart/front",
+    "server": "npm run start --workspace=@smart/api"
+  }
+}

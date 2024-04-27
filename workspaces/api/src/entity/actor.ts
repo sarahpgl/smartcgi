@@ -3,7 +3,6 @@ import { Card } from "./card";
 
 @Entity()
 export class Actor {
-
     @PrimaryGeneratedColumn()
     id: number;
 

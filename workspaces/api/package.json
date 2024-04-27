@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@smart/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -27,6 +27,7 @@
     "@nestjs/platform-socket.io": "^10.3.5",
     "@nestjs/typeorm": "^10.0.2",
     "@nestjs/websockets": "^10.3.5",
+    "@smart/shared": "*",
     "class-transformer": "^0.5.1",
     "papaparse": "^5.4.1",
     "pg": "^8.11.3",
