@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CardController } from './card.controller';
-import { Card } from 'src/entity/card';
+import { Card } from '@app/entity/card';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Best_Practice_Card } from 'src/entity/best_practice_card';
-import { Bad_Practice_Card } from 'src/entity/bad_practice_card';
-import { Training_Card } from 'src/entity/training_card';
-import { Expert_Card } from 'src/entity/expert_card';
-import { Card_Content } from 'src/entity/card_content';
-import { Actor } from 'src/entity/actor';
+import { Best_Practice_Card } from '@app/entity/best_practice_card';
+import { Bad_Practice_Card } from '@app/entity/bad_practice_card';
+import { Training_Card } from '@app/entity/training_card';
+import { Expert_Card } from '@app/entity/expert_card';
+import { Card_Content } from '@app/entity/card_content';
+import { Actor } from '@app/entity/actor';
 
 @Module({
   imports: [

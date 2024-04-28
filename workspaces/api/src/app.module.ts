@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import configuration from 'config/configuration';
+import configuration from '../config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Card } from './entity/card';
 import { Actor } from './entity/actor';
@@ -20,6 +20,7 @@ import { Question_Answer } from './entity/question_answer';
 import { User_Game } from './entity/user_game';
 import { User } from './entity/user';
 import { CardModule } from './card/card.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -52,7 +53,8 @@ import { CardModule } from './card/card.module';
       ],
       synchronize: true
     }),
-    CardModule
+    CardModule,
+    GameModule,
   ],
   controllers: [AppController],
   providers: [AppService],

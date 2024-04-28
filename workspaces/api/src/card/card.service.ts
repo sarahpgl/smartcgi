@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { parse } from "papaparse";
 import { CsvCard } from "./card.type";
-import { Card } from "src/entity/card";
-import { Expert_Card } from "src/entity/expert_card";
+import { Card } from "@app/entity/card";
+import { Expert_Card } from "@app/entity/expert_card";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Best_Practice_Card } from "src/entity/best_practice_card";
-import { Bad_Practice_Card } from "src/entity/bad_practice_card";
-import { Training_Card } from "src/entity/training_card";
-import { Card_Content } from "src/entity/card_content";
-import { Actor } from "src/entity/actor";
-import { Practice_Card } from "src/entity/practice_card";
+import { Best_Practice_Card } from "@app/entity/best_practice_card";
+import { Bad_Practice_Card } from "@app/entity/bad_practice_card";
+import { Training_Card } from "@app/entity/training_card";
+import { Card_Content } from "@app/entity/card_content";
+import { Actor } from "@app/entity/actor";
+import { Practice_Card } from "@app/entity/practice_card";
 
 @Injectable()
 export class CardService {
