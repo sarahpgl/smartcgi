@@ -12,5 +12,12 @@
   "scripts": {
     "client": "npm run dev --workspace=@smart/front",
     "server": "npm run start:dev --workspace=@smart/api"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "decrypt": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2"
   }
 }
