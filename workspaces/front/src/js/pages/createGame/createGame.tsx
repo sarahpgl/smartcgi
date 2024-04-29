@@ -1,11 +1,11 @@
 import React from 'react';
 import HeaderTempo from '@app/js/components/HeaderTempo/HeaderTempo';
-import Lobby from '@app/js/components/Lobby/Lobby';
+import CreateGame from '@app/js/components/CreateGame/CreateGame';
 function Register(){
     return (
         <div>
         <HeaderTempo />
-        <Lobby />
+        <CreateGame />
         </div>
     )
 }

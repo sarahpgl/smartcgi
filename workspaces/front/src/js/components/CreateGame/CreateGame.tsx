@@ -1,8 +1,8 @@
 import React from 'react';
 
-import styles from './Lobby.module.css';
+import styles from './CreateGame.module.css';
 
-const Lobby: React.FC = () => {
+const CreateGame: React.FC = () => {
     return (
         <div className={styles.container}>
             <label className={styles.label}>kg de CO2 à économiser</label> <br />
@@ -14,4 +14,4 @@ const Lobby: React.FC = () => {
     );
 };
 
-export default Lobby;
+export default CreateGame;
