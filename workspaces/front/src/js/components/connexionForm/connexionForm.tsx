@@ -1,14 +1,17 @@
-
 import React, { useState } from 'react';
-import styles from './ConnexionForm.module.css';
+import styles from './connexionForm.module.css';
+import { useNavigate } from "react-router-dom";
 
-const ConnexionForm: React.FC = () => {
+
+
+const ConnexionForm = ({ onShowRegisterForm }) => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -16,9 +19,9 @@ const ConnexionForm: React.FC = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // Add your form submission logic here
+        navigate('/menu');
         console.log(formData);
     };
 
@@ -52,7 +55,7 @@ const ConnexionForm: React.FC = () => {
                 <label className={styles.label} >Pas de compte ?</label>
             </div>
             <div>
-                <button className={styles.buttonregister} type="submit">S'inscrire</button>
+                <button onClick={onShowRegisterForm} className={styles.buttonregister}>S'inscrire</button>
             </div>
         </form>
     );

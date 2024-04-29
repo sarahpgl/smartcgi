@@ -1,0 +1,21 @@
+.container{
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    color: black;
+    width: 400px;
+}
+.button{
+    text-align: left;
+    width: 60%;
+    height: 50px;
+    font-size :18px;
+    padding-left: 25px;
+    background-color: rgba(75, 149, 122, 0.25);
+    color: #000000;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 10px;
+}
