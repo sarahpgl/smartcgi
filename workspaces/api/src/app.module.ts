@@ -21,6 +21,8 @@ import { User_Game } from './entity/user_game';
 import { User } from './entity/user';
 import { CardModule } from './card/card.module';
 import { GameModule } from './game/game.module';
+import { AuthModule } from './authentification/authentification.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -55,6 +57,8 @@ import { GameModule } from './game/game.module';
     }),
     CardModule,
     GameModule,
+    AuthModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
