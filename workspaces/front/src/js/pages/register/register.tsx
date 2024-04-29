@@ -18,7 +18,7 @@ const RegisterPage = () => {
     <div className={styles.registerPage}>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
-            <img src={image} alt="Image de la tonne de bonnes pratiques" height={1000}} />
+            <img src={image} alt="Image de la tonne de bonnes pratiques"/>
         </div>
         <div className={styles.formContainer}>
           {showLoginForm ? (
