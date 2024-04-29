@@ -1,13 +1,13 @@
 import React from 'react';
 import HeaderTempo from '@app/js/components/HeaderTempo/HeaderTempo';
-import Lobby from '@app/js/components/Lobby/Lobby';
-function Register(){
+import LobbyComponent from '@app/js/components/LobbyComponent/LobbyComponent';
+function PageLobby(){
     return (
         <div>
         <HeaderTempo />
-        <Lobby />
+        <LobbyComponent />
         </div>
     )
 }
 
-export default Register;
+export default PageLobby;

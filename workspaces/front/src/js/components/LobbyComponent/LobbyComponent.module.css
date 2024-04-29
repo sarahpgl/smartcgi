@@ -32,8 +32,44 @@
   .code {
     color: #1f1f1f;
     font-size: 30px;
+    border: #9f9f9f;
+    padding: 10px;
+    border-style: solid;
+    border-radius: 30px;
+    position: relative;
+    transition: background-color 0.04s;
   }
-  
+
+  .code.copied::after {
+    content: "Copied";
+}
+
+  .code::after {
+    content: "Click to copy";
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .code:hover::after {
+    opacity: 1;
+  }
+  .code:hover {
+    background-color: aliceblue;
+    cursor: pointer;
+  }
+  .code:active {
+    background-color: #9bb9a6;
+  }
+
   .button {
     width: 40%;
     font-size: 20px;

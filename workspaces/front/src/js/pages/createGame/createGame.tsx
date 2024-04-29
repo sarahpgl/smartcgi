@@ -1,7 +1,7 @@
 import React from 'react';
 import HeaderTempo from '@app/js/components/HeaderTempo/HeaderTempo';
 import CreateGame from '@app/js/components/CreateGame/CreateGame';
-function Register(){
+function PageCreateGame(){
     return (
         <div>
         <HeaderTempo />
@@ -10,4 +10,4 @@ function Register(){
     )
 }
 
-export default Register;
+export default PageCreateGame;
