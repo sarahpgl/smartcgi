@@ -1,0 +1,14 @@
+/* HeaderTempo.css */
+
+.header {
+    text-align:center;
+    background-color: #b84646;
+    color: white;
+    z-index: 999; 
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    height: 100px;
+}
+
