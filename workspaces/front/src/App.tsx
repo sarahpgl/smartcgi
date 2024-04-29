@@ -7,6 +7,7 @@ import Register from './js/pages/register/register'
 import Home from './js/pages/home/home'
 import HeaderTempo from './js/components/HeaderTempo';
 import RegisterForm from './js/components/RegisterForm/RegisterForm';
+import ConnexionForm from './js/components/connexionForm/connexionForm';
 import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
@@ -15,6 +16,7 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
+        <Route path='/ConnexionForm' element={<ConnexionForm />} />
         <Route path="/RegisterForm" element={<RegisterForm />} />
         <Route path="/HeaderTempo" element={<HeaderTempo />} />
         <Route path="/register" element={<Register />} />

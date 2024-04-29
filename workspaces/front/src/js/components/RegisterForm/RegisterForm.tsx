@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import './RegisterForm.module.css';
+import '../../../CSS/App.css';
+import styles from './RegitserForm.module.css';
+
 
 const RegisterForm = () => {
   const [email, setEmail] = useState('');
@@ -59,7 +61,9 @@ const RegisterForm = () => {
             required
           />
         </div>
-        <button type="submit">S'inscrire</button>
+        <div>
+                <button className={styles.buttonregister} type="submit">S'inscrire</button>
+            </div>
       </form>
     </div>
   );

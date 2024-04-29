@@ -1,9 +1,9 @@
-
+import ConnexionForm from "@app/js/components/connexionForm/connexionForm";
 
 function Register(){
     return (
         <div>
-        <h1> Register </h1>
+        <ConnexionForm />
         </div>
     )
 }
