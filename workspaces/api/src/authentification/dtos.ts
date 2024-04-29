@@ -36,5 +36,5 @@ export class SignOutDto
 export class isConnectedDto
 {
   @IsString()
-  username: string ;
+  mail: string ;
 }

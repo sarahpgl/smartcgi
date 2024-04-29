@@ -34,6 +34,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('testAccess')
   testAccess(@Body() isConnectedDto: isConnectedDto) {
-    return this.authService.isConnected(isConnectedDto.username);
+    return this.authService.isConnected(isConnectedDto.mail);
   }
 }

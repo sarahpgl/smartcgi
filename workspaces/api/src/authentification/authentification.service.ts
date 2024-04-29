@@ -13,13 +13,13 @@ export class AuthService {
   ) {}
 
     async signIn(
-    username: string,
+    mail: string,
     pass: string,
   ): Promise<{ access_token: string }> {
     
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findOne(mail);
     if (!user) {
-      throw new UnauthorizedException('Invalid username');
+      throw new UnauthorizedException('Invalid mail');
     }
     const isPasswordValid = await bcrypt.compare(pass, user.password);
     if (!isPasswordValid) {
@@ -44,7 +44,7 @@ export class AuthService {
 
       const existingUser = await this.usersService.findOne(mail);
       if (existingUser) {
-        throw new Error('Username already exists');
+        throw new Error('mail already exists');
       }
       // Hash du mot de passe
       const saltRounds = 10;
@@ -74,13 +74,13 @@ export class AuthService {
     }
 
      
-    async isConnected(username : string) :  Promise<{ success: boolean }> {
+    async isConnected(mail : string) :  Promise<{ success: boolean }> {
         try{
             
             for (const [key, value] of this.validTokens) {
                 
                 
-                if (value == username) {
+                if (value == mail) {
                     
                     return {success :true}; // Retourne le string associé au token
                 }
