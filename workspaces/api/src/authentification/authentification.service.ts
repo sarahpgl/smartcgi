@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+    private validTokens: Map<string, string> = new Map();
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService
@@ -25,8 +26,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
     const payload = { sub: user.id, mail: user.mail };
+    const token = await this.jwtService.signAsync(payload,  { expiresIn: '2h' });
+    this.validTokens.set(token, user.mail);
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: token ,
     };
   }
 
@@ -59,6 +62,42 @@ export class AuthService {
     }
   }
 
+   async signOut(token: string) : Promise<{ success: boolean }>  {
+    try {
+        
+        this.validTokens.delete(token);
+        return {success :true}
+    }
+    catch{
+        throw new Error('deconnection failed'); 
+    }
+    }
+
+     
+    async isConnected(username : string) :  Promise<{ success: boolean }> {
+        try{
+            
+            for (const [key, value] of this.validTokens) {
+                
+                
+                if (value == username) {
+                    
+                    return {success :true}; // Retourne le string associé au token
+                }
+            }
+            console.log("not connected")
+            return {success :false};
+             
+        }
+        catch{
+            console.error('user not connected:')
+            return {success :false};
+
+        }
+       
+        
+    }
+  
 }
 
 
