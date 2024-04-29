@@ -12,5 +12,9 @@
   "scripts": {
     "client": "npm run dev --workspace=@smart/front",
     "server": "npm run start:dev --workspace=@smart/api"
+  },
+  "dependencies": {
+    "@types/react-router-dom": "^5.3.3",
+    "react-router-dom": "^6.23.0"
   }
 }

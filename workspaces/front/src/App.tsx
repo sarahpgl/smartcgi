@@ -1,20 +1,26 @@
 import { RecoilRoot } from 'recoil'
-import './App.css'
+import React from 'react'
+import { useEffect } from 'react';
+import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import Register from './js/pages/register/register'
+import Home from './js/pages/home/home'
+import Menu from './js/pages/menu/menu'
+import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
 
 function App() {
   return (
-    <>
-    <h1> App </h1>
-      <RecoilRoot>
-        <SocketManagerProvider>
-          <div>Hello</div>
-          <Test/>
-        </SocketManagerProvider>
-<div> Hello </div>
-      </RecoilRoot>
-    </>
+    <BrowserRouter>
+    <Routes>
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+    
+    </Routes>
+    
+    </BrowserRouter>
+
   )
 }
 
