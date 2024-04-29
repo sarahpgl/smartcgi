@@ -6,7 +6,6 @@ import HeaderTempo from "@app/js/components/HeaderTempo";
 import styles from './register.module.css';
 import image from '../../../icons/Image_welcome.svg';
 
-
 const RegisterPage = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
 
@@ -18,14 +17,16 @@ const RegisterPage = () => {
     <div className={styles.registerPage}>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
-            <img src={image} alt="Image de la tonne de bonnes pratiques"/>
+          <img src={image} alt="Image de la tonne de bonnes pratiques" className={styles.image} />
         </div>
         <div className={styles.formContainer}>
-          {showLoginForm ? (
-            <ConnexionForm onShowRegisterForm={() => setShowLoginForm(false)} />
-          ) : (
-            <RegisterForm onSuccessfulRegistration={handleSuccessfulRegistration} />
-          )}
+          <div className={styles.forms}>
+            {showLoginForm ? (
+              <ConnexionForm onShowRegisterForm={() => setShowLoginForm(false)} />
+            ) : (
+              <RegisterForm onSuccessfulRegistration={handleSuccessfulRegistration} />
+            )}
+          </div>
         </div>
       </div>
     </div>

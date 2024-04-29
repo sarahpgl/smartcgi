@@ -1,18 +1,19 @@
+.content {
+  display: flex;
+}
 
-  
-  .content {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 20px; /* Espace au-dessus du contenu */
-  }
-  
-  .imageContainer {
-    flex: 1; /* Prendra 50% de l'espace disponible */
-  }
-  
-  .formContainer {
-    flex: 1; /* Prendra 50% de l'espace disponible */
-  }
-  
+.imageContainer {
+  flex: 1; /* Prend la moitié de l'espace */
+}
+
+.formContainer {
+  flex: 1; /* Prend la moitié de l'espace */
+  display: flex;
+  justify-content: center; /* Centre horizontalement les éléments */
+  align-items: center; /* Centre verticalement les éléments */
+}
+
+.image {
+  width: 100%;
+  height: auto; /* Pour maintenir les proportions de l'image */
+}
