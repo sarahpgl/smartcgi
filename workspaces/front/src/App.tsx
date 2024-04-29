@@ -1,5 +1,5 @@
 import { RecoilRoot } from 'recoil'
-import './App.css'
+import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
 
