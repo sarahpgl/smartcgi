@@ -1,1 +1,1 @@
-export type LobbyMode = 'duo' | 'solo';
+export type CO2Quantity = number;

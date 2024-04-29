@@ -7,5 +7,7 @@ export enum ServerEvents
   LobbyState = 'server.lobby.state',
 
   // Game
-  GameMessage = 'server.game.message',
+  GameState = 'server.game.state',
+  SensibilisationQuestion = 'server.game.sensibilisation_question',
+  PracticeQuestion = 'server.game.practice_question',
 }
