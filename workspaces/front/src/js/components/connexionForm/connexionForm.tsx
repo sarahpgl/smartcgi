@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import styles from './connexionForm.module.css';
+import { useNavigate } from "react-router-dom";
+
+
 
 const ConnexionForm = ({ onShowRegisterForm }) => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -17,7 +21,7 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add your form submission logic here
+        navigate('/menu');
         console.log(formData);
     };
 

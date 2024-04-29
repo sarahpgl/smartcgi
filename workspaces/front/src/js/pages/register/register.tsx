@@ -1,4 +1,4 @@
-import ConnexionForm from "@app/js/components/ConnexionForm/connexionForm";
+import ConnexionForm from "@app/js/components/connexionForm/connexionForm";
 import React, { useState } from 'react';
 
 import RegisterForm from "@app/js/components/RegisterForm/RegisterForm";
@@ -17,7 +17,9 @@ const RegisterPage = () => {
     <div className={styles.registerPage}>
       <Header />
       <div className={styles.content}>
-        <img src={image} alt="Image de la tonne de bonnes pratiques" className={styles.image} />
+        <div className={styles.imageContainer}>
+            <img src={image} alt="Image de la tonne de bonnes pratiques" className={styles.image} />
+        </div>
         <div className={styles.formContainer}>
           <div className={styles.forms}>
             {showLoginForm ? (
