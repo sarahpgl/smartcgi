@@ -1,0 +1,17 @@
+.registerPage {
+
+}
+
+.content {
+  flex: 1; /* Le contenu prendra toute la place disponible */
+  display: flex;
+  justify-content: space-between; /* Pour placer les éléments à gauche et à droite */
+  align-items: center; /* Pour aligner les éléments verticalement au centre */
+}
+
+.image {
+}
+
+.formContainer {
+  margin-left: 20px; /* Espacement entre l'image et les formulaires */
+}

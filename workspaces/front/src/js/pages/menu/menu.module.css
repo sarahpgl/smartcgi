@@ -1,0 +1,19 @@
+.container {
+}
+
+.content {
+    flex: 1; /* Le contenu prendra toute la place disponible */
+    display: flex;
+    justify-content: space-between; /* Pour placer les éléments à gauche et à droite */
+    align-items: center; /* Pour aligner les éléments verticalement au centre */
+}
+
+.imageContainer {
+    flex: 1;
+}
+
+.menuContainer {
+    display: flex;
+    justify-content: center; /* Pour centrer les éléments horizontalement */
+    align-items: center; /* Pour centrer les éléments verticalement */
+}
