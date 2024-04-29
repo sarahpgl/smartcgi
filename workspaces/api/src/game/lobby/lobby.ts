@@ -13,7 +13,7 @@ export class Lobby
 
   public readonly createdAt: Date = new Date();
 
-  public readonly connectionCode: string = Math.random().toString(36).substring(2, 8);
+  public readonly connectionCode: string = (Math.random()*100000000 + '').substring(0, 6);
 
   public readonly maxClients: number = 4;
 

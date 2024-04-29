@@ -34,9 +34,9 @@ export class LobbyManager
     return lobby;
   }
 
-  public joinLobby(lobbyId: string, playerName: string, client: AuthenticatedSocket): void
+  public joinLobby(connectionCode: string, playerName: string, client: AuthenticatedSocket): void
   {
-    const lobby = this.lobbies.get(lobbyId);
+    const lobby = Array.from(this.lobbies.values()).find((lobby) => lobby.connectionCode === connectionCode)
 
     if (!lobby) {
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby not found');

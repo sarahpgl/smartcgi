@@ -12,7 +12,7 @@ export class LobbyCreateDto
 export class LobbyJoinDto
 {
   @IsString()
-  lobbyId: string;
+  connectionCode: string;
 
   @IsString()
   playerName: string;

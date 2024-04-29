@@ -32,7 +32,13 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleConnection(client: Socket, ...args: any[]): Promise<void>
   {
     // Call initializers to set up socket
-    this.lobbyManager.initializeSocket(client as AuthenticatedSocket);
+    const authenticatedClient: AuthenticatedSocket = client as AuthenticatedSocket;
+    authenticatedClient.gameData = {
+      lobby: null,
+      playerName: '',
+    }
+
+    this.lobbyManager.initializeSocket(authenticatedClient);
   }
 
   async handleDisconnect(client: AuthenticatedSocket): Promise<void>
@@ -53,13 +59,12 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage(ClientEvents.LobbyCreate) 
   onLobbyCreate(client: AuthenticatedSocket, data: LobbyCreateDto) {
     const lobby = this.lobbyManager.createLobby(data.co2Quantity);
-    
     lobby.addClient(client, data.playerName);
   }
 
   @SubscribeMessage(ClientEvents.LobbyJoin)
   onLobbyJoin(client: AuthenticatedSocket, data: LobbyJoinDto) {
-    this.lobbyManager.joinLobby(data.lobbyId, data.playerName, client);
+    this.lobbyManager.joinLobby(data.connectionCode, data.playerName, client);
   }
 
   @SubscribeMessage(ClientEvents.LobbyLeave)

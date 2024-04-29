@@ -1,15 +1,16 @@
 import { SocketState } from '@components/websocket/SocketState';
 import { Listener } from '@components/websocket/types';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { ClientPayloads } from '@shared/client/ClientPayloads';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerExceptionResponse } from '@shared/server/types';
 import { SetterOrUpdater } from 'recoil';
 import { io, Socket } from 'socket.io-client';
 import { showNotification } from '@mantine/notifications';
 
-type EmitOptions<T> = {
-  event: ClientEvents;
-  data?: T;
+type EmitOptions<T extends ClientEvents> = {
+  event: T;
+  data?: ClientPayloads[T];
 };
 
 export default class SocketManager
@@ -34,7 +35,7 @@ export default class SocketManager
     this.onException();
   }
 
-  emit<T>(options: EmitOptions<T>): this
+  emit<T extends ClientEvents>(options: EmitOptions<T>): this
   {
     this.socket.emit(options.event, options.data);
 
@@ -148,6 +149,7 @@ export default class SocketManager
         message: body,
         color: 'red',
       });
+      console.error(`Error ${data.exception}`, `Message: ${data.message}`);
     });
   }
 }
