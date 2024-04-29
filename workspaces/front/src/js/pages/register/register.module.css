@@ -1,18 +1,17 @@
+.registerPage {
 
-  
-  .content {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 20px; /* Espace au-dessus du contenu */
-  }
-  
-  .imageContainer {
-    flex: 1; /* Prendra 50% de l'espace disponible */
-  }
-  
-  .formContainer {
-    flex: 1; /* Prendra 50% de l'espace disponible */
-  }
-  
+}
+
+.content {
+  flex: 1; /* Le contenu prendra toute la place disponible */
+  display: flex;
+  justify-content: space-between; /* Pour placer les éléments à gauche et à droite */
+  align-items: center; /* Pour aligner les éléments verticalement au centre */
+}
+
+.image {
+}
+
+.formContainer {
+  margin-left: 20px; /* Espacement entre l'image et les formulaires */
+}
