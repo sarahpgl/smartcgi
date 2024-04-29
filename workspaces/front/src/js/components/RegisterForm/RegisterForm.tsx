@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import '../../../CSS/App.css';
+//import styles from './RegisterForm.module.css';
 import styles from './RegitserForm.module.css';
 
 
-const RegisterForm = () => {
+const RegisterForm = ({ onSuccessfulRegistration }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,6 +16,12 @@ const RegisterForm = () => {
     if (password === confirmPassword) {
       // Effectuez ici votre action de soumission du formulaire
       setErrorMessage('');
+      // Réinitialisez les champs de formulaire
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      // Basculez vers le formulaire de connexion
+      onSuccessfulRegistration();
     } else {
       setErrorMessage("Les mots de passe ne correspondent pas.");
       setOpenSnackbar(true);
@@ -62,11 +69,14 @@ const RegisterForm = () => {
           />
         </div>
         <div>
-                <button className={styles.buttonregister} type="submit">S'inscrire</button>
-            </div>
+          <button className={styles.buttonregister} type="submit">S'inscrire</button>
+        </div>
       </form>
     </div>
   );
 };
 
 export default RegisterForm;
+
+
+
