@@ -64,4 +64,16 @@
   color: white;
 }
 
+.error {
+  color: red;
+  font-size: 16px;
+  margin-top: -10px;
+}
+
+.message{
+  color: #173a13;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
 
