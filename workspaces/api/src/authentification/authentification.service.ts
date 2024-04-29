@@ -29,6 +29,36 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  async signUp(
+    mail: string, 
+    password: string, 
+    lastname: string, 
+    firstname: string
+  ): Promise<{ success: boolean }> {
+    try {
+      // Vérifiez si l'utilisateur existe déjà
+
+      const existingUser = await this.usersService.findOne(mail);
+      if (existingUser) {
+        throw new Error('Username already exists');
+      }
+      // Hash du mot de passe
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      // Création de l'utilisateur dans la base de données avec le mot de passe hashé
+      await this.usersService.createUser(mail, hashedPassword, lastname, firstname);
+      console.log('User created');
+
+      return { success: true };
+
+    } catch (error) {
+
+      console.error('Error creating user:', error.message);
+      return { success: false };
+    }
+  }
+
 }
 
 
