@@ -1,10 +1,10 @@
 import React from 'react';
-import HeaderTempo from '@app/js/components/HeaderTempo/HeaderTempo';
+import Header from "@app/js/components/header/Header";
 import LobbyComponent from '@app/js/components/LobbyComponent/LobbyComponent';
 function PageLobby(){
     return (
         <div>
-        <HeaderTempo />
+        <Header />
         <LobbyComponent />
         </div>
     )

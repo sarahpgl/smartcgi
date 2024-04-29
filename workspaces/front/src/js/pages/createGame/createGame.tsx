@@ -1,10 +1,10 @@
 import React from 'react';
-import HeaderTempo from '@app/js/components/HeaderTempo/HeaderTempo';
+import Header from "@app/js/components/header/Header";
 import CreateGame from '@app/js/components/CreateGame/CreateGame';
 function PageCreateGame(){
     return (
         <div>
-        <HeaderTempo />
+        <Header />
         <CreateGame />
         </div>
     )
