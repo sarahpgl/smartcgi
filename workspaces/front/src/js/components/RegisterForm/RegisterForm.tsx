@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../../CSS/App.css';
 //import styles from './RegisterForm.module.css';
-import styles from './RegitserForm.module.css';
+import styles from './RegisterForm.module.css';
 
 
 const RegisterForm = ({ onSuccessfulRegistration }) => {
