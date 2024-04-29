@@ -1,20 +1,31 @@
 import { RecoilRoot } from 'recoil'
-import './App.css'
+
+import React from 'react'
+import { useEffect } from 'react';
+import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import Register from './js/pages/register/register'
+import Home from './js/pages/home/home'
+import HeaderTempo from './js/components/HeaderTempo';
+import RegisterForm from './js/components/RegisterForm/RegisterForm';
+import ConnexionForm from './js/components/connexionForm/connexionForm';
+import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
 
 function App() {
   return (
-    <>
-    <h1> App </h1>
-      <RecoilRoot>
-        <SocketManagerProvider>
-          <div>Hello</div>
-          <Test/>
-        </SocketManagerProvider>
-<div> Hello </div>
-      </RecoilRoot>
-    </>
+    <BrowserRouter>
+    <Routes>
+        <Route path='/ConnexionForm' element={<ConnexionForm />} />
+        <Route path="/RegisterForm" element={<RegisterForm />} />
+        <Route path="/HeaderTempo" element={<HeaderTempo />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+    
+    </Routes>
+    
+    </BrowserRouter>
+
   )
 }
 
