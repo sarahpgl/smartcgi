@@ -1,0 +1,60 @@
+
+.container {
+    position: relative;
+    width: 310px;
+    height: 158px;
+    color: black;
+    background-color:#9ECD8E;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex; 
+    justify-content: space-between;
+  }
+
+  .container2 {
+    width: 80px;
+    position: absolute;
+    top: 5px; 
+    left: 10px;
+    margin-top: 5px;
+    color: white;
+    font-size: small;
+    background-color: #4B957A;
+    padding: 10px;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center; 
+    text-align: left;
+  }
+
+  .container2 img.cardImage {
+    width: 20px; 
+    height: auto;
+}
+  
+
+  .label {
+    text-align: left;
+    color: #D4D6D5;
+    font-size: 30px;
+  }
+
+  .labelname {
+    text-align: left;
+    color: #1f1f1f;
+    margin: 0px;
+    font-size: 15px;
+    margin-top: -30px;
+    position: relative;
+    align-self: flex-start
+  }
+
+  .labelPoints {
+    text-align: left;
+    color: #9ECD8E;
+    margin: 4px;
+    font-size: 6px;
+    margin-top: 10px;
+    position: relative;
+    align-self: flex-start
+  }
