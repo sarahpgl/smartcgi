@@ -12,7 +12,7 @@ export class Green_IT_Booklet {
 
     user_id: number;
 
-    @OneToOne(() => User, user => user.green_it_booklet_id)
+    @OneToOne(() => User, user => user.green_it_booklet)
     user: User;
 
     @ManyToMany(() => Bad_Practice_Card)

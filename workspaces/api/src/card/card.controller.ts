@@ -1,4 +1,4 @@
-import { Controller, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Get, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CardService } from './card.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
@@ -14,6 +14,16 @@ export class CardController {
         try {
             console.log(csvFile)
             const cards =  await this.cardService.parseCsv(csvFile);
+            return res.status(200).json({ok: true, data: cards});
+        } catch(error){
+            console.error(error);
+        }
+    }
+
+    @Get("/bad-practice")
+    async getBadPracticeCards(@Res() res: Response){
+        try {
+            const cards = await this.cardService.getBadPracticeCard();
             return res.status(200).json({ok: true, data: cards});
         } catch(error){
             console.error(error);

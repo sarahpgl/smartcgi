@@ -112,4 +112,8 @@ export class CardService {
     */
     return Promise.resolve([]);
   }
+
+  async getBadPracticeCard(): Promise<Bad_Practice_Card[]> {
+    return await this.bad_practice_cards_repository.find({relations: ["contents"]})
+  }
 }

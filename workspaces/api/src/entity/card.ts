@@ -14,7 +14,7 @@ export abstract class Card {
   @JoinTable()
   actors: Actor[];
 
-  @OneToMany(() => Card_Content, card_content => card_content.card_id)
+  @OneToMany(() => Card_Content, card_content => card_content.card)
   contents: Card_Content[];
 
   @ManyToMany(() => Game, game => [game.deck_stack, game.discard_stack])
