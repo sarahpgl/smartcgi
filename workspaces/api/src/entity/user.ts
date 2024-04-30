@@ -22,12 +22,12 @@ export class User {
     @Exclude()
     password: string;
 
-    @OneToMany(() => User_Game, (user_game) => user_game.user_id )
+    @OneToMany(() => User_Game, (user_game) => user_game.user )
     user_games: User_Game[]
 
     @Column({nullable: false})
     green_it_booklet_id: number
 
-    @OneToOne(() => Green_IT_Booklet, green_it_booklet => green_it_booklet.user_id)
+    @OneToOne(() => Green_IT_Booklet, green_it_booklet => green_it_booklet.user)
     green_it_booklet: Green_IT_Booklet;
 }

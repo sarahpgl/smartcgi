@@ -23,7 +23,7 @@ export default class SocketManager
 
   constructor()
   {
-    this.socket = io('http://localhost:9000' /*import.meta.env.API_URL as string*/, {
+    this.socket = io(`${import.meta.env.VITE_API_URL}` /*import.meta.env.API_URL as string*/, {
       autoConnect: false,
       path: '/wsapi',
       transports: ['websocket'],

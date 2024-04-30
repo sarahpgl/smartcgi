@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import RegisterForm from "@app/js/components/RegisterForm/RegisterForm";
 import Header from "@app/js/components/header/Header";
 import styles from './register.module.css';
-import image from '../../../icons/Image_welcome.svg';
+import image from '../../../icons/Welcome_Photo.webp';
 
 const RegisterPage = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
