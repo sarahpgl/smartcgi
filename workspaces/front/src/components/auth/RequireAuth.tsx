@@ -53,14 +53,14 @@ function RequireAuth({ children }) {
 
 export default RequireAuth;*/
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate, useLocation } from "react-router-dom";
 
 function RequireAuth({ children }) {
     const location = useLocation();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [redirecting, setRedirecting] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         const verifyUser = async () => {
@@ -97,21 +97,28 @@ function RequireAuth({ children }) {
     }, []);
 
     useEffect(() => {
-        if (!isAuthenticated && !isLoading && !redirecting) {
-            alert("Vous devez être connecté pour accéder à ces pages");
-            setRedirecting(true);
+        if (!isAuthenticated && !isLoading) {
+            setShowAlert(true);
         }
-    }, [isAuthenticated, isLoading, redirecting]);
+    }, [isAuthenticated, isLoading]);
 
-    if (isLoading) {
-        return <div>Chargement...</div>; // Ou un composant de chargement
-    }
+    const handleConfirm = () => {
+        setShowAlert(false);
+        window.location.href = '/register';
+    };
 
-    if (!isAuthenticated && redirecting) {
-        return <Navigate to="/register" />;
-    }
-
-    return children;
+    return (
+        <>
+            {showAlert && (
+                <div className="alert">
+                    <div>Veuillez vous connecter pour accéder à ces pages</div>
+                    <button onClick={handleConfirm}>OK</button>
+                </div>
+            )}
+            {isAuthenticated ? children : <div>Chargement...</div>}
+        </>
+    );
 }
 
 export default RequireAuth;
+
