@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styles from './connexionForm.module.css';
 import { useNavigate } from "react-router-dom";
 
-
 const ConnexionForm = ({ onShowRegisterForm }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -32,6 +31,10 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
             });
 
             if (response.ok) {
+                const data = await response.json(); // Récupération de la réponse JSON
+                localStorage.setItem('token', data.access_token); // Stockage du token dans le Local Storage
+                const token = localStorage.getItem('token');
+                console.log('Token:', token);
                 navigate('/menu');
             } else {
                 const errorData = await response.json();
