@@ -15,7 +15,7 @@ const Quizz: React.FC = () => {
     const [resultMessage, setResultMessage] = useState("");
     const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
     const [quizzPlay, setQuizzPlay] = useState(false);
-    const [tempsRestant, setTempsRestant] = useState(10);
+    const [tempsRestant, setTempsRestant] = useState(15);
     
     useEffect(() => {
         let timer: NodeJS.Timeout;
