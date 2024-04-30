@@ -14,15 +14,12 @@
     "server": "npm run start:dev --workspace=@smart/api"
   },
   "dependencies": {
-<<<<<<< back-us-1-authentification
     "bcrypt": "^5.1.1",
     "decrypt": "^0.0.1"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2"
-=======
+    "@types/bcrypt": "^5.0.2",
     "@types/react-router-dom": "^5.3.3",
     "react-router-dom": "^6.23.0"
->>>>>>> master-tampon
   }
 }

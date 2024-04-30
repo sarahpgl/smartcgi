@@ -19,10 +19,32 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    /*const handleSubmit = (e) => {
         e.preventDefault();
         navigate('/menu');
         console.log(formData);
+    };*/
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/auth/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                navigate('/menu');
+            } else {
+                // Gérer les erreurs de connexion
+                console.error('Erreur de connexion:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Erreur de connexion:', error.message);
+        }
     };
 
     return (
