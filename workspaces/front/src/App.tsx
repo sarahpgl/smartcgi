@@ -7,6 +7,7 @@ import Home from './js/pages/home/home'
 import CreateGame from './js/pages/createGame/createGame'
 import JoinGame from './js/pages/joinGame/joinGame'
 import Lobby from './js/pages/lobby/lobby'
+import PageTest from './js/pages/test/test'
 import Menu from './js/pages/menu/menu'
 import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
@@ -22,6 +23,7 @@ function App() {
         <Route path="/createGame" element={<CreateGame />} />
         <Route path="/joinGame" element={<JoinGame />} />
         <Route path="/lobby" element={<Lobby />} />
+        <Route path="/test" element={<PageTest />} />
     
     </Routes>
     
