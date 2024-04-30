@@ -12,6 +12,8 @@ import { Card_Content } from "@app/entity/card_content";
 import { Actor } from "@app/entity/actor";
 import { Practice_Card } from "@app/entity/practice_card";
 import { Card } from "@shared/common/Cards";
+import { Best_Practices_Status } from "@app/entity/user_game";
+import { info } from "console";
 
 @Injectable()
 export class CardService {
@@ -33,6 +35,7 @@ export class CardService {
   ) {}
 
   async parseCsv(file: Express.Multer.File) {
+    console.log('on parse le csv');
     const csvData: CsvCard[] = [];
     const stream = parse(file.buffer.toString(), {
       header: true,
@@ -45,6 +48,7 @@ export class CardService {
     const cards = [];
     for (const row of csvData) {
       const { id, cardType, language, label, description, link, actorType, networkGain, memoryGain, cpuGain, storageGain, difficulty } = row;
+      console.log(row);
       let card: EntityCard = await this.cards_repository.findOne({ where: { id } });
       let card_already_exists = true;
       if (card == null) {
