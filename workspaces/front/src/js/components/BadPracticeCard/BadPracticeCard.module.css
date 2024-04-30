@@ -12,9 +12,15 @@
     height: 153px;
     width: 102px;
     border-radius: 4px;
-    margin-bottom: 16px;
+    background-color: white;
+    margin-bottom: 0px;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+    position: relative; /* Ajouter position relative */
 }
+.card:hover{
+    cursor: pointer;
+}
+
 
 .cardheader {
     margin-left: 5px;
@@ -97,7 +103,9 @@
 }
 
 .cardfooter {
-    margin-top: -4px;
+    position: absolute; /* Positionner le footer */
+    bottom: -30px; /* Aligner le footer en bas */
+    left: 0; /* Aligner le footer à gauche */
     font-size: 2.5px;
     color: rgb(0, 0, 0);
     width: 100%;
@@ -105,36 +113,32 @@
     font-family: 'JetBrainsFont', sans-serif;
     font-weight: 600;
     border-radius: 0px 0px 2px 2px;
-    
 }
+
 
 .actor {
     width: 25%;
     height: 17px;
     background-color: #C3E3FA;
     border-radius: 0px 0px 0px 3px;
-    z-index: 1;
     position: relative; /* Ajouter une position relative pour positionner footericon */
 }
 
 .component{
     width: 25%;
     height: 17px;
-    z-index: 1;
     position: relative; /* Ajouter une position relative pour positionner footericon */
     background-color: #9ECD8E
 }
 .gains{
     width: 25%;
     height: 17px;
-    z-index: 1;
     position: relative; /* Ajouter une position relative pour positionner footericon */
     background-color: #E19F9F
 }
 .difficulty{
     width: 25%;
     height: 17px;
-    z-index: 1;
     position: relative; /* Ajouter une position relative pour positionner footericon */
     background-color: #F8E0A3;
     border-radius: 0px 0px 3px 0px;

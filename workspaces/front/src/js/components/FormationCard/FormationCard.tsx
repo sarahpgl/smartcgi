@@ -19,7 +19,7 @@ function FormationCard(card:Formation_Card) {
                     <img src={card.actor === 'Developer' ? iconFormationDev : card.actor === 'Architect' ? iconFormationLeadTech : card.actor === 'ProductOwner' ? iconFormationProductOwner : iconFormationProductOwner} alt="iconFormation" />
                 </div>
                 <div>
-                <h2>Formation</h2>
+                <h2>Formation {card.actor==="Developer" ? "Développeur" : card.actor==="Architect" ? "Architecte" : card.actor==="ProductOwner" ? "Product Owner" : " inconnu"}</h2>
                 <h3>{card.actor==="Developer" ? "développement green" : card.actor==="Architect" ? "écoconception tech" : card.actor==="ProductOwner" ? "frugalité fonctionnelle" : "type inconnu"}</h3>
                 </div>
             </div>

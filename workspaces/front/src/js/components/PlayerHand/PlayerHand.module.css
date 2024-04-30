@@ -1,0 +1,17 @@
+.hand {
+    padding-right: 30px;
+    display: flex;
+    flex-direction: row-reverse; /* Inverser l'ordre des cartes */
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    height: 170px;
+    width: 500px;
+
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+}
+
+
+.hand > * {
+    margin-right: -40px;
+}
