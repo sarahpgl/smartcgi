@@ -1,6 +1,6 @@
-import { PlayerStateInterface, PublicPlayerState } from '@shared/common/Game';
+import { GameState, SensibilisationQuestion } from '../common/Game';
 import { ServerEvents } from './ServerEvents';
-import { Card, CardType } from '@shared/common/Cards';
+import { Card, CardType } from '../common/Cards';
 
 export type ServerPayloads = {
   [ServerEvents.Pong]: {
@@ -15,18 +15,14 @@ export type ServerPayloads = {
     clientsNames: string[];
   };
 
-  [ServerEvents.GameState]: {
-    currentPlayer: string;
-    playerStates: PlayerStateInterface[];
-    discardPile: Card[];
+  [ServerEvents.GameStart]: {
+    gameState: GameState;
+    sensibilisationQuestion: SensibilisationQuestion;
   };
 
-  [ServerEvents.SensibilisationQuestion]: {
-    question: string;
-    answers: {
-      [key: string]: string;
-    };
-  };
+  [ServerEvents.GameState]: GameState;
+
+  [ServerEvents.SensibilisationQuestion]: SensibilisationQuestion;
 
   [ServerEvents.PracticeQuestion]: {
     playerName: string;

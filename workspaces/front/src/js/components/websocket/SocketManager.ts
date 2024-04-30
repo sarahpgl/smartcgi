@@ -1,5 +1,5 @@
-import { SocketState } from '@components/websocket/SocketState';
-import { Listener } from '@components/websocket/types';
+import { SocketState } from '@app/js/components/websocket/SocketState';
+import { Listener } from '@app/js/components/websocket/types';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { ClientPayloads } from '@shared/client/ClientPayloads';
 import { ServerEvents } from '@shared/server/ServerEvents';
@@ -86,6 +86,9 @@ export default class SocketManager
         });
         this.connectionLost = false;
       }
+      this.setSocketState((currVal) => {
+        return {...currVal, connected: true};
+      });
     });
   }
 

@@ -1,7 +1,7 @@
 export interface BaseCard {
   id: string;
   actor: Actor;
-  title: string
+  title: string;
   contents: string;
   cardType: CardType;
 }
