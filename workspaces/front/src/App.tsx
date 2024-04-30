@@ -1,7 +1,7 @@
 import { RecoilRoot } from 'recoil'
 import React from 'react'
 import { useEffect } from 'react';
-import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import {BrowserRouter,Navigate,Route,Routes} from 'react-router-dom';
 import Register from './js/pages/register/register'
 import Home from './js/pages/home/home'
 import CreateGame from './js/pages/createGame/createGame'
@@ -22,6 +22,7 @@ function App() {
         <Route path="/createGame" element={<CreateGame />} />
         <Route path="/joinGame" element={<JoinGame />} />
         <Route path="/lobby" element={<Lobby />} />
+        <Route path="/" element={<Navigate to="/register" />} />
     
     </Routes>
     
