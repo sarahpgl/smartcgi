@@ -59,13 +59,7 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
   };
 
   return (
-    <div>
-      {openSnackbar && (
-        <div style={{ backgroundColor: 'red', color: 'white', padding: '10px', position: 'fixed', bottom: '10px', left: '50%', transform: 'translateX(-50%)' }}>
-          {errorMessage}
-          <button onClick={handleSnackbarClose} style={{ marginLeft: '10px', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>Fermer</button>
-        </div>
-      )}
+    <div className={styles.registerFormContainer}>
       <form onSubmit={handleSubmit}>
         <div className="inputContainerRegisterForm">
           <input
@@ -116,6 +110,12 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
           <button className={styles.buttonregister} type="submit">S'inscrire</button>
         </div>
       </form>
+      {openSnackbar && (
+        <div className={styles.snackbar}>
+          {errorMessage}
+          <button onClick={handleSnackbarClose} className={styles.snackbarButton}>Fermer</button>
+        </div>
+      )}
     </div>
   );
 };

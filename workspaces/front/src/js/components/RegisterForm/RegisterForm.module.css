@@ -27,3 +27,27 @@
 button:hover {
     background-color: #2c5c4a;
 }
+
+.snackbar {
+    background-color: rgb(233, 126, 109);
+    width: 100%;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.snackbarButton {
+    background-color: #f8f8f8;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    align-items: center;
+}
+
+.snackbarButton:hover {
+    background-color: #ff0000;
+}

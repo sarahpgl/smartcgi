@@ -54,12 +54,6 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            {openSnackbar && (
-                <div style={{ backgroundColor: 'red', color: 'white', padding: '10px', position: 'fixed', bottom: '10px', left: '50%', transform: 'translateX(-50%)' }}>
-                    {errorMessage}
-                    <button onClick={handleSnackbarClose} style={{ marginLeft: '10px', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>Fermer</button>
-                </div>
-            )}
             <div>
                 <label htmlFor="email"></label>
                 <input className={styles.input}
@@ -89,6 +83,12 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
             <div>
                 <button onClick={onShowRegisterForm} className={styles.buttonregister}>S'inscrire</button>
             </div>
+            {openSnackbar && (
+                <div className={styles.snackbar}>
+                    {errorMessage}
+                    <button onClick={handleSnackbarClose} className={styles.snackbarButton}>Fermer</button>
+                </div>
+            )}
         </form>
     );
 };
