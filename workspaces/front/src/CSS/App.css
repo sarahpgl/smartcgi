@@ -57,9 +57,10 @@
 .inputContainerRegisterForm input[type="password"] {
   width: 100%;
   padding: 10px;
-  border-radius: 15px;
+  border-radius: 30px;
+  text-indent: 30px;
   border: 1px solid lightgray;
-  background-color: #6e9678; /* Fond vert pastel */
+  background-color: rgba(75, 149, 122, 0.5);
   color: rgba(255, 255, 255, 0.96);
 }
 
