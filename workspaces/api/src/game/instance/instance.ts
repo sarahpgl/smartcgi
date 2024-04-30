@@ -12,6 +12,7 @@ import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
 import { PracticeAnswerType } from '@shared/common/Game';
+import { DrawMode } from './types';
 
 export class Instance
 {
@@ -24,15 +25,20 @@ export class Instance
 
   constructor(
     private readonly lobby: Lobby,
+    private readonly cardService: CardService,
   )
   {
   }
 
-  public triggerStart(): void
+  public async triggerStart(): Promise<void>
   {
+    this.cardDeck = await this.cardService.getDeck();
     this.lobby.clients.forEach((client) =>
     {
       this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.id, this.co2Quantity);
+      while (this.playerStates[client.id].cardsInHand.length <= 8) {
+        this.drawCard(this.playerStates[client.id]);
+      }
     });
 
     //Set the first player
@@ -116,8 +122,10 @@ export class Instance
   private playFormation(card: Formation_Card, playerState: PlayerState) {
   }
 
-  private drawCard(playerState: PlayerState) {
-    //Piocher une carte
+  private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
+    if (this.cardDeck.length !== 0) {
+      playerState.cardsInHand.push(this.cardDeck.pop());
+    }
   }
 
   private transitionToNextRound(): void

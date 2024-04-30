@@ -6,6 +6,7 @@ import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { Practice_Card } from '@shared/common/Cards';
 import { PublicPlayerState } from '@shared/common/Game';
+import { CardService } from '@app/card/card.service';
 
 export class Lobby
 {
@@ -21,10 +22,11 @@ export class Lobby
 
   public readonly clients: Map<Socket['id'], AuthenticatedSocket> = new Map<Socket['id'], AuthenticatedSocket>();
 
-  public readonly instance: Instance = new Instance(this);
+  public readonly instance: Instance = new Instance(this, this.cardService);
 
   constructor(
     private readonly server: Server,
+    private readonly cardService: CardService,
     co2Quantity: number,
   )
   {

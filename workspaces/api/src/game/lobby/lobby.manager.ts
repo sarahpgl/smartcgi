@@ -7,13 +7,20 @@ import { LOBBY_MAX_LIFETIME } from '@app/game/constants';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { CO2Quantity } from '@app/game/lobby/types';
-import { Cron } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule'
+import { CardService } from '@app/card/card.service';
 
 export class LobbyManager
 {
   public server: Server;
 
   private readonly lobbies: Map<Lobby['id'], Lobby> = new Map<Lobby['id'], Lobby>();
+
+  constructor (
+    private readonly cardService: CardService,
+  )
+  {
+  }
 
   public initializeSocket(client: AuthenticatedSocket): void
   {
@@ -27,7 +34,7 @@ export class LobbyManager
 
   public createLobby(co2Quantity: CO2Quantity): Lobby
   {
-    const lobby = new Lobby(this.server, co2Quantity);
+    const lobby = new Lobby(this.server, this.cardService, co2Quantity );
 
     this.lobbies.set(lobby.id, lobby);
 
@@ -58,7 +65,7 @@ export class LobbyManager
     }
 
     if (lobby.lobbyOwner !== client) {
-      throw new ServerException(SocketExceptions.LobbyError, 'Not lobby owner');
+      throw new ServerException(SocketExceptions.LobbyError, 'Only lobby owner can start the game');
     }
 
     lobby.instance.triggerStart();

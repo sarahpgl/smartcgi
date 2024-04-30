@@ -21,6 +21,7 @@ import { Actor } from '@app/entity/actor';
     TypeOrmModule.forFeature([Actor]),
   ],
   providers: [CardService],
-  controllers: [CardController]
+  controllers: [CardController],
+  exports: [CardService],
 })
 export class CardModule {}
