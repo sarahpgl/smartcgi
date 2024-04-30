@@ -32,8 +32,12 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
         });
         const data = await response.json();
         if (response.ok) {
-          // Si la requête est réussie, effectuez votre action de traitement
-          onSuccessfulRegistration();
+          if (data.success) {
+            onSuccessfulRegistration();
+          } else {
+            setErrorMessage(data.message || 'Une erreur s\'est produite lors de l\'inscription.');
+            setOpenSnackbar(true);
+          }
         } else {
           // Sinon, affichez l'erreur
           setErrorMessage(data.error || 'Une erreur s\'est produite lors de l\'inscription.');

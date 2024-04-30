@@ -10,7 +10,7 @@ import Menu from './js/pages/menu/menu'
 import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
-import RequireAuth from './js/components/RequireAuth';
+import RequireAuth from './components/auth/RequireAuth';
 
 function App() {
 

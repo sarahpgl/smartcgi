@@ -1,6 +1,5 @@
 import ConnexionForm from "@app/js/components/connexionForm/connexionForm";
 import React, { useEffect, useState } from 'react';
-import { AuthService } from '@app/services/AuthService';
 import RegisterForm from "@app/js/components/RegisterForm/RegisterForm";
 import Header from "@app/js/components/header/Header";
 import styles from './register.module.css';
@@ -12,10 +11,6 @@ const RegisterPage = () => {
   const handleSuccessfulRegistration = () => {
     setShowLoginForm(true); // Revenir au formulaire de connexion après une inscription réussie
   };
-
-  useEffect(() => {
-    console.log('Le user est connecté :', AuthService.isAuthenticatedUser());
-  }, []);
 
   return (
     <div className={styles.registerPage}>
