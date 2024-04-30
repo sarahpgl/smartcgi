@@ -1,8 +1,11 @@
-import { Controller, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Res, UploadedFile, UseInterceptors,Body } from '@nestjs/common';
 import { SensibilisationService } from './sensibilisation.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Question } from '@app/entity/question';
+import { HttpStatus, HttpCode } from '@nestjs/common';
+
+
 
 @Controller('sensibilisation')
 export class SensibilisationController {
@@ -19,5 +22,17 @@ export class SensibilisationController {
             console.error(error);
         }
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('randomCard')
+    randomCard(@Body() card: Question) {
+    return this.sensibilisationService.randomQuestionToStart();
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('randomQuizz')
+  randomQuizz(@Body() dataJson: string) {
+  return this.sensibilisationService.getSensibilisationQuizz();
+}
 }
 

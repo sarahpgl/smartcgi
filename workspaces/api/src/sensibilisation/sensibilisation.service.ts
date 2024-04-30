@@ -64,7 +64,7 @@ export class SensibilisationService {
 
             if (card_answer == null) {
                 card_answer = this.question_answer_repository.create({
-                    question_id : id,
+                    question_id : card.id,
                     question : card, 
                     language : language, 
                     answer : solutionnb, 
@@ -83,11 +83,40 @@ export class SensibilisationService {
           }
           card = await this.question_repository.save(card);
 
-
-    
-
             cards.push(card);
         };
         return cards;
     }
+
+    async randomQuestionToStart() :  Promise< { card : Question }> {
+      
+      let cards: Question[] = await this.question_repository.find();
+
+      const index = Math.floor(Math.random() *(cards.length))
+      let chosenCard = cards[index];
+      console.log(chosenCard)
+      return {card : chosenCard};
+    }
+
+    async getSensibilisationQuizz() : Promise < {jsonString : string}>{
+
+      let card_id = (await this.randomQuestionToStart()).card.id;
+      let card_content: Question_Content = await this.question_content_repository.findOne({ where: { question_id: card_id } });
+      let card_answer : Question_Answer = await this.question_answer_repository.findOne({ where: { question_id : card_id } });
+      
+      const jsonData = {
+        card_content: card_content,
+        card_answer: card_answer
+      };
+      
+      const jsonString = JSON.stringify(jsonData, null, 2); 
+      
+      console.log(jsonString);
+
+      return {jsonString : jsonString}
+    }
+
+    
+
+
 }
