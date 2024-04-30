@@ -1,7 +1,7 @@
 import { RecoilRoot } from 'recoil'
 import React from 'react'
 import { useEffect } from 'react';
-import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import {BrowserRouter,Navigate,Route,Routes} from 'react-router-dom';
 import Register from './js/pages/register/register'
 import Home from './js/pages/home/home'
 import CreateGame from './js/pages/createGame/createGame'
@@ -17,6 +17,7 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
+<<<<<<< Updated upstream
         <Route path="/menu" element={<Menu />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
@@ -24,6 +25,15 @@ function App() {
         <Route path="/joinGame" element={<JoinGame />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/test" element={<PageTest />} />
+=======
+      <Route path="/menu" element={<Menu />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/createGame" element={<CreateGame />} />
+      <Route path="/joinGame" element={<JoinGame />} />
+      <Route path="/lobby" element={<Lobby />} />
+      <Route path="/" element={<Navigate to="/register" />} />
+>>>>>>> Stashed changes
     
     </Routes>
     
