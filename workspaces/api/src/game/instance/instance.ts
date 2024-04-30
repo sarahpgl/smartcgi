@@ -11,30 +11,30 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { PracticeAnswerType } from '@shared/common/Game';
+import { PracticeAnswerType, SensibilisationQuestion } from '@shared/common/Game';
 import { DrawMode } from './types';
 
-export class Instance
-{
+export class Instance {
   public co2Quantity: CO2Quantity;
   public playerStates: Record<Socket['id'], PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
   public currentPlayer: string;
+  public players: string[] = [];
+  public sensibilisationQuestions: SensibilisationQuestion[] = [];
   private answerCount: number = 0;
 
   constructor(
     private readonly lobby: Lobby,
     private readonly cardService: CardService,
-  )
-  {
+  ) {
   }
 
-  public async triggerStart(): Promise<void>
-  {
+  public async triggerStart(): Promise<void> {
     this.cardDeck = await this.cardService.getDeck();
-    this.lobby.clients.forEach((client) =>
-    {
+    // TODO: Implement this service in Sensibilisation Module
+    // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
+    this.lobby.clients.forEach((client) => {
       this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.id, this.co2Quantity);
       while (this.playerStates[client.id].cardsInHand.length <= 8) {
         this.drawCard(this.playerStates[client.id]);
@@ -42,16 +42,15 @@ export class Instance
     });
 
     //Set the first player
-    this.currentPlayer = this.lobby.clients.keys().next().value;
-
-    this.lobby.dispatchGameStart();
+    this.currentPlayer = this.players[0];
+    const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
+    this.lobby.dispatchGameStart(question);
   }
 
-  public triggerFinish(): void
-  {
+  public triggerFinish(): void {
   }
 
-  public playCard(card: Card, client:AuthenticatedSocket) {
+  public playCard(card: Card, client: AuthenticatedSocket) {
     const playerState = this.playerStates[client.id];
 
     if (!playerState) {
@@ -62,27 +61,27 @@ export class Instance
       throw new ServerException(SocketExceptions.GameError, 'Player cannot play');
     }
 
-    if(playerState.badPractice && card.cardType !== 'Formation' && card.cardType !== 'Expert' && card.actor !== playerState.badPractice) {
+    if (playerState.badPractice && card.cardType !== 'Formation' && card.cardType !== 'Expert' && card.actor !== playerState.badPractice) {
       throw new ServerException(SocketExceptions.GameError, 'Player must play a fitting formation or expert card');
     }
 
     playerState.cardsHistory.push(card);
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
-    switch(card.cardType) {
-      case 'BestPractice': 
-      this.playBestPractice(card, playerState);
-      break;
+    switch (card.cardType) {
+      case 'BestPractice':
+        this.playBestPractice(card, playerState);
+        break;
 
       case 'Expert':
-      this.playExpert(card, playerState);
-      break;
+        this.playExpert(card, playerState);
+        break;
 
       case 'BadPractice':
-      this.playBadPractice(card, playerState);
-      break;
+        this.playBadPractice(card, playerState);
+        break;
 
       case 'Formation':
-      this.playFormation(card, playerState);
+        this.playFormation(card, playerState);
 
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
@@ -91,8 +90,7 @@ export class Instance
     //Passer au joueur suivant
   }
 
-  public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void
-  {
+  public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
     const playerState = this.playerStates[playerId];
 
     if (!playerState) {
@@ -128,9 +126,8 @@ export class Instance
     }
   }
 
-  private transitionToNextRound(): void
-  {
-    
+  private transitionToNextRound(): void {
+
   }
 
 }
