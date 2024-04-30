@@ -54,6 +54,7 @@
 }
 
 .inputContainerRegisterForm input[type="email"],
+.inputContainerRegisterForm input[type="text"],
 .inputContainerRegisterForm input[type="password"] {
   width: 100%;
   padding: 10px;
@@ -65,12 +66,14 @@
 }
 
 .inputContainerRegisterForm input[type="email"]:focus,
+.inputContainerRegisterForm input[type="text"]:focus,
 .inputContainerRegisterForm input[type="password"]:focus {
   outline: none;
   border: 1px solid #5cb85c; /* Bordure verte sur le focus */
 }
 
 .inputContainerRegisterForm input[type="email"]::placeholder,
+.inputContainerRegisterForm input[type="text"]::placeholder,
 .inputContainerRegisterForm input[type="password"]::placeholder {
   color: rgba(0, 0, 0, 0.364); 
   font-size: 14px;

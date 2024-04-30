@@ -7,6 +7,8 @@ import styles from './RegisterForm.module.css';
 const RegisterForm = ({ onSuccessfulRegistration }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [firstname, setFirstname] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -67,6 +69,24 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
+            required
+          />
+        </div>
+        <div className="inputContainerRegisterForm">
+          <input
+            type="text"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            placeholder="Nom"
+            required
+          />
+        </div>
+        <div className="inputContainerRegisterForm">
+          <input
+            type="text"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            placeholder="Prénom"
             required
           />
         </div>
