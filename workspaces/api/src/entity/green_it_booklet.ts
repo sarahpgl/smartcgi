@@ -1,4 +1,4 @@
-import { Entity, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user";
 import { Bad_Practice_Card } from "./bad_practice_card";
 import { Best_Practice_Card } from "./best_practice_card";
@@ -10,9 +10,11 @@ export class Green_IT_Booklet {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({nullable: false})
     user_id: number;
 
     @OneToOne(() => User, user => user.green_it_booklet)
+    @JoinColumn({ name: "user_id" })
     user: User;
 
     @ManyToMany(() => Bad_Practice_Card)

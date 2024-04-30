@@ -1,4 +1,4 @@
-import { Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Index, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { Actor } from "./actor";
 import { Card_Content } from "./card_content";
 import { Game } from "./game";
@@ -7,7 +7,7 @@ import { User_Game } from "./user_game";
 @Entity()
 export abstract class Card {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @ManyToMany(() => Actor, actor => actor.cards)

@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User_Game } from "./user_game";
 import { Exclude } from 'class-transformer';
 import { Green_IT_Booklet } from "./green_it_booklet";
@@ -29,5 +29,6 @@ export class User {
     green_it_booklet_id: number
 
     @OneToOne(() => Green_IT_Booklet, green_it_booklet => green_it_booklet.user)
+    @JoinColumn({ name: "green_it_booklet_id" })
     green_it_booklet: Green_IT_Booklet;
 }
