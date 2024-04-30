@@ -17,7 +17,6 @@ const LobbyComponent: React.FC = () => {
             <div className={styles.codeContainer}>
                 <label className={`${styles.code} ${isCopied ? styles.copied : ''}`} onClick={handleCodeClick}>
                     Code : 77674
-                    <span className={styles.tooltip}>{isCopied ? '' : ''}</span>
                 </label>
             </div>
             <div className={styles.container}>
