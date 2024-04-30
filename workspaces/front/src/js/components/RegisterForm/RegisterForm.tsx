@@ -26,8 +26,8 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
           body: JSON.stringify({
             mail: email,
             password: password,
-            lastname: '', // Ajoutez le nom et le prénom ici si nécessaire
-            firstname: '', // Ajoutez le nom et le prénom ici si nécessaire
+            lastname: lastname, // Ajoutez le nom et le prénom ici si nécessaire
+            firstname: firstname, // Ajoutez le nom et le prénom ici si nécessaire
           }),
         });
         const data = await response.json();
