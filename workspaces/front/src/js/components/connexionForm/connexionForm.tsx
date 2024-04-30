@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './connexionForm.module.css';
 import { useNavigate } from "react-router-dom";
+import { AuthService } from '@app/services/AuthService';
 
 
 const ConnexionForm = ({ onShowRegisterForm }) => {
@@ -32,6 +33,8 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
             });
 
             if (response.ok) {
+                AuthService.login();
+                //console.log(AuthService.isAuthenticatedUser());
                 navigate('/menu');
             } else {
                 const errorData = await response.json();
