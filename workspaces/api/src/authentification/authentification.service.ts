@@ -38,25 +38,26 @@ export class AuthService {
     password: string, 
     lastname: string, 
     firstname: string
-  ): Promise<{ success: boolean }> {
+  ): Promise<{ success: boolean; message?: string }> {
     try {
       // Vérifiez si l'utilisateur existe déjà
-
       const existingUser = await this.usersService.findOne(mail);
       if (existingUser) {
-        throw new UnauthorizedException('Mail already exists');
+        return { success: false, message: 'Mail already exists' };
       }
+  
       // Hash du mot de passe
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
+  
       // Création de l'utilisateur dans la base de données avec le mot de passe hashé
       await this.usersService.createUser(mail, hashedPassword, lastname, firstname);
-      
-
+      console.log('User created');
+  
       return { success: true };
-
     } catch (error) {
-        throw new UnauthorizedException('Error creating user:', error.message);
+      console.error('Error creating user:', error.message);
+      return { success: false, message: 'An error occurred while creating the user' };
     }
   }
 
@@ -67,25 +68,23 @@ export class AuthService {
         return {success :true}
     }
     catch{
-        throw new UnauthorizedException('deconnection failed'); 
+        throw new Error('deconnection failed'); 
     }
     }
 
      
-    async isConnected(mail : string) :  Promise<{ success: boolean }> {
-        try{
-            for (const [key, value] of this.validTokens) {
-                if (value == mail) {
-                    return {success :true}; // Retourne le string associé au token
-                }
-            }
+    async isConnected(access_token : string) :  Promise<{ success: boolean }> {
+
+           let valid =  this.validTokens.get(access_token)
+          if(valid){
+            console.log("not connected")
             return {success :false};
-        }
-        catch{
-            console.error('user not connected:')
-            return {success :false};
-        }
-    }
+          }else{
+            console.log("connected")
+            return {success :true};
+          }
+
+      }
   
 }
 
