@@ -1,22 +1,23 @@
 import { Injectable } from "@nestjs/common";
 import { parse } from "papaparse";
 import { CsvCard } from "./card.type";
-import { Card } from "@app/entity/card";
+import { Card as EntityCard } from "@app/entity/card";
 import { Expert_Card } from "@app/entity/expert_card";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Entity, Repository } from "typeorm";
 import { Best_Practice_Card } from "@app/entity/best_practice_card";
 import { Bad_Practice_Card } from "@app/entity/bad_practice_card";
 import { Training_Card } from "@app/entity/training_card";
 import { Card_Content } from "@app/entity/card_content";
 import { Actor } from "@app/entity/actor";
 import { Practice_Card } from "@app/entity/practice_card";
+import { Card } from "@shared/common/Cards";
 
 @Injectable()
 export class CardService {
   constructor(
-    @InjectRepository(Card)
-    private cards_repository: Repository<Card>,
+    @InjectRepository(EntityCard)
+    private cards_repository: Repository<EntityCard>,
     @InjectRepository(Best_Practice_Card)
     private best_practice_cards_repository: Repository<Best_Practice_Card>,
     @InjectRepository(Bad_Practice_Card)
@@ -44,7 +45,7 @@ export class CardService {
     const cards = [];
     for(const row of csvData){
       const { id, cardType, language, label, description, link, actorType, networkGain, memoryGain, cpuGain, storageGain, difficulty } = row;
-      let card: Card = await this.cards_repository.findOne({ where: { id } });
+      let card: EntityCard = await this.cards_repository.findOne({ where: { id } });
       if (card == null) {
         card = this.cards_repository.create({id});
       }
@@ -103,5 +104,12 @@ export class CardService {
       cards.push(card);
     };
     return cards;
+  }
+
+  async getDeck(): Promise<Card[]> {
+    /* A faire récupérer les cartes avec leurs différents types et informations
+    *  Mélanger le deck et le renvoyer
+    */
+    return Promise.resolve([]);
   }
 }

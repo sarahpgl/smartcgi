@@ -1,25 +1,28 @@
-import { IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
-import { Cards } from '@shared/common/Cards';
-
+import { PracticeAnswerType } from '@shared/common/Game';
+import { IsNumber, IsString } from 'class-validator';
 export class LobbyCreateDto
 {
   @IsString()
-  mode: 'solo' | 'duo';
+  playerName: string;
 
-  @IsInt()
-  @Min(1)
-  @Max(5)
-  delayBetweenRounds: number;
+  @IsNumber()
+  co2Quantity: number;
 }
 
 export class LobbyJoinDto
 {
   @IsString()
-  lobbyId: string;
+  connectionCode: string;
+
+  @IsString()
+  playerName: string;
 }
 
-export class RevealCardDto
+export class PracticeAnswerDto
 {
-  @IsNumber()
-  cardIndex: Cards;
+  @IsString()
+  cardId: string;
+
+  @IsString()
+  answer: PracticeAnswerType;
 }

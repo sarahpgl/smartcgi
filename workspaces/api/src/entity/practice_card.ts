@@ -1,12 +1,7 @@
 import { Column } from "typeorm";
 import { Card } from "./card";
+import { Difficulty } from "@shared/common/Cards";
 
-export enum Difficulty {
-    ONE = 1,
-    TWO = 2,
-    THREE = 3,
-    FOUR = 4,
-}
 
 export class Practice_Card extends Card {
 

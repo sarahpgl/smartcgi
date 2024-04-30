@@ -6,8 +6,9 @@ import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { LOBBY_MAX_LIFETIME } from '@app/game/constants';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { LobbyMode } from '@app/game/lobby/types';
-import { Cron } from '@nestjs/schedule';
+import { CO2Quantity } from '@app/game/lobby/types';
+import { Cron } from '@nestjs/schedule'
+import { CardService } from '@app/card/card.service';
 
 export class LobbyManager
 {
@@ -15,40 +16,34 @@ export class LobbyManager
 
   private readonly lobbies: Map<Lobby['id'], Lobby> = new Map<Lobby['id'], Lobby>();
 
+  constructor (
+    private readonly cardService: CardService,
+  )
+  {
+  }
+
   public initializeSocket(client: AuthenticatedSocket): void
   {
-    client.data.lobby = null;
+    client.gameData.lobby = null;
   }
 
   public terminateSocket(client: AuthenticatedSocket): void
   {
-    client.data.lobby?.removeClient(client);
+    client.gameData.lobby?.removeClient(client);
   }
 
-  public createLobby(mode: LobbyMode, delayBetweenRounds: number): Lobby
+  public createLobby(co2Quantity: CO2Quantity): Lobby
   {
-    let maxClients = 2;
-
-    switch (mode) {
-      case 'solo':
-        maxClients = 1;
-        break;
-
-      case 'duo':
-        maxClients = 2;
-        break;
-    }
-
-    const lobby = new Lobby(this.server, maxClients);
+    const lobby = new Lobby(this.server, this.cardService, co2Quantity );
 
     this.lobbies.set(lobby.id, lobby);
 
     return lobby;
   }
 
-  public joinLobby(lobbyId: string, client: AuthenticatedSocket): void
+  public joinLobby(connectionCode: string, playerName: string, client: AuthenticatedSocket): void
   {
-    const lobby = this.lobbies.get(lobbyId);
+    const lobby = Array.from(this.lobbies.values()).find((lobby) => lobby.connectionCode === connectionCode)
 
     if (!lobby) {
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby not found');
@@ -58,7 +53,22 @@ export class LobbyManager
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby already full');
     }
 
-    lobby.addClient(client);
+    lobby.addClient(client, playerName);
+  }
+
+  public startGame(client: AuthenticatedSocket): void
+  {
+    const lobby = client.gameData.lobby;
+
+    if (!lobby) {
+      throw new ServerException(SocketExceptions.LobbyError, 'Not in lobby');
+    }
+
+    if (lobby.lobbyOwner !== client) {
+      throw new ServerException(SocketExceptions.LobbyError, 'Only lobby owner can start the game');
+    }
+
+    lobby.instance.triggerStart();
   }
 
   // Periodically clean up lobbies
