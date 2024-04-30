@@ -17,7 +17,7 @@ export class Question_Answer {
     language: string;
 
     @Column({nullable: false})
-    answer: string;
+    answer: number;
 
     @Column({nullable: false})
     is_good_answer: boolean;

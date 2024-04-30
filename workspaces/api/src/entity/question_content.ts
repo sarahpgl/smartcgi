@@ -21,4 +21,13 @@ export class Question_Content {
 
     @Column({nullable: false})
     description: string;
+
+    @Column({nullable: false})
+    response1: string;
+
+    @Column({nullable: false})
+    response2: string;
+
+    @Column({nullable: false})
+    response3: string;
 }
