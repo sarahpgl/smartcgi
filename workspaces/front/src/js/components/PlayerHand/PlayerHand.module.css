@@ -15,3 +15,77 @@
 .hand > * {
     margin-right: -40px;
 }
+
+.card{
+    border-radius: 10px;
+    margin-bottom: 0px;
+    transition: transform 0.2s;
+    user-select: none; /* Rend le contenu non sélectionnable */
+
+}
+.card:hover{
+    transform: translateY(-50px) scale(2.3) translateX(-20px); /* Zoom on hover */
+    z-index: 1;
+}
+.selected {
+    width: 120px;
+    background-color: rgb(230, 230, 230);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.selectedContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.iconOk {
+    cursor: pointer;
+    position: absolute;
+    bottom: 130px;
+    left:45px;
+    width: 12px; /* Ajustez la largeur selon vos besoins */
+    height: auto; /* Conservez l'aspect ratio */
+    filter: invert(50%) sepia(73%) saturate(250%) hue-rotate(107deg) brightness(89%) contrast(88%);
+}
+.iconBin{
+    cursor: pointer;
+    position: absolute;
+    bottom: 110px;
+    left:45px;
+    width: 12px; /* Ajustez la largeur selon vos besoins */
+    height: auto; /* Conservez l'aspect ratio */
+    filter: invert(13%) sepia(92%) saturate(3132%) hue-rotate(339deg) brightness(120%) contrast(99%);
+}
+
+.tooltip {
+    position: absolute;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    font-size: 5px;
+    width: 50px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    transform: translateY(-110px) translateX(40px);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+
+
