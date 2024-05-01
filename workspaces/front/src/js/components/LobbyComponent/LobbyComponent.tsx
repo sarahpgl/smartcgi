@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import styles from './LobbyComponent.module.css';
 import { useRecoilState } from 'recoil';
 import { CurrentLobbyState } from '../Game/states';
+import useSocketManager from '@hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
+
 
 const LobbyComponent: React.FC = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [lobbyState] = useRecoilState(CurrentLobbyState);
+  const { sm } = useSocketManager();
 
   const handleCodeClick = () => {
     setIsCopied(true);
@@ -14,6 +18,19 @@ const LobbyComponent: React.FC = () => {
     // You can set a timeout to reset the isCopied state after a certain time
     setTimeout(() => setIsCopied(false), 2000); // Reset isCopied after 2000 milliseconds (2 seconds)
   };
+
+  const handleStartGame = () => {
+    if ((lobbyState ? Object.keys(lobbyState?.clientsNames).length  : 0 )=== 4){
+      sm.emit({
+        event: ClientEvents.LobbyStartGame,
+        data: {
+
+        }
+      })
+    } else {
+      alert("Il n'y a pas assez de joueurs pour lancer la partie")
+    }
+  }
 
   return (
     <>
@@ -35,7 +52,7 @@ const LobbyComponent: React.FC = () => {
           )
         })}
         {lobbyState?.ownerId === localStorage.getItem('clientInGameId') && (
-          <button className={styles.button}>Lancer la partie</button>
+          <button className={styles.button} onClick={handleStartGame}>Lancer la partie</button>
         )}
 
       </div>
