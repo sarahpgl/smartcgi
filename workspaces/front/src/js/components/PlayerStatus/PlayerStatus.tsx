@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import styles from './PlayerStatus.module.css';
-import { PublicPlayerState } from '@shared/common/Game';
+import { PlayerStateInterface, PublicPlayerState } from '@shared/common/Game';
 
 import expertDev from '../../images/Expert_dev.webp';
 import expertPO from '../../images/Expert_product_owner.webp';
@@ -11,17 +11,18 @@ import bpDev from '../../images/MP_dev.webp';
 import bpPO from '../../images/MP_product_owner.webp';
 import bpLT from '../../images/MP_lead_tech.webp';
 
-function PlayerStatus(playerstate:PublicPlayerState) {
+function PlayerStatus(playerstate:PlayerStateInterface) {
 
     let name = "Pierre";
     let expert= ["ProductOwner", "Developer"];
     let bp = "Developer";
     let co2= 260;
     let sensibilisation = 2;
+    let me=0; //a utiliser pour savoir si c'est le joueur ou l'adversaire
 
     return (
         <div className={styles.status}>
-            <div className={styles.container2}>
+            <div className={me === 1 ? styles.container2Me : styles.container2}>
                 <label className={styles.label}>{co2} kg</label> 
                 <br/>
                 {expert.map((e) => {

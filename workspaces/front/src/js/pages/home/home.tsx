@@ -8,6 +8,7 @@ import PlayerHand from '@app/js/components/PlayerHand/PlayerHand';
 import PlayerInGameHistory from '@app/js/components/PlayerInGameHistory/PlayerInGameHistory';
 import OpponentBoard from '@app/js/components/OpponentBoard/OpponentBoard';
 import PlayerStatus from '@app/js/components/PlayerStatus/PlayerStatus';
+import PlayerBoard from '@app/js/components/PlayerBoard/PlayerBoard';
 
 function Home() {
   return (
@@ -22,7 +23,7 @@ function Home() {
       <PlayerInGameHistory />
       <OpponentBoard />
       <PlayerStatus />
-
+      <PlayerBoard />
       </div>
     </div>
   );

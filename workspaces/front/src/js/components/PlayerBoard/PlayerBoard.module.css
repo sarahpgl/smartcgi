@@ -1,0 +1,25 @@
+.board{
+    display: flex;
+    flex-direction: row;
+    outline: 1px solid #000;
+    color: #000;
+    border-radius: 5px;
+    height: 220px;
+    width: 780px;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.status{
+    margin-bottom: 0px;
+}
+
+.hand{
+    margin-bottom: 0px;
+}
+
+.history{
+    margin-bottom: 0px;
+}
