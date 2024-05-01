@@ -10,7 +10,7 @@ export class Card_Content{
     @ManyToOne(() => Card, (card) => card.contents)
     @JoinColumn({ name: "card_id" })
     card: Card;
-
+    
     @Column({nullable: false})
     card_id : number;
 
