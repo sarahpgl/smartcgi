@@ -50,6 +50,7 @@ function Header() {
                     </div>
                 </div>
             </div>
+            </div>
             <div className="center">
                 <img src={tonne_de_bonnes_pratiques} alt="1T_Bonnes_Pratiques" style={{ height: 150 }} />
             </div>
