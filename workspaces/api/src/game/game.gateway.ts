@@ -81,6 +81,9 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
     client.gameData.lobby.instance.answerPracticeQuestion(client.id, data.cardId, data.answer);
   }
+
+
+  
   //Todo: Handler for practice question
 
 }

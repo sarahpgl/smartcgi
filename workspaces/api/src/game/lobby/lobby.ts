@@ -4,7 +4,7 @@ import { ServerEvents } from '@shared/server/ServerEvents';
 import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { Practice_Card } from '@shared/common/Cards';
+import { Card, Practice_Card } from '@shared/common/Cards';
 import { PublicPlayerState, SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 
@@ -76,9 +76,9 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
   }
 
-  public dispatchPracticeQuestion(card: Practice_Card, playerName: string): void {
+  public dispatchPracticeQuestion(card: Practice_Card, playerId: string): void {
     const payload: ServerPayloads[ServerEvents.PracticeQuestion] = {
-      playerName,
+      playerId,
       cardType: card.cardType,
     };
 
@@ -105,6 +105,19 @@ export class Lobby {
       sensibilisationQuestion: question,
     };
     this.dispatchToLobby(ServerEvents.GameStart, payload);
+  }
+
+  public dispatchCardPlayed(card: Card, playerId: string ): void {
+    const payload: ServerPayloads[ServerEvents.CardPlayed] = {
+      playerId,
+      cardType: card.cardType,
+      gameState: {
+        currentPlayer: this.instance.currentPlayer,
+        playerStates: Object.values(this.instance.playerStates),
+        discardPile: this.instance.discardPile,
+      },
+    };
+    this.dispatchToLobby(ServerEvents.CardPlayed, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
