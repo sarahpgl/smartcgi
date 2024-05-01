@@ -16,7 +16,6 @@ function PlayerInGameHistory() {
                 <FormationCard cardType={'Formation'} id={'32'} actor={'ProductOwner'} title={'Titre de la carte'} contents={'blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla '} />
                 <BestPracticeCard cardType={'BestPractice'} id={'32'} title={'Titre de la carte'} contents={'blabla blabla blabla blabla blabla blabla blabla blabla blabla '} carbon_loss={50} />
             </div>
-
     );
 }
 

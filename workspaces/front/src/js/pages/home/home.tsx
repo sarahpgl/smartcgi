@@ -6,6 +6,8 @@ import FormationCard from '@app/js/components/FormationCard/FormationCard';
 import ExpertCard from '@app/js/components/ExpertCard/ExpertCard';
 import PlayerHand from '@app/js/components/PlayerHand/PlayerHand';
 import PlayerInGameHistory from '@app/js/components/PlayerInGameHistory/PlayerInGameHistory';
+import OpponentBoard from '@app/js/components/OpponentBoard/OpponentBoard';
+import PlayerStatus from '@app/js/components/PlayerStatus/PlayerStatus';
 
 function Home() {
   return (
@@ -18,6 +20,8 @@ function Home() {
       <ExpertCard />
       <PlayerHand />
       <PlayerInGameHistory />
+      <OpponentBoard />
+      <PlayerStatus />
 
       </div>
     </div>

@@ -1,4 +1,11 @@
 
+.opponentBoard{
+  outline: 1px solid #000;
+  border-radius: 10px;
+  margin-bottom: 0px;
+}
+
+
 .container {
     position: relative;
     width: 310px;
@@ -9,6 +16,8 @@
     border-radius: 10px;
     display: flex; 
     justify-content: space-between;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 
   .container2 {
@@ -47,6 +56,7 @@
     margin-top: -30px;
     position: relative;
     align-self: flex-start
+    
   }
 
   .labelPoints {

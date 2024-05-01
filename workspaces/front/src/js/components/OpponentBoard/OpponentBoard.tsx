@@ -11,7 +11,7 @@ import styles from './OpponentBoard.module.css';
 const OpponentBoard: React.FC = () => {
 
     const data = {
-        name : "Marc",
+        name : "Pierre",
         kg: "900",
         points: "3",
         expert : "ProductOwner",
@@ -38,7 +38,7 @@ const OpponentBoard: React.FC = () => {
 
 
     return (
-        <>
+        <div className={styles.opponentBoard}>
             <div className={styles.nameContainer}> </div>
             <div className={styles.container}>
             <label className={styles.labelname}>{data.name}</label>
@@ -50,7 +50,7 @@ const OpponentBoard: React.FC = () => {
                 </div>
                 <BestPracticeCard /> {}
             </div>
-        </>
+        </div>
         
     );
 };
