@@ -6,7 +6,8 @@ import { ServerPayloads } from '@shared/server/ServerPayloads';
 export type AuthenticatedSocket = Socket & {
   gameData: {
     lobby: null | Lobby;
-    playerName: string;
+    clientInGameId: null | string;
+    playerName: null | string;
   };
 
   emit: <T extends ServerEvents>(ev: T, data: ServerPayloads[T]) => boolean;

@@ -10,30 +10,25 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { Cron } from '@nestjs/schedule'
 import { CardService } from '@app/card/card.service';
 
-export class LobbyManager
-{
+export class LobbyManager {
   public server: Server;
 
   private readonly lobbies: Map<Lobby['id'], Lobby> = new Map<Lobby['id'], Lobby>();
 
-  constructor (
+  constructor(
     private readonly cardService: CardService,
-  )
-  {
+  ) {
   }
 
-  public initializeSocket(client: AuthenticatedSocket): void
-  {
+  public initializeSocket(client: AuthenticatedSocket): void {
     client.gameData.lobby = null;
   }
 
-  public terminateSocket(client: AuthenticatedSocket): void
-  {
+  public terminateSocket(client: AuthenticatedSocket): void {
     client.gameData.lobby?.removeClient(client);
   }
 
-  public createLobby(co2Quantity: CO2Quantity): Lobby
-  {
+  public createLobby(co2Quantity: CO2Quantity): Lobby {
     const lobby = new Lobby(this.server, this.cardService, co2Quantity);
 
     this.lobbies.set(lobby.id, lobby);
@@ -41,8 +36,7 @@ export class LobbyManager
     return lobby;
   }
 
-  public joinLobby(connectionCode: string, playerName: string, client: AuthenticatedSocket): void
-  {
+  public joinLobby(client: AuthenticatedSocket, connectionCode: string, playerName: string, playerInGameId: string | null): void {
     const lobby = Array.from(this.lobbies.values()).find((lobby) => lobby.connectionCode === connectionCode)
 
     if (!lobby) {
@@ -53,11 +47,10 @@ export class LobbyManager
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby already full');
     }
 
-    lobby.addClient(client, playerName);
+    lobby.addClient(client, playerName, playerInGameId);
   }
 
-  public startGame(client: AuthenticatedSocket): void
-  {
+  public startGame(client: AuthenticatedSocket): void {
     const lobby = client.gameData.lobby;
 
     if (!lobby) {
@@ -73,8 +66,7 @@ export class LobbyManager
 
   // Periodically clean up lobbies
   @Cron('*/5 * * * *')
-  private lobbiesCleaner(): void
-  {
+  private lobbiesCleaner(): void {
     for (const [lobbyId, lobby] of this.lobbies) {
       const now = (new Date()).getTime();
       const lobbyCreatedAt = lobby.createdAt.getTime();

@@ -30,16 +30,20 @@ export class Lobby {
   ) {
   }
 
-  public addClient(client: AuthenticatedSocket, playerName: string, isOwner: boolean = false): void {
+  public addClient(client: AuthenticatedSocket, playerName: string, clientInGameId: string | null = null, isOwner: boolean = false): void {
     this.clients.set(client.id, client);
     client.join(this.id);
-    client.gameData.playerName = playerName;
-    client.gameData.lobby = this;
+    if (!clientInGameId) clientInGameId = v4();
+    client.gameData = {
+      playerName,
+      lobby: this,
+      clientInGameId,
+    }
 
     if (isOwner) {
       this.lobbyOwner = client;
     }
-
+    this.emitToClient(client, ServerEvents.LobbyJoined, { clientInGameId });
     this.dispatchLobbyState();
   }
 
@@ -57,12 +61,16 @@ export class Lobby {
   }
 
   public dispatchLobbyState(): void {
+    const clientsNames: Record<string, string> = {};
+    this.clients.forEach((client) => {
+      clientsNames[client.gameData.clientInGameId] = client.gameData.playerName;
+    });
     const payload: ServerPayloads[ServerEvents.LobbyState] = {
       lobbyId: this.id,
       connectionCode: this.connectionCode,
       co2Quantity: this.instance.co2Quantity,
-      ownerName: this.lobbyOwner?.gameData.playerName,
-      clientsNames: Array.from(this.clients.values()).map((client) => client.gameData.playerName),
+      ownerId: this.lobbyOwner?.gameData.clientInGameId,
+      clientsNames,
     };
 
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
@@ -101,5 +109,9 @@ export class Lobby {
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
     this.server.to(this.id).emit(event, payload);
+  }
+
+  public emitToClient<T extends ServerEvents>(client: AuthenticatedSocket, event: T, payload: ServerPayloads[T]): void {
+    client.emit(event, payload);
   }
 }

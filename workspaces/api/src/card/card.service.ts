@@ -55,7 +55,7 @@ export class CardService {
       let card: EntityCard = await this.cards_repository.findOne({ where: { id } });
       let card_already_exists = true;
       if (card == null) {
-        card_already_exists  = false;
+        card_already_exists = false;
         card = this.cards_repository.create({ id });
       }
 
@@ -83,7 +83,7 @@ export class CardService {
         case "Formation":
           let training_card = new EntityTraining()
           Object.assign(training_card, card);
-          if(card_already_exists){
+          if (card_already_exists) {
             training_card = await this.training_cards_repository.findOne({ where: { id } });
           }
           training_card.link = link;
@@ -92,7 +92,7 @@ export class CardService {
         case "Mauvaise pratique":
           let bad_practice_card = new EntityBadPractice()
           Object.assign(bad_practice_card, card);
-          if(card_already_exists){
+          if (card_already_exists) {
             bad_practice_card = await this.bad_practice_cards_repository.findOne({ where: { id } });
           }
           bad_practice_card = {
@@ -108,7 +108,7 @@ export class CardService {
         default:
           let best_practice_card = new EntityBestPractice()
           Object.assign(best_practice_card, card);
-          if(card_already_exists){
+          if (card_already_exists) {
             best_practice_card = await this.best_practice_cards_repository.findOne({ where: { id } });
           }
           best_practice_card = {

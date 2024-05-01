@@ -7,12 +7,17 @@ export type ServerPayloads = {
     message: string;
   };
 
+  [ServerEvents.LobbyJoined]: {
+    clientInGameId: string;
+  }
+
   [ServerEvents.LobbyState]: {
     lobbyId: string;
     connectionCode: string;
     co2Quantity: number;
-    ownerName: string;
-    clientsNames: string[];
+    ownerId: string;
+    // A Record from id to playerName
+    clientsNames: Record<string, string>;
   };
 
   [ServerEvents.GameStart]: {

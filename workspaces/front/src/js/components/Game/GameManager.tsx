@@ -29,13 +29,15 @@ export default function GameManager() {
       setGameState(data);
     };
 
+    const onLobbyJoined: Listener<ServerPayloads[ServerEvents.LobbyJoined]> = (data) => {
+      localStorage.setItem('clientInGameId', data.clientInGameId);
+    };
+
     if (!socket.connected) {
       sm.connect();
-
-      sm.registerListener(ServerEvents.LobbyState, onLobbyState);
-      sm.registerListener(ServerEvents.GameState, onGameState);
     }
     if (!sm.socket.hasListeners(ServerEvents.LobbyState)) sm.registerListener(ServerEvents.LobbyState, onLobbyState);
+    if (!sm.socket.hasListeners(ServerEvents.LobbyJoined)) sm.registerListener(ServerEvents.LobbyJoined, onLobbyJoined);
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);
 
     return () => {

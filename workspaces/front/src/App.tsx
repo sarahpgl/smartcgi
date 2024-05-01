@@ -53,9 +53,9 @@ function App() {
         />
 
 
-        <Route path="/home" element={<Home />} />
-        <Route path="/" element={<Navigate to="/register" />} />
-      </Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/register" />} />
+          </Routes>
 
         </BrowserRouter>
       </SocketManagerProvider>

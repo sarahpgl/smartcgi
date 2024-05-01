@@ -1,7 +1,6 @@
 import { PracticeAnswerType } from '@shared/common/Game';
-import { IsNumber, IsString } from 'class-validator';
-export class LobbyCreateDto
-{
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+export class LobbyCreateDto {
   @IsString()
   playerName: string;
 
@@ -9,17 +8,19 @@ export class LobbyCreateDto
   co2Quantity: number;
 }
 
-export class LobbyJoinDto
-{
+export class LobbyJoinDto {
   @IsString()
   connectionCode: string;
+
+  @IsOptional()
+  @IsString()
+  clientInGameId: string;
 
   @IsString()
   playerName: string;
 }
 
-export class PracticeAnswerDto
-{
+export class PracticeAnswerDto {
   @IsString()
   cardId: string;
 

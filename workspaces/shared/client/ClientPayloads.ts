@@ -1,5 +1,6 @@
 import { PracticeAnswerType } from '@shared/common/Game';
 import { ClientEvents } from './ClientEvents';
+import { Card } from '../common/Cards';
 
 export type ClientPayloads = {
   [ClientEvents.Ping]: {
@@ -17,18 +18,21 @@ export type ClientPayloads = {
   }
 
   [ClientEvents.LobbyLeave]: {
-  
+
   }
 
   [ClientEvents.LobbyStartGame]: {
-  
+
   }
 
-  [ClientEvents.PracticeQuestion]: {
+  [ClientEvents.AnswerPracticeQuestion]: {
     cardId: string;
     answer: PracticeAnswerType;
   }
 
+  [ClientEvents.PlayCard]: {
+    card: Card;
+  }
   [ClientEvents.ClientReconnect]: {
 
   }

@@ -33,9 +33,9 @@ export interface GameState {
 };
 
 export interface SensibilisationQuestion {
-    question: string;
-    answers: {
-      [key: string]: string;
-    };
+  question: string;
+  answers: {
+    [key: string]: string;
   };
+};
 

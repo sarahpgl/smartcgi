@@ -1,9 +1,9 @@
-export enum ServerEvents
-{
+export enum ServerEvents {
   // General
   Pong = 'server.pong',
 
   // Lobby
+  LobbyJoined = 'server.lobby.joined',
   LobbyState = 'server.lobby.state',
 
   // Game
