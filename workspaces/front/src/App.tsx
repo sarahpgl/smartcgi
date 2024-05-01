@@ -44,7 +44,7 @@ function App() {
           }
         />
         <Route
-          path="/lobby"
+          path="/lobby/:lobbyId"
           element={
             <RequireAuth>
               <Lobby />
