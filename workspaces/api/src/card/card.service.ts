@@ -73,7 +73,7 @@ export class CardService {
 
       switch (cardType) {
         case "Expert":
-          let expert_card = new Expert_Card();
+          let expert_card = new EntityExpert();
           Object.assign(expert_card,card);
           if(card_already_exists){
               expert_card = await this.expert_cards_repository.findOne({ where: { id } });
@@ -81,7 +81,7 @@ export class CardService {
           card = await this.expert_cards_repository.save(expert_card);
           break;
         case "Formation":
-          let training_card = new Training_Card()
+          let training_card = new EntityTraining()
           Object.assign(training_card, card);
           if(card_already_exists){
             training_card = await this.training_cards_repository.findOne({ where: { id } });
@@ -90,7 +90,7 @@ export class CardService {
           card = await this.training_cards_repository.save(training_card);
           break;
         case "Mauvaise pratique":
-          let bad_practice_card = new Bad_Practice_Card()
+          let bad_practice_card = new EntityBadPractice()
           Object.assign(bad_practice_card, card);
           if(card_already_exists){
             bad_practice_card = await this.bad_practice_cards_repository.findOne({ where: { id } });
@@ -106,7 +106,7 @@ export class CardService {
           card = await this.bad_practice_cards_repository.save(bad_practice_card);
           break;
         default:
-          let best_practice_card = new Best_Practice_Card()
+          let best_practice_card = new EntityBestPractice()
           Object.assign(best_practice_card, card);
           if(card_already_exists){
             best_practice_card = await this.best_practice_cards_repository.findOne({ where: { id } });
@@ -139,7 +139,9 @@ export class CardService {
 
     // Shuffling and formatting bad practice cards
     const badPracticeCards = await this.bad_practice_cards_repository.find({relations: ["contents", "actors"]});
+    console.log('badPracticeCards : ');
     console.log(badPracticeCards);
+    console.log('badPracticeCards.content : ');
     console.log(badPracticeCards[0].contents);
     const deckBadPracticeCards = this.shuffleArray(badPracticeCards).slice(0, 12);
     const formattedBadPracticeCards: Bad_Practice_Card[] = deckBadPracticeCards.map((card: EntityBadPractice
@@ -187,6 +189,8 @@ export class CardService {
     // Shuffling and formatting training cards
     const trainingCards = await this.training_cards_repository.find({relations: ["contents", "actors"]});
     const deckTrainingCards = this.shuffleArray(trainingCards).slice(0, 18);
+    console.log(trainingCards);
+    console.log(trainingCards[0].contents);
     const formattedTrainingCards: Formation_Card[] = deckTrainingCards.map((card: EntityTraining) => ({
       id: card.id.toString(),
       actor: this.getActorName(card.actors[0].title), 
@@ -195,11 +199,14 @@ export class CardService {
       cardType: 'Formation',
       linkToFormation: card.link, 
     }));
+    console.log('formattedTrainingCards : ');
+    console.log(formattedTrainingCards);
 
 
     const allCards = [formattedBadPracticeCards, formattedBestPracticeCards, formattedExpertCards, formattedTrainingCards];
 
     const shuffledCards = this.shuffleArray(allCards);
+    console.log('shuffledCards : ');
     console.log(shuffledCards); 
     return shuffledCards;
 
@@ -226,8 +233,8 @@ export class CardService {
     }
   }
 
-  async getBadPracticeCard(): Promise<Bad_Practice_Card[]> {
-    return await this.bad_practice_cards_repository.find({ relations: ["contents"] });
+  async getBadPracticeCard(): Promise<EntityBadPractice[]> {
+    return this.bad_practice_cards_repository.find({relations: ["contents", "actors"]});
   }
 
 }

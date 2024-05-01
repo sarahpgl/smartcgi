@@ -37,4 +37,10 @@ export class CardController {
         console.log('get deck');
         return this.cardService.getDeck();
     }
+
+    @Get('bad-practice')
+    async getBadPractice(){
+        console.log('get bad practice');
+        return this.cardService.getBadPracticeCard();
+    }
 }
