@@ -34,7 +34,7 @@ export class LobbyManager
 
   public createLobby(co2Quantity: CO2Quantity): Lobby
   {
-    const lobby = new Lobby(this.server, this.cardService, co2Quantity );
+    const lobby = new Lobby(this.server, this.cardService, co2Quantity);
 
     this.lobbies.set(lobby.id, lobby);
 

@@ -43,49 +43,67 @@ export class CardService {
     });
 
     const cards = [];
-    for(const row of csvData){
+    for (const row of csvData) {
       const { id, cardType, language, label, description, link, actorType, networkGain, memoryGain, cpuGain, storageGain, difficulty } = row;
       let card: EntityCard = await this.cards_repository.findOne({ where: { id } });
+      let card_already_exists = true;
       if (card == null) {
-        card = this.cards_repository.create({id});
+        card_already_exists  = false;
+        card = this.cards_repository.create({ id });
       }
-      let card_content = this.card_contents_repository.create({ card, language, label, description });
 
       let actor = await this.actors_repository.findOne({ where: { language, title: actorType } });
       if (actor == null) {
         actor = this.actors_repository.create({ language, title: actorType });
         actor = await this.actors_repository.save(actor);
       }
-      if(card.actors){
+      if (card.actors) {
         card.actors.push(actor);
-    } else {
-      card.actors = [actor];
-    }
-    card = await this.cards_repository.save(card);
-
+      } else {
+        card.actors = [actor];
+      }
+      card = await this.cards_repository.save(card);
 
       switch (cardType) {
         case "Expert":
-          card = await this.expert_cards_repository.save(card);
+          let expert_card = new Expert_Card();
+          Object.assign(expert_card,card);
+          if(card_already_exists){
+              expert_card = await this.expert_cards_repository.findOne({ where: { id } });
+          }
+          card = await this.expert_cards_repository.save(expert_card);
           break;
         case "Formation":
-          card = await this.training_cards_repository.save({ ...card, link });
+          let training_card = new Training_Card()
+          Object.assign(training_card, card);
+          if(card_already_exists){
+            training_card = await this.training_cards_repository.findOne({ where: { id } });
+          }
+          training_card.link = link;
+          card = await this.training_cards_repository.save(training_card);
           break;
         case "Mauvaise pratique":
-          let bad_practice_card = this.bad_practice_cards_repository.create(card as Bad_Practice_Card);
+          let bad_practice_card = new Bad_Practice_Card()
+          Object.assign(bad_practice_card, card);
+          if(card_already_exists){
+            bad_practice_card = await this.bad_practice_cards_repository.findOne({ where: { id } });
+          }
           bad_practice_card = {
             ...bad_practice_card,
             network_gain: !!networkGain,
             memory_gain: !!memoryGain,
             cpu_gain: !!cpuGain,
             storage_gain: !!storageGain,
-            difficulty: difficulty
+            difficulty: difficulty,
           };
-          bad_practice_card = await this.bad_practice_cards_repository.save(bad_practice_card);
-          card = bad_practice_card;
+          card = await this.bad_practice_cards_repository.save(bad_practice_card);
           break;
         default:
-          let best_practice_card = this.best_practice_cards_repository.create(card as Best_Practice_Card);
+          let best_practice_card = new Best_Practice_Card()
+          Object.assign(best_practice_card, card);
+          if(card_already_exists){
+            best_practice_card = await this.best_practice_cards_repository.findOne({ where: { id } });
+          }
           best_practice_card = {
             ...best_practice_card,
             network_gain: !!networkGain,
@@ -93,23 +111,29 @@ export class CardService {
             cpu_gain: !!cpuGain,
             storage_gain: !!storageGain,
             difficulty: difficulty,
-            carbon_loss: parseInt(cardType),
+            carbon_loss: parseInt(cardType)
           };
-          best_practice_card = await this.best_practice_cards_repository.save(best_practice_card);
-          card = best_practice_card;
+          card = await this.best_practice_cards_repository.save(best_practice_card);
           break;
       }
-      card_content.card_id = card.id;
+      let card_content = await this.card_contents_repository.findOne({ where: { card_id: card.id, language } });
+      if (card_content == null) {
+        card_content = this.card_contents_repository.create({ card_id: card.id, card, language, label, description });
+      }
       card_content = await this.card_contents_repository.save(card_content);
       cards.push(card);
-    };
+    }
     return cards;
   }
 
   async getDeck(): Promise<Card[]> {
     /* A faire récupérer les cartes avec leurs différents types et informations
-    *  Mélanger le deck et le renvoyer
-    */
+     *  Mélanger le deck et le renvoyer
+     */
     return Promise.resolve([]);
+  }
+
+  async getBadPracticeCard(): Promise<Bad_Practice_Card[]> {
+    return await this.bad_practice_cards_repository.find({ relations: ["contents"] });
   }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateGame.module.css';
 import Lobby from '../../pages/lobby/lobby';
+import useSocketManager from '@hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
 
 const CreateGame: React.FC = () => {
     const [co2Value, setCo2Value] = React.useState("");
@@ -10,8 +12,8 @@ const CreateGame: React.FC = () => {
     const [pseudo, setPseudo] = React.useState("");
     const [createGameMessage, setCreateGameMessage] = React.useState("");
 
-    const navigate = useNavigate();
-
+    const {sm} = useSocketManager();
+    
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCo2Value(event.target.value);
     };
@@ -35,8 +37,13 @@ const CreateGame: React.FC = () => {
                 setErrorMessage("");
                 setCreateGameMessage(`Partie créée avec ${co2Value}kg de CO2 à économiser et le pseudo ${pseudo}`);
                 
-                // Redirect to Lobby page
-                navigate("/lobby");
+                sm.emit({
+                    event: ClientEvents.LobbyCreate,
+                    data: {
+                        co2Quantity: Number(co2Value),
+                        playerName: pseudo,
+                    }
+                });
             } else {
                 setErrorMessage("Veuillez entrer une valeur entre 500 et 1000");
             }

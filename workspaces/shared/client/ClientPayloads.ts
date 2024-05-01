@@ -28,4 +28,8 @@ export type ClientPayloads = {
     cardId: string;
     answer: PracticeAnswerType;
   }
+
+  [ClientEvents.ClientReconnect]: {
+
+  }
 };

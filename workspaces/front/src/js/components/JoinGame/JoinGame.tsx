@@ -1,5 +1,7 @@
 import React from 'react';
 import styles from './JoinGame.module.css';
+import useSocketManager from '@hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
 
 const JoinGame: React.FC = () => {
     const [codePartie, setcodePartie] = React.useState("");
@@ -8,6 +10,8 @@ const JoinGame: React.FC = () => {
     const [pseudo, setPseudo] = React.useState("");
     const [createGameMessage, setCreateGameMessage] = React.useState("");
 
+    const { sm } = useSocketManager();
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setcodePartie(event.target.value);
     };
@@ -15,7 +19,7 @@ const JoinGame: React.FC = () => {
         setPseudo(event.target.value);
     }
 
-    const handleCreateGame = () => {
+    const handleJoinGame = () => {
         if (codePartie === "" || Number(codePartie) < 1000) {
             setErrorMessage("Code incorrect");
         } else {
@@ -26,10 +30,17 @@ const JoinGame: React.FC = () => {
         } else {
             setPseudoErrorMessage("");
             if (codePartie !== "" && Number(codePartie) >= 1000) {
+                sm.emit({
+                    event: ClientEvents.LobbyJoin,
+                    data: {
+                        playerName: pseudo,
+                        connectionCode: codePartie,
+                    }
+                })
                 setErrorMessage("");
                 setCreateGameMessage(`Vous avez rejoint la partie ${codePartie} avec le pseudo ${pseudo}`);
             }
-            else{
+            else {
                 setErrorMessage("Code incorrect");
             }
         }
@@ -40,19 +51,19 @@ const JoinGame: React.FC = () => {
 
     return (
         <>
-        <div className={styles.codeContainer}>
+            <div className={styles.codeContainer}>
                 <label className={styles.titre}>Rejoindre une partie</label>
-         </div>
-        <div className={styles.container}>
-            <label className={styles.label}>Entrez le code de la partie</label> <br />
-            <input className={styles.input} type="text" value={codePartie} onChange={handleInputChange} /> <br />
-            {errorMessage && <p className={styles.error}>{errorMessage}</p>}
-            <label className={styles.label}>Rejoindre avec le pseudo : </label> <br />
-            <input className={styles.input} type="text" value={pseudo} onChange={handlePseudoChange} /> <br />
-            {pseudoErrorMessage && <p className={styles.error}>{pseudoErrorMessage}</p>}
-            <button className={styles.button} onClick={handleCreateGame}>Rejoindre</button> <br />
-            {createGameMessage && <p className={styles.message}>{createGameMessage}</p>}
-        </div>
+            </div>
+            <div className={styles.container}>
+                <label className={styles.label}>Entrez le code de la partie</label> <br />
+                <input className={styles.input} type="text" value={codePartie} onChange={handleInputChange} /> <br />
+                {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+                <label className={styles.label}>Rejoindre avec le pseudo : </label> <br />
+                <input className={styles.input} type="text" value={pseudo} onChange={handlePseudoChange} /> <br />
+                {pseudoErrorMessage && <p className={styles.error}>{pseudoErrorMessage}</p>}
+                <button className={styles.button} onClick={handleJoinGame}>Rejoindre</button> <br />
+                {createGameMessage && <p className={styles.message}>{createGameMessage}</p>}
+            </div>
         </>
     );
 };

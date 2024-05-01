@@ -11,4 +11,7 @@ export enum ClientEvents
 
   // Game
   PracticeQuestion = 'client.game.practice_question',
+
+  // Reconnecting
+  ClientReconnect = 'client.reconnect'
 }
