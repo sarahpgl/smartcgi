@@ -29,7 +29,7 @@ button:hover {
 }
 
 .snackbar {
-    background-color: rgb(233, 126, 109);
+    background-color: rgb(255, 255, 255);
     width: 100%;
     border-radius: 30px;
     padding: 5px;

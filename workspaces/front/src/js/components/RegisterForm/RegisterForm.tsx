@@ -16,6 +16,11 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password.length < 8) {
+      setErrorMessage("Le mot de passe doit contenir au moins 8 caractères.");
+      setOpenSnackbar(true);
+      return;
+    }
     if (password === confirmPassword) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
