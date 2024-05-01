@@ -1,7 +1,6 @@
 .board{
     display: flex;
     flex-direction: row;
-    outline: 1px solid #000;
     color: #000;
     border-radius: 5px;
     height: 220px;
@@ -10,6 +9,7 @@
     text-align: center;
     justify-content: space-between;
     padding: 5px;
+    margin-bottom: 0px;
 }
 
 .status{

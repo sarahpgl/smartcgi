@@ -4,9 +4,8 @@
   }
 
 .status{
-    outline: 1px solid #000;
     width: 100px;
-    height: 135px;
+    height: 145px;
     border-radius: 10px;
     margin-bottom: 0px;
 }
@@ -33,7 +32,7 @@
   }
 
   .container2 img.cardImage {
-    width: 20px; 
+    width: 30px; 
     height: auto;
 }
 
@@ -47,7 +46,7 @@
     font-family: 'Inria', sans-serif;
     text-align: left;
     color: #D4D6D5;
-    font-size: 27px;
+    font-size: 30px;
     letter-spacing: 1px;
   }
 

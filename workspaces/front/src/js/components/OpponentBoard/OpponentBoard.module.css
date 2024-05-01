@@ -1,9 +1,13 @@
+@font-face {
+  font-family: 'Inria';
+  src: url(./InriaSans-Regular.ttf);
+}
 
 .opponentBoard{
-  outline: 1px solid #000;
   border-radius: 10px;
   margin-bottom: 0px;
 }
+
 
 
 .container {
@@ -21,19 +25,8 @@
   }
 
   .container2 {
-    width: 80px;
     position: absolute;
-    top: 5px; 
-    left: 10px;
-    margin-top: 5px;
-    color: white;
-    font-size: small;
-    background-color: #4B957A;
-    padding: 10px;
-    border-radius: 10px;
-    flex-direction: column;
     align-items: center; 
-    text-align: left;
   }
 
   .container2 img.cardImage {
@@ -52,12 +45,25 @@
     text-align: left;
     color: #1f1f1f;
     margin: 0px;
-    font-size: 15px;
-    margin-top: -30px;
+    font-family: 'Inria';
+    font-size: 20px;
+    margin-top: -37px;
     position: relative;
     align-self: flex-start
-    
   }
+  .userIcon {
+    height: 25px;
+    text-align: left;
+    color: #1f1f1f;
+    margin: 0px;
+    font-size: 15px;
+    margin-top: -35px;
+    margin-left: 10px;
+    margin-right: -90px;
+    position: relative;
+    align-self: flex-start
+  }
+
 
   .labelPoints {
     text-align: left;
