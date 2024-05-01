@@ -11,19 +11,18 @@ import bpDev from '../../images/MP_dev.webp';
 import bpPO from '../../images/MP_product_owner.webp';
 import bpLT from '../../images/MP_lead_tech.webp';
 
-function PlayerStatus(playerstate:PlayerStateInterface) {
+function PlayerStatus({ playerstate,me}: { playerstate: PlayerStateInterface ,  me: number}) {
 
     let name = "Pierre";
-    let expert= ["ProductOwner", "Developer"];
-    let bp = "Developer";
-    let co2= 260;
-    let sensibilisation = 2;
-    let me=0; //a utiliser pour savoir si c'est le joueur ou l'adversaire
+    let expert= playerstate.expertCards;
+    let bp = playerstate.badPractice;
+    let co2= playerstate.co2Saved;
+    let sensibilisation = playerstate.sensibilisationPoints ;
 
     return (
-        <div className={styles.status}>
+        <div className={me === 1 ? styles.statusMe : styles.status}>
             <div className={me === 1 ? styles.container2Me : styles.container2}>
-                <label className={styles.label}>{co2} kg</label> 
+                <label className={styles.label}>{co2}</label><label className={styles.label} style={{ fontSize: '18px', letterSpacing: '0.2px' }}> kg</label> 
                 <br/>
                 {expert.map((e) => {
                     let expertImageSrc = null;

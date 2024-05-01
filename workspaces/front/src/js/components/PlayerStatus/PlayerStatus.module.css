@@ -4,11 +4,16 @@
   }
 
 .status{
-    outline: 1px solid #000;
     width: 100px;
-    height: 135px;
+    height: 145px;
     border-radius: 10px;
     margin-bottom: 0px;
+}
+.statusMe{
+  width: 160px;
+  height: 155px;
+  border-radius: 10px;
+  margin-bottom: 0px;
 }
 
 .container2 {
@@ -22,23 +27,23 @@
     text-align: center;
   }
   .container2Me {
-    width: 100%;
+    width: 160px;
     height: 100%;
     color: white;
     font-size: small;
-    background-color: #83ac75;
+    background-color: #9ECD8E;
     border-radius: 10px;
     margin-bottom: 0px;
     text-align: center;
   }
 
   .container2 img.cardImage {
-    width: 20px; 
+    width: 30px; 
     height: auto;
 }
 
 .container2Me img.cardImage {
-    width: 20px; 
+    width: 30px; 
     height: auto;
 }
   
@@ -46,8 +51,15 @@
   .label {
     font-family: 'Inria', sans-serif;
     text-align: left;
-    color: #D4D6D5;
-    font-size: 27px;
+    color: #F5F5F5;
+    font-size: 30px;
+    letter-spacing: 1px;
+  }
+  .container2Me .label {
+    font-family: 'Inria', sans-serif;
+    text-align: left;
+    color: #F5F5F5;
+    font-size: 35px;
     letter-spacing: 1px;
   }
 
@@ -63,11 +75,20 @@
 
   .labelPoints {
     text-align: left;
-    color: #e7e7e7;
+    color: #f5F5F5;
     margin: 4px;
     font-size: 8px;
     margin-top: 10px;
     align-self: flex-start;
     letter-spacing: -8px;
-    
+  }
+
+  .container2Me .labelPoints {
+    text-align: left;
+    color: #f5F5F5;
+    margin: 4px;
+    font-size: 15px;
+    margin-top: 10px;
+    align-self: flex-start;
+    letter-spacing: -5px;
   }

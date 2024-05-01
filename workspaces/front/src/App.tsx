@@ -9,6 +9,8 @@ import JoinGame from './js/pages/joinGame/joinGame'
 import Lobby from './js/pages/lobby/lobby'
 import PageTest from './js/pages/test/test'
 import Menu from './js/pages/menu/menu'
+import Game from './js/pages/game/game'
+
 import './CSS/App.css'
 import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
@@ -25,6 +27,7 @@ function App() {
       <Route path="/joinGame" element={<JoinGame />} />
       <Route path="/lobby" element={<Lobby />} />
       <Route path="/" element={<Navigate to="/register" />} />
+      <Route path="/game" element={<Game />} />
     
     </Routes>
     

@@ -1,70 +1,102 @@
+@font-face {
+  font-family: 'Inria';
+  src: url(./InriaSans-Regular.ttf);
+}
 
-.opponentBoard{
-  outline: 1px solid #000;
+.opponentBoard {
   border-radius: 10px;
   margin-bottom: 0px;
 }
 
 
+
 .container {
-    position: relative;
-    width: 310px;
-    height: 158px;
-    color: black;
-    background-color:#9ECD8E;
-    padding: 10px;
-    border-radius: 10px;
-    display: flex; 
-    justify-content: space-between;
-    margin-top: 0px;
-    margin-bottom: 0px;
-  }
-
-  .container2 {
-    width: 80px;
-    position: absolute;
-    top: 5px; 
-    left: 10px;
-    margin-top: 5px;
-    color: white;
-    font-size: small;
-    background-color: #4B957A;
-    padding: 10px;
-    border-radius: 10px;
-    flex-direction: column;
-    align-items: center; 
-    text-align: left;
-  }
-
-  .container2 img.cardImage {
-    width: 20px; 
-    height: auto;
+  position: relative;
+  width: 310px;
+  height: 158px;
+  color: black;
+  background-color: #9ECD8E;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
-  
 
-  .label {
-    text-align: left;
-    color: #D4D6D5;
-    font-size: 30px;
-  }
+.container2 {
+  position: absolute;
+  align-items: center;
+}
 
-  .labelname {
-    text-align: left;
-    color: #1f1f1f;
-    margin: 0px;
-    font-size: 15px;
-    margin-top: -30px;
-    position: relative;
-    align-self: flex-start
-    
-  }
+.container2 img.cardImage {
+  width: 20px;
+  height: auto;
+}
 
-  .labelPoints {
-    text-align: left;
-    color: #9ECD8E;
-    margin: 4px;
-    font-size: 6px;
-    margin-top: 10px;
-    position: relative;
-    align-self: flex-start
-  }
+.label {
+  text-align: left;
+  color: #D4D6D5;
+  font-size: 30px;
+}
+
+.labelname {
+  text-align: left;
+  color: #1f1f1f;
+  margin: 0px;
+  font-family: 'Inria';
+  font-size: 20px;
+  margin-top: -37px;
+  position: relative;
+  align-self: flex-start
+}
+
+.userIcon {
+  height: 25px;
+  text-align: left;
+  color: #1f1f1f;
+  margin: 0px;
+  font-size: 15px;
+  margin-top: -35px;
+  margin-left: 10px;
+  margin-right: -10px;
+  position: relative;
+  align-self: flex-start
+}
+
+
+.labelPoints {
+  text-align: left;
+  color: #9ECD8E;
+  margin: 4px;
+  font-size: 6px;
+  margin-top: 10px;
+  position: relative;
+  align-self: flex-start
+}
+
+.opponentHistory {
+  display: flex;
+  flex-direction: row-reverse; /* Inverser l'ordre des cartes */
+  border-radius: 20px;
+  justify-content: center; /* Centrer horizontalement */
+  align-items: center; /* Centrer verticalement */
+  margin-top: 10px;
+  margin-right: 50px;
+}
+
+
+.opponentHistory > * {
+  margin-right: -55px;
+}
+
+.card{
+  border-radius: 10px;
+  margin-bottom: 0px;
+  transition: transform 0.2s;
+  user-select: none; /* Rend le contenu non sélectionnable */
+}
+.card:hover{
+  transform: scale(1.5) translateX(-20px); /* Zoom on hover */
+  z-index: 1;
+}

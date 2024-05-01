@@ -7,51 +7,59 @@ import expertLT from '../../images/Expert_lead_tech.webp';
 import MPLT from '../../images/MP_lead_tech.webp';
 import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCard";
 import styles from './OpponentBoard.module.css';
+import userIcon from '../../../icons/user_icon.webp';
+import PlayerStatus from '../PlayerStatus/PlayerStatus';
+import { PlayerStateInterface, PublicPlayerState } from '@shared/common/Game';
+import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 
 const OpponentBoard: React.FC = () => {
 
     const data = {
-        name : "Pierre",
+        name: "Jean",
         kg: "900",
         points: "3",
-        expert : "ProductOwner",
-        MP : "Developer"
+        expert: ["Developer", "ProductOwner", "Architect"],
+        MP: "Developer"
     };
 
-    let expertImageSrc = null;
-    if (data.expert === "Developer") {
-        expertImageSrc = expertD;
-    } else if (data.expert === "Architect") {
-        expertImageSrc = expertLT;
-    } else if (data.expert === "ProductOwner") {
-        expertImageSrc = expertPO;
-    }
-
-    let mpImageSrc =null;
-    if (data.MP === "Developer") {
-        mpImageSrc = MPD;
-    } else if (data.MP === "Architect") {
-        mpImageSrc = MPLT;
-    } else if (data.MP === "ProductOwner") {
-        mpImageSrc = MPPO;
-    }
-
+    let player: PlayerStateInterface = {
+        co2Saved: 900,
+        sensibilisationPoints: 3,
+        expertCards: ["Developer", "ProductOwner", "Architect"],
+        badPractice: "Developer",
+        playerName: "Jean",
+        cardsInHand: [],
+        practiceAnswers: [],
+        playerId: '',
+        canPlay: false,
+        cardsHistory: []
+    };
 
     return (
         <div className={styles.opponentBoard}>
             <div className={styles.nameContainer}> </div>
             <div className={styles.container}>
-            <label className={styles.labelname}>{data.name}</label>
+                <img src={userIcon} alt="user icon" className={styles.userIcon} />
+                <label className={styles.labelname}>{data.name}</label>
+
                 <div className={styles.container2}>
-                    <label className={styles.label}>{data.kg}kg</label> <br />
-                    {expertImageSrc && <img src={expertImageSrc} alt="Carte expert" className={styles.cardImage} />} <br />
-                    {mpImageSrc && <img src={mpImageSrc} alt="Carte MP" className={styles.cardImage} />} <br />
-                    <label className={styles.labelPoints}>{data.points} points de sensibilisation</label> <br />
+                    <PlayerStatus playerstate={player} />
                 </div>
-                <BestPracticeCard /> {}
+                <div className={styles.opponentHistory}>
+                    <div className={styles.card}>
+                        <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
+                    </div>
+                    <div className={styles.card}>
+                        <BadPracticeCard cardType="BadPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " targetedPlayer="Pierre" />
+                    </div>
+                    <div className={styles.card}>
+                        <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
+                    </div>
             </div>
+            </div>
+
         </div>
-        
+
     );
 };
 

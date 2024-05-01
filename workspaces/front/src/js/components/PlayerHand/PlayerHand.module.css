@@ -21,7 +21,6 @@
     margin-bottom: 0px;
     transition: transform 0.2s;
     user-select: none; /* Rend le contenu non sélectionnable */
-
 }
 .card:hover{
     transform: translateY(-50px) scale(2.3) translateX(-20px); /* Zoom on hover */
@@ -76,7 +75,7 @@
     border-radius: 6px;
     position: absolute;
     z-index: 1;
-    transform: translateY(-110px) translateX(40px);
+    transform: translateY(-130px) translateX(30px);
     opacity: 0;
     transition: opacity 0.3s;
 }
