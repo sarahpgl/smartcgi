@@ -34,7 +34,10 @@ const LobbyComponent: React.FC = () => {
             <label key={index} className={styles.participant}>{lobbyState?.clientsNames[id]}</label>
           )
         })}
-        <button className={styles.button}>Lancer la partie</button> <br />
+        {lobbyState?.ownerId === localStorage.getItem('clientInGameId') && (
+          <button className={styles.button}>Lancer la partie</button>
+        )}
+
       </div>
     </>
   );
