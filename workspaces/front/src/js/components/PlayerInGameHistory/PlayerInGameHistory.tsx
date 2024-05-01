@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import styles from './PlayerBoard.module.css';
+import styles from './PlayerInGameHistory.module.css';
 
 import BestPracticeCard from '@app/js/components/BestPracticeCard/BestPracticeCard';
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
 
-function PlayerBoard() {
+function PlayerInGameHistory() {
 
     return (
 
@@ -20,4 +20,4 @@ function PlayerBoard() {
     );
 }
 
-export default PlayerBoard;
+export default PlayerInGameHistory;

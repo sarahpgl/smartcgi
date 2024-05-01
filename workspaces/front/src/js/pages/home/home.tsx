@@ -5,7 +5,7 @@ import BadPracticeCard from '@app/js/components/BadPracticeCard/BadPracticeCard'
 import FormationCard from '@app/js/components/FormationCard/FormationCard';
 import ExpertCard from '@app/js/components/ExpertCard/ExpertCard';
 import PlayerHand from '@app/js/components/PlayerHand/PlayerHand';
-import PlayerBoard from '@app/js/components/PlayerBoard/PlayerBoard';
+import PlayerInGameHistory from '@app/js/components/PlayerInGameHistory/PlayerInGameHistory';
 
 function Home() {
   return (
@@ -17,7 +17,8 @@ function Home() {
       <FormationCard />
       <ExpertCard />
       <PlayerHand />
-      <PlayerBoard />
+      <PlayerInGameHistory />
+
       </div>
     </div>
   );
