@@ -9,7 +9,7 @@ import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCa
 import styles from './OpponentBoard.module.css';
 import userIcon from '../../../icons/user_icon.webp';
 import PlayerStatus from '../PlayerStatus/PlayerStatus';
-import { PlayerStateInterface } from '@shared/common/Game';
+import { PlayerStateInterface, PublicPlayerState } from '@shared/common/Game';
 
 const OpponentBoard: React.FC = () => {
 
@@ -33,8 +33,6 @@ const OpponentBoard: React.FC = () => {
         canPlay: false,
         cardsHistory: []
     };
-
-
 
     return (
         <div className={styles.opponentBoard}>

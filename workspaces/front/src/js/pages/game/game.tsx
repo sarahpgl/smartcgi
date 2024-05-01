@@ -4,6 +4,9 @@ import PlayerBoard from '@app/js/components/PlayerBoard/PlayerBoard';
 
 import styles from './game.module.css';
 import OpponentBoard from '@app/js/components/OpponentBoard/OpponentBoard';
+import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP';
+import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
+import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 
 function gamePage() {
     return (
@@ -23,6 +26,7 @@ function gamePage() {
                     <OpponentBoard />
                 </div>
             </div>
+
         </div>
     );
 }

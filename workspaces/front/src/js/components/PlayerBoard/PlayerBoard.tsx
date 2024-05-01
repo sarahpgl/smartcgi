@@ -10,18 +10,25 @@ import PlayerInGameHistory from '../PlayerInGameHistory/PlayerInGameHistory';
 
 function PlayerBoard() {
 
-    let name = "Pierre";
-    let expert= ["ProductOwner", "Developer"];
-    let bp = "Developer";
-    let co2= 260;
-    let sensibilisation = 2;
+    let player: PublicPlayerState = {
+        co2Saved: 900,
+        sensibilisationPoints: 3,
+        expertCards: ["Developer", "Architect"],
+        badPractice: "Developer",
+        playerName: "Jean",
+        cardsInHand: [],
+        practiceAnswers: [],
+        playerId: '',
+        canPlay: false,
+        cardsHistory: []
+    };
 
 
 
     return (
         <div className={styles.board}>
             <div className={styles.status}>
-                <PlayerStatus playerstate="hi" me={1} /> 
+                <PlayerStatus playerstate={player} me={1} /> 
             </div>
             <div className={styles.hand}>
                 <PlayerHand />
