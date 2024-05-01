@@ -7,6 +7,7 @@ import OpponentBoard from '@app/js/components/OpponentBoard/OpponentBoard';
 import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP';
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
+import CardDeck from '@app/js/components/CardDeck/CardDeck';
 
 function gamePage() {
     return (
@@ -24,6 +25,9 @@ function gamePage() {
                 </div>
                 <div className={styles.opponentBoardTop}>
                     <OpponentBoard />
+                </div>
+                <div className={styles.deck}>
+                    <CardDeck />
                 </div>
             </div>
 
