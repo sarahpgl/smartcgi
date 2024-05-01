@@ -1,5 +1,5 @@
-import SocketManager from '@components/websocket/SocketManager';
-import SocketState from '@components/websocket/SocketState';
+import SocketManager from '@app/js/components/websocket/SocketManager';
+import SocketState from '@app/js/components/websocket/SocketState';
 import React, { createContext } from 'react';
 import { useSetRecoilState } from 'recoil';
 

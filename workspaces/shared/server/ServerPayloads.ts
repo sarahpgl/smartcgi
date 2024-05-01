@@ -1,32 +1,33 @@
-import { PlayerStateInterface, PublicPlayerState } from '@shared/common/Game';
+import { GameState, SensibilisationQuestion } from '../common/Game';
 import { ServerEvents } from './ServerEvents';
-import { Card, CardType } from '@shared/common/Cards';
+import { Card, CardType } from '../common/Cards';
 
 export type ServerPayloads = {
   [ServerEvents.Pong]: {
     message: string;
   };
 
+  [ServerEvents.LobbyJoined]: {
+    clientInGameId: string;
+  }
+
   [ServerEvents.LobbyState]: {
     lobbyId: string;
     connectionCode: string;
     co2Quantity: number;
-    ownerName: string;
-    clientsNames: string[];
+    ownerId: string;
+    // A Record from id to playerName
+    clientsNames: Record<string, string>;
   };
 
-  [ServerEvents.GameState]: {
-    currentPlayer: string;
-    playerStates: PlayerStateInterface[];
-    discardPile: Card[];
+  [ServerEvents.GameStart]: {
+    gameState: GameState;
+    sensibilisationQuestion: SensibilisationQuestion;
   };
 
-  [ServerEvents.SensibilisationQuestion]: {
-    question: string;
-    answers: {
-      [key: string]: string;
-    };
-  };
+  [ServerEvents.GameState]: GameState;
+
+  [ServerEvents.SensibilisationQuestion]: SensibilisationQuestion;
 
   [ServerEvents.PracticeQuestion]: {
     playerName: string;

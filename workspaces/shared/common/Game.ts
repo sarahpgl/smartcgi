@@ -26,4 +26,16 @@ export enum PracticeAnswerType {
   UNKNOWN = 'unknown',
 }
 
+export interface GameState {
+  currentPlayer: string;
+  playerStates: PlayerStateInterface[];
+  discardPile: Card[];
+};
+
+export interface SensibilisationQuestion {
+  question: string;
+  answers: {
+    [key: string]: string;
+  };
+};
 

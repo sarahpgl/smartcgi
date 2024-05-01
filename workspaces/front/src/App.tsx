@@ -1,7 +1,7 @@
 import { RecoilRoot } from 'recoil'
 import React from 'react'
 import { useEffect } from 'react';
-import {BrowserRouter,Navigate,Route,Routes} from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Register from './js/pages/register/register'
 import Home from './js/pages/home/home'
 import CreateGame from './js/pages/createGame/createGame'
@@ -12,27 +12,60 @@ import Menu from './js/pages/menu/menu'
 import Game from './js/pages/game/game'
 
 import './CSS/App.css'
-import { SocketManagerProvider } from './components/websocket/SocketManagerProvider'
+import { SocketManagerProvider } from '@components/websocket/SocketManagerProvider'
 import Test from './components/game/test'
+import RequireAuth from './components/auth/RequireAuth';
 
 function App() {
+
   return (
-    <BrowserRouter>
-    <Routes>
-
-      <Route path="/menu" element={<Menu />} />
+    <RecoilRoot>
+      <SocketManagerProvider>
+      <BrowserRouter>
+      <Routes>
       <Route path="/register" element={<Register />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/createGame" element={<CreateGame />} />
-      <Route path="/joinGame" element={<JoinGame />} />
-      <Route path="/lobby" element={<Lobby />} />
-      <Route path="/" element={<Navigate to="/register" />} />
-      <Route path="/game" element={<Game />} />
-    
-    </Routes>
-    
-    </BrowserRouter>
+        <Route
+          path="/menu"
+          element={
+            <RequireAuth>
+              <Menu />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/createGame"
+          element={
+            <RequireAuth>
+              <CreateGame />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/joinGame"
+          element={
+            <RequireAuth>
+              <JoinGame />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/lobby/:lobbyId"
+          element={
+            <RequireAuth>
+              <Lobby />
+            </RequireAuth>
+          }
+        />
 
+
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/register" />} />
+            <Route path="/game" element={<Game />} />
+          </Routes>
+
+        </BrowserRouter>
+      </SocketManagerProvider>
+    </RecoilRoot>
   )
 }
 

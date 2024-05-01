@@ -1,7 +1,7 @@
 export interface BaseCard {
   id: string;
   actor: Actor;
-  title: string
+  title: string;
   contents: string;
   cardType: CardType;
 }
@@ -30,6 +30,7 @@ export interface Bad_Practice_Card extends Practice_Card {
 
 export interface Formation_Card extends BaseCard {
   cardType: 'Formation';
+  linkToFormation : string; 
 }
 
 export interface Expert_Card extends BaseCard {

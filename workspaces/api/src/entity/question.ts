@@ -9,10 +9,10 @@ export class Question {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToMany(() => Question_Answer, question_answer => question_answer.question_id)
+    @OneToMany(() => Question_Answer, question_answer => question_answer.question)
     question_answers: Question_Answer[];
 
-    @OneToMany(() => Question_Content, question_content => question_content.question_id)
+    @OneToMany(() => Question_Content, question_content => question_content.question)
     question_contents: Question_Content[];
 
     @ManyToMany(() => Game, game => game.questions)

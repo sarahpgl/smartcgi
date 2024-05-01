@@ -23,6 +23,8 @@ import { CardModule } from './card/card.module';
 import { GameModule } from './game/game.module';
 import { AuthModule } from './authentification/authentification.module';
 import { UsersModule } from './users/users.module';
+import { SensibilisationModule } from './sensibilisation/sensibilisation.module';
+import { BookletModule } from './booklet/booklet.module';
 
 @Module({
   imports: [
@@ -58,7 +60,9 @@ import { UsersModule } from './users/users.module';
     CardModule,
     GameModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    SensibilisationModule,
+    BookletModule
   ],
   controllers: [AppController],
   providers: [AppService],

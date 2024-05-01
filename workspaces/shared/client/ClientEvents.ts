@@ -1,5 +1,4 @@
-export enum ClientEvents
-{
+export enum ClientEvents {
   // General
   Ping = 'client.ping',
 
@@ -10,5 +9,12 @@ export enum ClientEvents
   LobbyStartGame = 'client.lobby.start',
 
   // Game
-  PracticeQuestion = 'client.game.practice_question',
+  AnswerPracticeQuestion = 'client.game.answer_practice_question',
+  AnswerSensibilisationQuestion = 'client.game.answer_sensibilisation_question',
+  PlayCard = 'client.game.play_card',
+  DiscardCard = 'client.game.discard_card',
+
+
+  // Reconnecting
+  ClientReconnect = 'client.reconnect'
 }
