@@ -88,7 +88,7 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    // TODO: Passer au joueur suivant
+    this.currentPlayer = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayer) + 1) % Object.keys(this.playerStates).length];
   }
 
   public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
