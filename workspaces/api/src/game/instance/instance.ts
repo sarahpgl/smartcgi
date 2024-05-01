@@ -21,7 +21,6 @@ export class Instance {
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
   public currentPlayer: string;
-  public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
   private answerCount: number = 0;
 
@@ -43,7 +42,7 @@ export class Instance {
     });
 
     //Set the first player
-    this.currentPlayer = this.players[0];
+    this.currentPlayer = Object.keys(this.playerStates)[0];
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
   }
@@ -88,7 +87,7 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    // TODO: Passer au joueur suivant
+    this.currentPlayer = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayer) + 1) % Object.keys(this.playerStates).length];
   }
 
   public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
