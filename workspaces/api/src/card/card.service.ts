@@ -139,10 +139,6 @@ export class CardService {
 
     // Shuffling and formatting bad practice cards
     const badPracticeCards = await this.bad_practice_cards_repository.find({relations: ["contents", "actors"]});
-    console.log('badPracticeCards : ');
-    console.log(badPracticeCards);
-    console.log('badPracticeCards.content : ');
-    console.log(badPracticeCards[0].contents);
     const deckBadPracticeCards = this.shuffleArray(badPracticeCards).slice(0, 12);
     const formattedBadPracticeCards: Bad_Practice_Card[] = deckBadPracticeCards.map((card: EntityBadPractice
     ) => ({
@@ -189,8 +185,6 @@ export class CardService {
     // Shuffling and formatting training cards
     const trainingCards = await this.training_cards_repository.find({relations: ["contents", "actors"]});
     const deckTrainingCards = this.shuffleArray(trainingCards).slice(0, 18);
-    console.log(trainingCards);
-    console.log(trainingCards[0].contents);
     const formattedTrainingCards: Formation_Card[] = deckTrainingCards.map((card: EntityTraining) => ({
       id: card.id.toString(),
       actor: this.getActorName(card.actors[0].title), 
@@ -199,15 +193,11 @@ export class CardService {
       cardType: 'Formation',
       linkToFormation: card.link, 
     }));
-    console.log('formattedTrainingCards : ');
-    console.log(formattedTrainingCards);
 
+    const allCards = [...formattedBadPracticeCards, ...formattedBestPracticeCards, ...formattedExpertCards, ...formattedTrainingCards];
 
-    const allCards = [formattedBadPracticeCards, formattedBestPracticeCards, formattedExpertCards, formattedTrainingCards];
 
     const shuffledCards = this.shuffleArray(allCards);
-    console.log('shuffledCards : ');
-    console.log(shuffledCards); 
     return shuffledCards;
 
   }
