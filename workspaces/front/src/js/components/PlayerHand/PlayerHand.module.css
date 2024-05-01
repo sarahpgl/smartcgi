@@ -21,7 +21,6 @@
     margin-bottom: 0px;
     transition: transform 0.2s;
     user-select: none; /* Rend le contenu non sélectionnable */
-
 }
 .card:hover{
     transform: translateY(-50px) scale(2.3) translateX(-20px); /* Zoom on hover */
