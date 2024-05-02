@@ -1,5 +1,5 @@
 import { Actor, Card } from "@shared/common/Cards";
-import { PlayerStateInterface, PracticeAnswer } from "@shared/common/Game";
+import { PlayerStateInterface, BestPracticeAnswer, BadPracticeAnswer, PracticeAnswer } from "@shared/common/Game";
 
 export class PlayerState implements PlayerStateInterface {
 
@@ -10,7 +10,8 @@ export class PlayerState implements PlayerStateInterface {
   public co2Saved: number = 1000;
   public expertCards: Actor[] = [];
   public sensibilisationPoints: number = 0;
-  public practiceAnswers: PracticeAnswer[] = [];
+  public bestPracticeAnswers: BestPracticeAnswer[] = [];
+  public badPracticeAnswers: BadPracticeAnswer[] = [];
 
   public clientInGameId: string;
   public playerName:string;

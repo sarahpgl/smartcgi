@@ -1,4 +1,4 @@
-import { PracticeAnswerType } from '@shared/common/Game';
+import { PracticeAnswer } from '../common/Game';
 import { ClientEvents } from './ClientEvents';
 import { Card } from '../common/Cards';
 
@@ -27,7 +27,7 @@ export type ClientPayloads = {
 
   [ClientEvents.AnswerPracticeQuestion]: {
     cardId: string;
-    answer: PracticeAnswerType;
+    answer: PracticeAnswer;
   }
 
   [ClientEvents.PlayCard]: {

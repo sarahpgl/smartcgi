@@ -11,7 +11,7 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { PracticeAnswerType, SensibilisationQuestion } from '@shared/common/Game';
+import { BestPracticeAnswerType, BadPracticeAnswerType, SensibilisationQuestion, PracticeAnswer } from '@shared/common/Game';
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
 
@@ -94,13 +94,30 @@ export class Instance {
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
   }
 
-  public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
+  public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
     const playerState = this.playerStates[playerId];
-
+    if (answer.answer !== BestPracticeAnswerType.APPLICABLE && answer.answer !== BestPracticeAnswerType.ALREADY_APPLICABLE && answer.answer !== BestPracticeAnswerType.NOT_APPLICABLE) {
+      throw new ServerException(SocketExceptions.GameError, 'Invalid best practice answer type');
+    }
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
-    playerState.practiceAnswers.push({ cardId, answer })
+    playerState.bestPracticeAnswers.push({ cardId, answer: answer.answer as BestPracticeAnswerType })
+    this.answerCount++;
+    if (this.answerCount === this.lobby.clients.size) {
+      this.lobby.dispatchGameState();
+    }
+  }
+
+  public answerBadPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
+    const playerState = this.playerStates[playerId];
+    if (answer.answer !== BadPracticeAnswerType.TO_BE_BANNED && answer.answer !== BadPracticeAnswerType.ALREADY_BANNED && answer.answer !== BadPracticeAnswerType.TOO_COMPLEX) {
+      throw new ServerException(SocketExceptions.GameError, 'Invalid best practice answer type');
+    }
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    playerState.badPracticeAnswers.push({ cardId, answer: answer.answer as BadPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.lobby.dispatchGameState();
