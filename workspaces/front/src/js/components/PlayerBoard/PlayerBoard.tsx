@@ -13,7 +13,7 @@ import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
 
-function PlayerBoard() {
+function PlayerBoard({ MPSelected, noMPSelected }) {
     const [gameState] = useRecoilState(CurrentGameState);
 
     useEffect(() => {
@@ -41,9 +41,19 @@ function PlayerBoard() {
                     const playerState = gameState.playerStates[playerId];
                     if (playerState.clientInGameId === localStorage.getItem('clientInGameId')) {
                         return (
-                            <div key={playerId} className={styles.status}>
-                                <PlayerStatus playerstate={playerState} me={1} />
-                            </div>
+                            <>
+                                <div key={playerId} className={styles.status}>
+                                    <PlayerStatus playerstate={playerState} me={1} />
+                                </div>
+                                <div className={styles.hand}>
+                                    <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} Cards={playerState.cardsInHand} />
+                                </div>
+                                <div className={styles.history}>
+                                    <PlayerInGameHistory Cards={playerState.cardsHistory} />
+                                </div>
+
+                            </>
+
                         );
                     }
                     return null;
@@ -53,12 +63,7 @@ function PlayerBoard() {
                     <PlayerStatus playerstate={player} me={1} />
                 </div>
             )}
-            <div className={styles.hand}>
-                <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} />
-            </div>
-            <div className={styles.history}>
-                <PlayerInGameHistory />
-            </div>
+
         </div>
     );
 }

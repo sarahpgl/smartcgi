@@ -13,7 +13,8 @@ import iconBin from '../../../icons/bin_icon.webp';
 
 import { Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
 
-function PlayerHand({MPSelected , noMPSelected}) {
+function PlayerHand({MPSelected , noMPSelected, Cards}) {
+    
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
     const handleCardClick = (cardId: number,cardType:string) => {
@@ -36,7 +37,7 @@ function PlayerHand({MPSelected , noMPSelected}) {
         setSelectedCard(null);
     };
 
-    let cards : BaseCard[] = [
+    let cards2 : BaseCard[] = [
         { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss : 150 },
         { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
         { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
@@ -45,6 +46,7 @@ function PlayerHand({MPSelected , noMPSelected}) {
         { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
         { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 180 }
     ];
+    let cards=Cards;
 
     return (
         <div className={styles.hand}>

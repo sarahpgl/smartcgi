@@ -52,7 +52,7 @@ function PlayerStatus({ playerstate, me }: { playerstate: PlayerStateInterface, 
                             expertImageSrc = expertPO;
                         }
                         return (
-                        <div className={styles.imgContainer}>
+                        <div className={styles.imgContainer} key={index}>
                         <Tooltip key={index} content={e}>
                         <img key={index} src={expertImageSrc} alt="Carte expert" className={styles.cardImage} />
                         </Tooltip>
