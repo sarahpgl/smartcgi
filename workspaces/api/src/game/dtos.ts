@@ -1,4 +1,5 @@
-import { PracticeAnswerType } from '@shared/common/Game';
+import { PracticeAnswer } from '@shared/common/Game';
+import { CardType } from '@shared/common/Cards';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 export class LobbyCreateDto {
   @IsString()
@@ -30,7 +31,9 @@ export class PracticeAnswerDto {
   cardId: string;
 
   @IsString()
-  answer: PracticeAnswerType;
+  answer: PracticeAnswer;
+
+  cardType: CardType;
 }
 
 export class ClientReconnectDto {
