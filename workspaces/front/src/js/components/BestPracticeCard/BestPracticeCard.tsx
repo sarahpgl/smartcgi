@@ -17,7 +17,7 @@ function BestPracticeCard(card:Best_Practice_Card) {
                 <h2>Bonne pratique</h2>
             </div>
             <div className={styles.cardPoids}>
-                <p>{card.carbon_loss >= 0 && card.carbon_loss <= 200 ? card.carbon_loss : "?? "} KG</p>
+                <p>{card.carbon_loss >= 0 && card.carbon_loss <= 200 ? card.carbon_loss : "?? "} kg</p>
             </div>
             <div className={styles.cardbody}>
                 <p>CO2 économisés</p>
