@@ -21,12 +21,9 @@ export class Instance {
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
   public currentPlayerId: string;
-<<<<<<< HEAD
-=======
-  // NOTE: May not be necessary
->>>>>>> ebf0300f20927fab76060e94020082c5642e0690
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
+  public cardService: CardService;
   public gameStarted: boolean = false;
   private answerCount: number = 0;
 

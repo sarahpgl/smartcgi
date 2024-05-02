@@ -35,7 +35,6 @@ export default function GameManager() {
       localStorage.setItem('clientInGameId', data.clientInGameId);
     };
 
-<<<<<<< HEAD
     const onGameStart: Listener<ServerPayloads[ServerEvents.GameStart]> = (data) => {
       console.log(data);
       setGameState(data.gameState);
@@ -45,8 +44,6 @@ export default function GameManager() {
     if (!socket.connected) {
       sm.connect();
     }
-=======
->>>>>>> ebf0300f20927fab76060e94020082c5642e0690
     if (!sm.socket.hasListeners(ServerEvents.LobbyState)) sm.registerListener(ServerEvents.LobbyState, onLobbyState);
     if (!sm.socket.hasListeners(ServerEvents.LobbyJoined)) sm.registerListener(ServerEvents.LobbyJoined, onLobbyJoined);
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);

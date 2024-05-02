@@ -24,7 +24,7 @@ export class Lobby {
   // Keep in memory the clients that disconnected Map<clientInGameId, playerName>
   public readonly disconnectedClients: Map<string, string> = new Map<string, string>();
 
-  public readonly instance: Instance = new Instance(this, this.cardService);
+  public readonly instance: Instance = new Instance(this);
 
   constructor(
     private readonly server: Server,
