@@ -37,8 +37,9 @@ export class Instance {
     // TODO: Implement this service in Sensibilisation Module
     // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
     this.lobby.clients.forEach((client) => {
+      //console.log('CO2', this.co2Quantity);
       this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
-      while (this.playerStates[client.id].cardsInHand.length <= 8) {
+      while (this.playerStates[client.id].cardsInHand.length <= 6) {
         this.drawCard(this.playerStates[client.id]);
       }
     });

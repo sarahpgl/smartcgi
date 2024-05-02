@@ -7,6 +7,7 @@ import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { Card, Practice_Card } from '@shared/common/Cards';
 import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
+import { CO2Quantity } from './types';
 
 export class Lobby {
   public readonly id: string = v4();
@@ -33,6 +34,7 @@ export class Lobby {
   ) {
     //console.log(cardService);
     this.instance.cardService = cardService;
+    this.instance.co2Quantity = co2Quantity; 
   }
 
   public addClient(client: AuthenticatedSocket, playerName: string, clientInGameId: string | null = null, isOwner: boolean = false): void {
