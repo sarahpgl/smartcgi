@@ -31,6 +31,7 @@ export class Lobby {
     private readonly cardService: CardService,
     co2Quantity: number,
   ) {
+    this.instance.cardService = cardService;
   }
 
   public addClient(client: AuthenticatedSocket, playerName: string, clientInGameId: string | null = null, isOwner: boolean = false): void {

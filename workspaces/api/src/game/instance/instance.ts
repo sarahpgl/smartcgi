@@ -29,7 +29,6 @@ export class Instance {
 
   constructor(
     private readonly lobby: Lobby,
-    private readonly cardService: CardService,
   ) {
   }
 
