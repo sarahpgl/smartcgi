@@ -19,14 +19,14 @@ export class Instance {
   public playerStates: Record<Socket['id'], PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
-  public currentPlayerId: string;
+  public currentPlayer: string;
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
+  public cardService: CardService;
   private answerCount: number = 0;
 
   constructor(
     private readonly lobby: Lobby,
-    private readonly cardService: CardService,
   ) {
   }
 

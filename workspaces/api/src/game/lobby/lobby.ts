@@ -21,13 +21,14 @@ export class Lobby {
 
   public readonly clients: Map<Socket['id'], AuthenticatedSocket> = new Map<Socket['id'], AuthenticatedSocket>();
 
-  public readonly instance: Instance = new Instance(this, this.cardService);
+  public readonly instance: Instance = new Instance(this);
 
   constructor(
     private readonly server: Server,
     private readonly cardService: CardService,
     co2Quantity: number,
   ) {
+    this.instance.cardService = cardService;
   }
 
   public addClient(client: AuthenticatedSocket, playerName: string, clientInGameId: string | null = null, isOwner: boolean = false): void {
