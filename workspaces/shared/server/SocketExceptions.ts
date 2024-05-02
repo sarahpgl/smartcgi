@@ -9,4 +9,6 @@ export enum SocketExceptions
 
   // Game
   GameError = 'exception.game.error',
+  TargetBadPracticeError = 'exception.game.target_bad_practice_error',
+ 
 }

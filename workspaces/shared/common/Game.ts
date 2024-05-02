@@ -1,7 +1,7 @@
 import { Card, Actor } from "./Cards";
 
-export interface PublicPlayerState {
-  playerId: string;
+export interface PlayerStateInterface {
+  clientInGameId: string;
   playerName: string;
   co2Saved: number;
   canPlay: boolean;
@@ -9,8 +9,6 @@ export interface PublicPlayerState {
   badPractice: Actor | null;
   expertCards: Actor[];
   cardsHistory: Card[];
-}
-export interface PlayerStateInterface extends PublicPlayerState {
   cardsInHand: Card[];
   practiceAnswers: PracticeAnswer[];
 }
@@ -27,7 +25,7 @@ export enum PracticeAnswerType {
 }
 
 export interface GameState {
-  currentPlayer: string;
+  currentPlayerId: string;
   playerStates: PlayerStateInterface[];
   discardPile: Card[];
 };

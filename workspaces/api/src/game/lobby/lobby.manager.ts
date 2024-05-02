@@ -9,16 +9,15 @@ import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { CO2Quantity } from '@app/game/lobby/types';
 import { Cron } from '@nestjs/schedule'
 import { CardService } from '@app/card/card.service';
+import { Injectable, Inject } from '@nestjs/common';
 
 export class LobbyManager {
   public server: Server;
 
   private readonly lobbies: Map<Lobby['id'], Lobby> = new Map<Lobby['id'], Lobby>();
 
-  constructor(
-    private readonly cardService: CardService,
-  ) {
-  }
+  @Inject(CardService)
+  private readonly cardService: CardService;
 
   public initializeSocket(client: AuthenticatedSocket): void {
     client.gameData.lobby = null;
@@ -50,18 +49,29 @@ export class LobbyManager {
     lobby.addClient(client, playerName, playerInGameId);
   }
 
-  public startGame(client: AuthenticatedSocket): void {
+  public startGame(client: AuthenticatedSocket, playerInGameId: string): void {
     const lobby = client.gameData.lobby;
 
     if (!lobby) {
       throw new ServerException(SocketExceptions.LobbyError, 'Not in lobby');
     }
 
-    if (lobby.lobbyOwner !== client) {
+    if (lobby.lobbyOwnerId !== playerInGameId) {
       throw new ServerException(SocketExceptions.LobbyError, 'Only lobby owner can start the game');
     }
 
     lobby.instance.triggerStart();
+  }
+
+  public reconnectClient(client: AuthenticatedSocket, clientInGameId: string): void {
+    const lobby = Array.from(this.lobbies.values()).find((lobby) => lobby.disconnectedClients.has(clientInGameId));
+
+    if (!lobby) {
+      throw new ServerException(SocketExceptions.LobbyError, 'Client not found');
+    }
+
+    lobby.reconnectClient(client, clientInGameId);
+
   }
 
   // Periodically clean up lobbies

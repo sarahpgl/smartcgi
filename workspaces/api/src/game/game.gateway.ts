@@ -15,7 +15,7 @@ import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto } from '@app/game/dtos';
+import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
 
 @WebSocketGateway()
@@ -29,7 +29,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(client: Socket, ...args: any[]): Promise<void> {
-    // Call initializers to set up socket
+    // TODO: Handle reconnection
+    this.logger.log('Client connected', client.id);
     const authenticatedClient: AuthenticatedSocket = client as AuthenticatedSocket;
     authenticatedClient.gameData = {
       lobby: null,
@@ -70,8 +71,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage(ClientEvents.LobbyStartGame)
-  onLobbyStartGame(client: AuthenticatedSocket): void {
-    this.lobbyManager.startGame(client);
+  onLobbyStartGame(client: AuthenticatedSocket, data: ClientStartGameDto): void {
+    this.lobbyManager.startGame(client, data.clientInGameId);
   }
 
   @SubscribeMessage(ClientEvents.AnswerPracticeQuestion)
@@ -81,6 +82,13 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
     client.gameData.lobby.instance.answerPracticeQuestion(client.id, data.cardId, data.answer);
   }
-  //Todo: Handler for practice question
+
+  // TODO: Deal with client reconnect
+  @SubscribeMessage(ClientEvents.ClientReconnect)
+  onClientReconnect(client: AuthenticatedSocket, data: ClientReconnectDto): void {
+    this.logger.log('Client reconnecting', data.clientInGameId);
+    this.lobbyManager.reconnectClient(client, data.clientInGameId);
+  }
+// TODO: Handler for practice question
 
 }

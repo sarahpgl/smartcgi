@@ -22,7 +22,7 @@ export type ClientPayloads = {
   }
 
   [ClientEvents.LobbyStartGame]: {
-
+    clientInGameId: string;
   }
 
   [ClientEvents.AnswerPracticeQuestion]: {
@@ -33,7 +33,8 @@ export type ClientPayloads = {
   [ClientEvents.PlayCard]: {
     card: Card;
   }
-  [ClientEvents.ClientReconnect]: {
 
+  [ClientEvents.ClientReconnect]: {
+    clientInGameId: string;
   }
 };

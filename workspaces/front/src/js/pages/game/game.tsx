@@ -5,6 +5,7 @@ import PlayerBoard from '@app/js/components/PlayerBoard/PlayerBoard';
 import styles from './game.module.css';
 import OpponentBoard from '@app/js/components/OpponentBoard/OpponentBoard';
 import CardDeck from '@app/js/components/CardDeck/CardDeck';
+import GameManager from '@app/js/components/Game/GameManager';
 
 function GamePage() {
     let playerAbleToMP = ["Top"];
@@ -60,6 +61,7 @@ function GamePage() {
                     <CardDeck />
                 </div>
             </div>
+            <GameManager />
         </div>
     );
     

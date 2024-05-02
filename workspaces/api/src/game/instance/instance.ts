@@ -13,20 +13,22 @@ import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
 import { PracticeAnswerType, SensibilisationQuestion } from '@shared/common/Game';
 import { DrawMode } from './types';
+import { Actor } from '@shared/common/Cards';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
-  public playerStates: Record<Socket['id'], PlayerState> = {};
+  public playerStates: Record<string, PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
-  public currentPlayer: string;
+  public currentPlayerId: string;
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
+  public cardService: CardService;
+  public gameStarted: boolean = false;
   private answerCount: number = 0;
 
   constructor(
     private readonly lobby: Lobby,
-    private readonly cardService: CardService,
   ) {
   }
 
@@ -35,14 +37,15 @@ export class Instance {
     // TODO: Implement this service in Sensibilisation Module
     // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
     this.lobby.clients.forEach((client) => {
-      this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.id, this.co2Quantity);
+      this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
       while (this.playerStates[client.id].cardsInHand.length <= 8) {
         this.drawCard(this.playerStates[client.id]);
       }
     });
 
     //Set the first player
-    this.currentPlayer = this.players[0];
+    this.gameStarted = true;
+    this.currentPlayerId = this.players[0];
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
   }
@@ -87,7 +90,7 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    //Passer au joueur suivant
+    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
   }
 
   public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
@@ -108,16 +111,47 @@ export class Instance {
     playerState.co2Saved -= card.carbon_loss;
     //Poser la question
     this.answerCount = 0;
-    this.lobby.dispatchPracticeQuestion(card, playerState.playerName);
+    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {
+    const actor = card.actor;
+    // add the expert card to the player
+    playerState.expertCards.push(actor);
+    // remove the bad practice card if the player has it
+    if (playerState.badPractice == actor) {
+      playerState.badPractice = null;
+    }
+    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
   }
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
+    const target = card.targetedPlayerId;
+    const targetPlayerState = this.playerStates[target];
+    // check if the target is already blocked
+    if (targetPlayerState.badPractice == null) {
+      // check if the target has the expert card associated
+      if (!targetPlayerState.expertCards.includes(card.actor)) {
+        targetPlayerState.badPractice = card.actor;
+        // Ask the question
+        this.answerCount = 0;
+        this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+      } else {
+        throw new ServerException(SocketExceptions.GameError, 'Player has the expert card associated');
+      }
+    } else {
+      throw new ServerException(SocketExceptions.GameError, 'Player already targeted by a bad practice card');
+    }
   }
 
+
   private playFormation(card: Formation_Card, playerState: PlayerState) {
+    const actor = card.actor;
+    // remove the bad practice card if the player has it
+    if (playerState.badPractice == actor) {
+      playerState.badPractice = null;
+    }
+    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
   }
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
