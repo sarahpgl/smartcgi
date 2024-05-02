@@ -31,7 +31,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(client: Socket, ...args: any[]): Promise<void> {
-    // Call initializers to set up socket
+    // TODO: Handle reconnection
+    this.logger.log('Client connected', client.id);
     const authenticatedClient: AuthenticatedSocket = client as AuthenticatedSocket;
     authenticatedClient.gameData = {
       lobby: null,
@@ -87,7 +88,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // TODO: Deal with client reconnect
   @SubscribeMessage(ClientEvents.ClientReconnect)
   onClientReconnect(client: AuthenticatedSocket, data: ClientReconnectDto): void {
-
+    this.logger.log('Client reconnecting', data.clientInGameId);
+    this.lobbyManager.reconnectClient(client, data.clientInGameId);
   }
 // TODO: Handler for practice question
 
