@@ -28,6 +28,7 @@ export class Lobby {
     private readonly cardService: CardService,
     co2Quantity: number,
   ) {
+    //console.log(cardService);
     this.instance.cardService = cardService;
   }
 

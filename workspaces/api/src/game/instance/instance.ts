@@ -19,7 +19,7 @@ export class Instance {
   public playerStates: Record<Socket['id'], PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
-  public currentPlayer: string;
+  public currentPlayerId: string;
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
   public cardService: CardService;
