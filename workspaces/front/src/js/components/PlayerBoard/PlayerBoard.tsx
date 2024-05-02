@@ -12,6 +12,7 @@ import { CurrentGameState } from '../Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
+
 function PlayerBoard() {
     const [gameState] = useRecoilState(CurrentGameState);
 
@@ -53,7 +54,7 @@ function PlayerBoard() {
                 </div>
             )}
             <div className={styles.hand}>
-                <PlayerHand />
+                <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} />
             </div>
             <div className={styles.history}>
                 <PlayerInGameHistory />

@@ -96,7 +96,3 @@
   transition: transform 0.2s;
   user-select: none; /* Rend le contenu non sélectionnable */
 }
-.card:hover{
-  transform: scale(1.5) translateX(-20px); /* Zoom on hover */
-  z-index: 1;
-}

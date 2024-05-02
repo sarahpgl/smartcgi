@@ -1,59 +1,59 @@
 
 body {
     overflow-y: hidden;
+    user-select: none; /* Rend le contenu non sélectionnable */
 }
 
+
 .container {
+    width: 1510px;
+    height: 600px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: start;
+    margin-bottom: 0px;
+    position:absolute;
     justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    background-color: #f5f5f5;
-    position: relative;
+    top:135px;
+    left: 10px;
 }
 
 .playerBoard {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center; /* Add this line */
+    align-self: end;
     position: absolute;
-    top: 110px;
+    bottom: -15px;
 }
 
 .opponentBoardLeft {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center; /* Add this line */
+    align-self: center;
     position: absolute;
-    top: -70px;
-    left: 420px;
+    left: 0px;
 }
-
 .opponentBoardRight {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center; /* Add this line */
+    align-self: center;
     position: absolute;
-    top: -70px;
-    right: 420px;
+    right: 0px;
 }
 
 .opponentBoardTop {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center; /* Add this line */
+    align-self: start;
     position: absolute;
-    top: -230px;
+    left: 40%;
+    top: 10px;
+}
+
+.opponentBoardMPImpossible {
+    filter: brightness(0.6);
+    cursor: not-allowed;
+}
+
+.opponentBoardOk:hover{
+    cursor: pointer;
+    filter:drop-shadow(0 0 5px rgb(233, 209, 0));
 }
 
 .deck{
-    position:fixed;
-    top:500px;
-    right: 90px;
+    position: absolute;
+    bottom: -50px;
+    right: 100px;
 }
