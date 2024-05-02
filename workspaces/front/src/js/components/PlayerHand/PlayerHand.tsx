@@ -69,13 +69,13 @@ function PlayerHand({MPSelected , noMPSelected}) {
                     )}
                     {(card.type !== "BadPractice") && selectedCard === index && 
                         <div className={styles.tooltip}>
-                            <img className={styles.iconOk} src={iconOk} alt="iconOk" />
+                            <img onClick={()=>window.alert("La carte ''"+ card.title+"'' " + index + " a été validée")} className={styles.iconOk} src={iconOk} alt="iconOk" />
                             <span className={styles.tooltiptext}>Valider</span>
                         </div>
                     }
                     {selectedCard === index && (
                         <div className={styles.tooltip}>
-                            <img className={styles.iconBin} src={iconBin} alt="iconBin" />
+                            <img onClick={()=>window.alert("La carte ''"+ card.title+"'' " + index + " a été défaussée")} className={styles.iconBin} src={iconBin} alt="iconBin" />
                             <span className={styles.tooltiptext}>Défausser la carte</span>
                         </div>
                     )}
