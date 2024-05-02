@@ -20,11 +20,11 @@ const LobbyComponent: React.FC = () => {
   };
 
   const handleStartGame = () => {
-    if ((lobbyState ? Object.keys(lobbyState?.clientsNames).length  : 0 )=== 4){
+    if ((lobbyState ? Object.keys(lobbyState?.clientsNames).length  : 0 )=== 2){
       sm.emit({
         event: ClientEvents.LobbyStartGame,
         data: {
-
+          clientInGameId: localStorage.getItem('clientInGameId') ?? ''
         }
       })
     } else {

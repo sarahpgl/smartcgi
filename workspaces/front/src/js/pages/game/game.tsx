@@ -8,6 +8,7 @@ import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP'
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 import CardDeck from '@app/js/components/CardDeck/CardDeck';
+import GameManager from '@app/js/components/Game/GameManager';
 
 function gamePage() {
     return (
@@ -30,7 +31,7 @@ function gamePage() {
                     <CardDeck />
                 </div>
             </div>
-
+            <GameManager />
         </div>
     );
 }

@@ -2,7 +2,7 @@ import useSocketManager from '@hooks/useSocketManager';
 import { useEffect } from 'react';
 import { Listener } from '@components/websocket/types';
 import { useRecoilState } from 'recoil';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { CurrentLobbyState, CurrentGameState } from './states';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
@@ -34,12 +34,19 @@ export default function GameManager() {
       localStorage.setItem('clientInGameId', data.clientInGameId);
     };
 
+    const onGameStart: Listener<ServerPayloads[ServerEvents.GameStart]> = (data) => {
+      console.log(data);
+      setGameState(data.gameState);
+      naviguate('/game/');
+    };
+
     if (!socket.connected) {
       sm.connect();
     }
     if (!sm.socket.hasListeners(ServerEvents.LobbyState)) sm.registerListener(ServerEvents.LobbyState, onLobbyState);
     if (!sm.socket.hasListeners(ServerEvents.LobbyJoined)) sm.registerListener(ServerEvents.LobbyJoined, onLobbyJoined);
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);
+    if (!sm.socket.hasListeners(ServerEvents.GameStart)) sm.registerListener(ServerEvents.GameStart, onGameStart);
 
     return () => {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);

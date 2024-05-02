@@ -24,7 +24,7 @@ function PlayerStatus({ playerstate,me}: { playerstate: PlayerStateInterface ,  
             <div className={me === 1 ? styles.container2Me : styles.container2}>
                 <label className={styles.label}>{co2}</label><label className={styles.label} style={{ fontSize: '18px', letterSpacing: '0.2px' }}> kg</label> 
                 <br/>
-                {expert.map((e) => {
+                {expert.map((e, index) => {
                     let expertImageSrc = null;
                     if (e === "Developer") {
                         expertImageSrc = expertDev;
@@ -33,7 +33,7 @@ function PlayerStatus({ playerstate,me}: { playerstate: PlayerStateInterface ,  
                     } else if (e === "ProductOwner") {
                         expertImageSrc = expertPO;
                     }
-                    return <img src={expertImageSrc} alt="Carte expert" className={styles.cardImage} />
+                    return <img key={index} src={expertImageSrc} alt="Carte expert" className={styles.cardImage} />
                 }
                 )}
                 <br/>
