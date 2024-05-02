@@ -1,4 +1,4 @@
-import { PracticeAnswerType } from '@shared/common/Game';
+import { PracticeAnswerType, SensibilisationQuestionAnswer } from '@shared/common/Game';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 export class LobbyCreateDto {
   @IsString()
@@ -31,6 +31,15 @@ export class PracticeAnswerDto {
 
   @IsString()
   answer: PracticeAnswerType;
+}
+
+
+export class SensibilisationAnswerDto {
+  @IsNumber()
+  questionId: number;
+
+  @IsString()
+  answer: SensibilisationQuestionAnswer;
 }
 
 export class ClientReconnectDto {

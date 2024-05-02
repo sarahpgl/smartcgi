@@ -11,9 +11,11 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { PracticeAnswerType, SensibilisationQuestion } from '@shared/common/Game';
+import { PracticeAnswerType, SensibilisationQuestion, SensibilisationQuestionAnswer } from '@shared/common/Game';
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
+import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { Question_Content } from '@app/entity/question_content';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
@@ -28,6 +30,7 @@ export class Instance {
   constructor(
     private readonly lobby: Lobby,
     private readonly cardService: CardService,
+    private readonly sensibilisationService : SensibilisationService
   ) {
   }
 
@@ -103,6 +106,28 @@ export class Instance {
       this.lobby.dispatchGameState();
     }
   }
+  public getSensibilisationQuizz(): Promise<{ content: SensibilisationQuestion }> {
+    return this.getSensibilisationQuizz() ;
+  }
+
+  public answerSensibilisationQuestion(playerId: string, questionId: number, answer: SensibilisationQuestionAnswer): Promise<{trial :boolean }> {
+    let response = false;
+    const playerState = this.playerStates[playerId];
+
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    let solution = this.sensibilisationService.getGoodSolution(questionId);
+    if( solution[0] == answer.answer){
+      response = true;
+      if(!this.playerStates.canPlay){
+        this.playerStates.canPlay.canPlay = true;
+      }
+      this.playerStates.sensibilisationPoints.sensibilisationPoints ++;
+    }
+    return Promise.resolve({ trial: response });
+  }
+
 
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     //Ajouter le CO2

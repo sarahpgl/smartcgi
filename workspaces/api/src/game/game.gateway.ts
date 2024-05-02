@@ -15,8 +15,10 @@ import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto } from '@app/game/dtos';
+import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto, SensibilisationAnswerDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
+import { Question_Content } from '@app/entity/question_content';
+import { SensibilisationQuestion } from '@shared/common/Game';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -89,4 +91,24 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 // TODO: Handler for practice question
 
+@SubscribeMessage(ClientEvents.AnswerSensibilisationQuestion)
+onSensibilisationQuestion(client : AuthenticatedSocket, data : SensibilisationAnswerDto) : void {
+  if (!client.gameData.lobby) {
+    throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+  }
+  client.gameData.lobby.instance.answerSensibilisationQuestion(client.id, data.questionId, data.answer);
+}
+
+@SubscribeMessage(ServerEvents.GetSensibilisationQuestion)
+async onSensibilisationQuestionGet(client : AuthenticatedSocket) : Promise<{ content : SensibilisationQuestion}>
+ {
+  if (!client.gameData.lobby) {
+    throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+  }
+  
+  const content = await client.gameData.lobby.instance.getSensibilisationQuizz();
+
+  // Retourner le contenu dans un objet littéral
+  return { content : content.content };
+}
 }

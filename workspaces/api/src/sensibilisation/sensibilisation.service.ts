@@ -98,11 +98,11 @@ export class SensibilisationService {
         return { card: chosenCard };
     }
 
-    async getSensibilisationQuizz(): Promise<{ jsonString: string }> {
+    async getSensibilisationQuizz(): Promise<{ questions: Question_Content }> {
 
         let card_id = (await this.randomQuestionToStart()).card.id;
         let card_content: Question_Content = await this.question_content_repository.findOne({ where: { question_id: card_id } });
-        let card_answer: Question_Answer = await this.question_answer_repository.findOne({ where: { question_id: card_id } });
+       /* let card_answer: Question_Answer = await this.question_answer_repository.findOne({ where: { question_id: card_id } });
 
         const jsonData = {
             card_content: card_content,
@@ -111,9 +111,16 @@ export class SensibilisationService {
 
         const jsonString = JSON.stringify(jsonData, null, 2);
 
-        console.log(jsonString);
+        console.log(jsonString);*/
 
-        return { jsonString: jsonString }
+        return { questions: card_content }
+    }
+
+    async getGoodSolution(question_id : number): Promise<{ solution : number}> {
+
+        let solution : Question_Answer= await this.question_answer_repository.findOne({ where: { question_id: question_id } });
+
+        return {solution : solution.answer}
     }
 
 
