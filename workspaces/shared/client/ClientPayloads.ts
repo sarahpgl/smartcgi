@@ -22,7 +22,7 @@ export type ClientPayloads = {
   }
 
   [ClientEvents.LobbyStartGame]: {
-
+    clientInGameId: string;
   }
 
   [ClientEvents.AnswerPracticeQuestion]: {

@@ -17,7 +17,7 @@ export class Lobby {
 
   public readonly maxClients: number = 4;
 
-  public lobbyOwner: AuthenticatedSocket;
+  public lobbyOwnerId: string;
 
   public readonly clients: Map<Socket['id'], AuthenticatedSocket> = new Map<Socket['id'], AuthenticatedSocket>();
 
@@ -41,7 +41,7 @@ export class Lobby {
     }
 
     if (isOwner) {
-      this.lobbyOwner = client;
+      this.lobbyOwnerId = clientInGameId;
     }
     this.emitToClient(client, ServerEvents.LobbyJoined, { clientInGameId });
     this.dispatchLobbyState();
@@ -69,7 +69,7 @@ export class Lobby {
       lobbyId: this.id,
       connectionCode: this.connectionCode,
       co2Quantity: this.instance.co2Quantity,
-      ownerId: this.lobbyOwner?.gameData.clientInGameId,
+      ownerId: this.lobbyOwnerId,
       clientsNames,
     };
 

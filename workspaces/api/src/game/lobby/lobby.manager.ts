@@ -50,14 +50,14 @@ export class LobbyManager {
     lobby.addClient(client, playerName, playerInGameId);
   }
 
-  public startGame(client: AuthenticatedSocket): void {
+  public startGame(client: AuthenticatedSocket, playerInGameId: string): void {
     const lobby = client.gameData.lobby;
 
     if (!lobby) {
       throw new ServerException(SocketExceptions.LobbyError, 'Not in lobby');
     }
 
-    if (lobby.lobbyOwner !== client) {
+    if (lobby.lobbyOwnerId !== playerInGameId) {
       throw new ServerException(SocketExceptions.LobbyError, 'Only lobby owner can start the game');
     }
 
