@@ -1,4 +1,4 @@
-import ConnexionForm from "@app/js/components/connexionForm/connexionForm";
+import ConnexionForm from "@app/js/components/ConnexionForm/connexionForm";
 import React, { useEffect, useState } from 'react';
 import RegisterForm from "@app/js/components/RegisterForm/RegisterForm";
 import Header from "@app/js/components/header/Header";

@@ -11,9 +11,9 @@ import PlayerInGameHistory from '../PlayerInGameHistory/PlayerInGameHistory';
 function PlayerBoard() {
 
     let player: PublicPlayerState = {
-        co2Saved: 900,
+        co2Saved: 800,
         sensibilisationPoints: 3,
-        expertCards: ["Developer", "Architect"],
+        expertCards: ["Developer"],
         badPractice: "Developer",
         playerName: "Jean",
         cardsInHand: [],
