@@ -64,9 +64,7 @@ function GamePage() {
                         return null;
                     })
                 ) : (
-                    <div className={styles.status}>
-                        <PlayerStatus playerstate={player} me={1} />
-                    </div>
+                    <></>
                 )}
 
                 <div className={`${styles.opponentBoardLeft} ${MP === 1 ? (playerAbleToMP.includes("Left") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardLeft}`}>
