@@ -21,8 +21,8 @@ const MyEndGameSummary: React.FC = () => {
     ];
 
     const [isVisible, setIsVisible] = useState(true);
-    const [startBPIndex, setStartBPIndex] = useState(0); // Index de départ des bonnes pratiques
-    const [startMPIndex, setStartMPIndex] = useState(0); // Index de départ des mauvaises pratiques
+    const [startBPIndex, setStartBPIndex] = useState(0); 
+    const [startMPIndex, setStartMPIndex] = useState(0);
     const navigate = useNavigate();
 
     if (!isVisible) {
@@ -66,12 +66,12 @@ const MyEndGameSummary: React.FC = () => {
                             contents={card.contents}
                             carbon_loss={card.carbon_loss}
                         />
-                        <span className={styles.cardNumber}>{index + startBPIndex + 1}</span>
                     </div>
                 ))}
             </div>
             <div className={styles.navigationButtons}>
                 {startBPIndex > 0 && <img src={next} alt="Previous" className={styles.prevButton} onClick={prevBP} />}
+                {startBPIndex <= 0 && <img src="" alt="" className={styles.prevButton} onClick={prevBP} />}
                 {startBPIndex + 3 < data.filter(card => card.type === 'BestPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextBP} />}
             </div>
             <hr className={styles.separator} />
@@ -86,13 +86,13 @@ const MyEndGameSummary: React.FC = () => {
                             contents={card.contents}
                             targetedPlayer={card.targetedPlayer}
                         />
-                        <span className={styles.cardNumber}>{index + startMPIndex + 1}</span>
                     </div>
                 ))}
             </div>
             <div className={styles.navigationButtons}>
                 {startMPIndex > 0 && <img src={next} alt="Previous" className={styles.prevButton} onClick={prevMP} />}
-                {startMPIndex + 3 < data.filter(card => card.type === 'BestPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextMP} />}
+                {startMPIndex <= 0 && <img src="" alt="" className={styles.prevButton} onClick={prevMP} />}
+                {startMPIndex + 3 < data.filter(card => card.type === 'BadPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextMP} />}
             </div>
         </div>
     );

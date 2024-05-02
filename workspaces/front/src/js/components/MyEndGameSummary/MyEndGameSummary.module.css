@@ -33,6 +33,7 @@
   display: flex; 
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 40px;
 }
 
 .card {
@@ -72,11 +73,13 @@
   height: auto; 
 }
 
-
 .prevButton {
   rotate: 180deg;
 }
 
+.nextButton {
+  
+}
 
 .navigationButtons img:hover{
   cursor: pointer;
