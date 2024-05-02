@@ -8,7 +8,7 @@ import PlayerHand from '../PlayerHand/PlayerHand';
 import PlayerStatus from '../PlayerStatus/PlayerStatus';
 import PlayerInGameHistory from '../PlayerInGameHistory/PlayerInGameHistory';
 
-function PlayerBoard() {
+function PlayerBoard({ MPSelected , noMPSelected }) {
 
     let player: PublicPlayerState = {
         co2Saved: 800,
@@ -31,7 +31,7 @@ function PlayerBoard() {
                 <PlayerStatus playerstate={player} me={1} /> 
             </div>
             <div className={styles.hand}>
-                <PlayerHand />
+                <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} />
             </div>
             <div className={styles.history}>
                 <PlayerInGameHistory />

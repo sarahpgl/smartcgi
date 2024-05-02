@@ -11,22 +11,26 @@ import iconBin from '../../../icons/bin_icon.webp';
 
 import { Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
 
-function PlayerHand() {
+function PlayerHand({MPSelected , noMPSelected}) {
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
-    const handleCardClick = (cardId: number) => {
+    const handleCardClick = (cardId: number,cardType:string) => {
         if (selectedCard === cardId) {
             setSelectedCard(null);
+            noMPSelected();
             return;
         }
+        noMPSelected();
         setSelectedCard(cardId);
+        if (cardType === "BadPractice") {
+            MPSelected();
+        }
     };
 
     const handleCardHover = (cardId: number) => {
-        
     };
 
-    const handleCardLeave = () => {
+    const handleCardLeave = (cardType:string) => {
         setSelectedCard(null);
     };
 
@@ -47,9 +51,9 @@ function PlayerHand() {
                 <div
                     key={index}
                     className={`${styles.card} ${selectedCard === index ? styles.selected : ''}`}
-                    onClick={() => handleCardClick(index)}
+                    onClick={() => handleCardClick(index,card.type)}
                     onMouseEnter={() => handleCardHover(index)}
-                    onMouseLeave={handleCardLeave}
+                    onMouseLeave={() => handleCardLeave(card.type)}
                 >
                     {card.type === 'BestPractice' && (
                         <BestPracticeCard cardType={card.type} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} />

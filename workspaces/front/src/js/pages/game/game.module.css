@@ -1,6 +1,7 @@
 
 body {
     overflow-y: hidden;
+    user-select: none; /* Rend le contenu non sélectionnable */
 }
 
 .container {
@@ -32,6 +33,17 @@ body {
     top: -70px;
     left: 420px;
 }
+
+.opponentBoardMPImpossible {
+    filter: brightness(0.6);
+    cursor: not-allowed;
+}
+
+.opponentBoard:hover {
+    filter: brightness(1) drop-shadow(0 0 5px #fff200);
+    cursor: pointer;
+}
+
 
 .opponentBoardRight {
     display: flex;
