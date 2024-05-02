@@ -15,6 +15,7 @@ export enum ClientEvents {
   DiscardCard = 'client.game.discard_card',
 
 
+
   // Reconnecting
   ClientReconnect = 'client.reconnect'
 }

@@ -24,6 +24,7 @@ export enum PracticeAnswerType {
   UNKNOWN = 'unknown',
 }
 
+
 export interface GameState {
   currentPlayerId: string;
   playerStates: PlayerStateInterface[];
@@ -31,9 +32,18 @@ export interface GameState {
 };
 
 export interface SensibilisationQuestion {
+  question_id : number,
   question: string;
   answers: {
-    [key: string]: string;
-  };
+    response1 : number,
+    response2 : number,
+    response3 : number,
+    answer : number
+  }
 };
+
+  export interface SensibilisationQuestionAnswer {
+    answer : number
+  };
+
 

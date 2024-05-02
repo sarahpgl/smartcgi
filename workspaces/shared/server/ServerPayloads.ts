@@ -1,6 +1,7 @@
 import { GameState, SensibilisationQuestion } from '../common/Game';
 import { ServerEvents } from './ServerEvents';
 import { Card, CardType } from '../common/Cards';
+import { Question_Content } from '@app/entity/question_content';
 
 export type ServerPayloads = {
   [ServerEvents.Pong]: {
@@ -27,7 +28,7 @@ export type ServerPayloads = {
 
   [ServerEvents.GameState]: GameState;
 
-  [ServerEvents.SensibilisationQuestion]: SensibilisationQuestion;
+
 
   [ServerEvents.PracticeQuestion]: {
     playerId: string;
@@ -40,6 +41,16 @@ export type ServerPayloads = {
     gameState: GameState;
   };
   
+  [ServerEvents.GetSensibilisationQuestion] : {
+    question_id : number,
+    question: string;
+    answers: {
+      response1 : number,
+      response2 : number,
+      response3 : number,
+      answer : number
+    }
+  };
 };
 
 
