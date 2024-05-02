@@ -20,10 +20,27 @@ export class LobbyJoinDto {
   playerName: string;
 }
 
+export class ClientStartGameDto {
+  @IsString()
+  clientInGameId: string;
+}
+
 export class PracticeAnswerDto {
   @IsString()
   cardId: string;
 
   @IsString()
   answer: PracticeAnswerType;
+}
+
+export class ClientReconnectDto {
+  @IsString()
+  clientToken: string;
+
+  @IsString()
+  playerInGameId: string;
+
+  // See later if this will be useful, on how we can send back messages to the disconnect/reconnect client
+  @IsNumber()
+  lastMessageReceived: number;
 }

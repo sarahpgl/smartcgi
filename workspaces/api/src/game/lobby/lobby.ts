@@ -4,8 +4,9 @@ import { ServerEvents } from '@shared/server/ServerEvents';
 import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
+
 import { Card, Practice_Card } from '@shared/common/Cards';
-import { PublicPlayerState, SensibilisationQuestion } from '@shared/common/Game';
+import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 
 export class Lobby {
@@ -17,7 +18,7 @@ export class Lobby {
 
   public readonly maxClients: number = 4;
 
-  public lobbyOwner: AuthenticatedSocket;
+  public lobbyOwnerId: string;
 
   public readonly clients: Map<Socket['id'], AuthenticatedSocket> = new Map<Socket['id'], AuthenticatedSocket>();
 
@@ -41,7 +42,7 @@ export class Lobby {
     }
 
     if (isOwner) {
-      this.lobbyOwner = client;
+      this.lobbyOwnerId = clientInGameId;
     }
     this.emitToClient(client, ServerEvents.LobbyJoined, { clientInGameId });
     this.dispatchLobbyState();
@@ -69,7 +70,7 @@ export class Lobby {
       lobbyId: this.id,
       connectionCode: this.connectionCode,
       co2Quantity: this.instance.co2Quantity,
-      ownerId: this.lobbyOwner?.gameData.clientInGameId,
+      ownerId: this.lobbyOwnerId,
       clientsNames,
     };
 
@@ -87,7 +88,7 @@ export class Lobby {
 
   public dispatchGameState(): void {
     const payload: ServerPayloads[ServerEvents.GameState] = {
-      currentPlayer: this.instance.currentPlayer,
+      currentPlayerId: this.instance.currentPlayerId,
       playerStates: Object.values(this.instance.playerStates),
       discardPile: this.instance.discardPile,
     };
@@ -98,7 +99,7 @@ export class Lobby {
   public dispatchGameStart(question: SensibilisationQuestion): void {
     const payload: ServerPayloads[ServerEvents.GameStart] = {
       gameState: {
-        currentPlayer: this.instance.currentPlayer,
+        currentPlayerId: this.instance.currentPlayerId,
         playerStates: Object.values(this.instance.playerStates),
         discardPile: this.instance.discardPile,
       },
@@ -112,7 +113,7 @@ export class Lobby {
       playerId,
       cardType: card.cardType,
       gameState: {
-        currentPlayer: this.instance.currentPlayer,
+        currentPlayerId: this.instance.currentPlayerId,
         playerStates: Object.values(this.instance.playerStates),
         discardPile: this.instance.discardPile,
       },

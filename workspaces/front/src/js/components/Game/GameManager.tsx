@@ -12,6 +12,7 @@ export default function GameManager() {
   const { sm, socket } = useSocketManager();
   const naviguate = useNavigate();
   const location = useLocation();
+  const isLobbyPath = location.pathname.includes('/lobby');
 
   const [lobbyState, setLobbyState] = useRecoilState(CurrentLobbyState);
   const [gameState, setGameState] = useRecoilState(CurrentGameState);
@@ -49,10 +50,10 @@ export default function GameManager() {
   if (!lobbyState) {
     return <></>
   }
-  if (!gameState) {
+  if (!gameState && isLobbyPath) {
     return <LobbyComponent />
   }
 
-  return <div> Ceci sera le Game component </div>
+  return <div></div>
 
 }

@@ -3,12 +3,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { BookletService } from '../booklet/booklet.service';
 
 @Injectable()
 export class AuthService {
   private validTokens: Map<string, string> = new Map();
   constructor(
     private usersService: UsersService,
+    private bookletService : BookletService,
     private jwtService: JwtService
   ) { }
 
@@ -51,7 +53,10 @@ export class AuthService {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       // Création de l'utilisateur dans la base de données avec le mot de passe hashé
-      await this.usersService.createUser(mail, hashedPassword, lastname, firstname);
+      
+      let user_id = await this.usersService.createUser(mail, hashedPassword, lastname, firstname);
+      
+      let booklet = await this.bookletService.createBooklet(user_id.user_id);
       console.log('User created');
 
       return { success: true };

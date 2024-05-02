@@ -1,5 +1,5 @@
 import { Actor, Card } from "@shared/common/Cards";
-import { PlayerStateInterface, PracticeAnswer, PublicPlayerState } from "@shared/common/Game";
+import { PlayerStateInterface, PracticeAnswer } from "@shared/common/Game";
 
 export class PlayerState implements PlayerStateInterface {
 
@@ -12,26 +12,13 @@ export class PlayerState implements PlayerStateInterface {
   public sensibilisationPoints: number = 0;
   public practiceAnswers: PracticeAnswer[] = [];
 
-  public playerId: string;
+  public clientInGameId: string;
   public playerName:string;
 
   constructor(playerName:string, playerId:string, co2Quantity:number){
     this.playerName = playerName;
-    this.playerId = playerId;
+    this.clientInGameId = playerId;
     this.co2Saved = co2Quantity;
-  }
-
-  public getPublicState(): PublicPlayerState {
-    return {
-      playerId: this.playerId,
-      canPlay: this.canPlay,
-      cardsHistory: this.cardsHistory,
-      playerName: this.playerName,
-      co2Saved: this.co2Saved,
-      sensibilisationPoints: this.sensibilisationPoints,
-      badPractice: this.badPractice,
-      expertCards: this.expertCards,
-    }
   }
 
 }

@@ -20,7 +20,8 @@ export class Instance {
   public playerStates: Record<string, PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
-  public currentPlayer: string;
+  public currentPlayerId: string;
+  public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
   private answerCount: number = 0;
 
@@ -42,7 +43,7 @@ export class Instance {
     });
 
     //Set the first player
-    this.currentPlayer = Object.keys(this.playerStates)[0];
+    this.currentPlayerId = this.players[0];
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
   }
@@ -87,7 +88,7 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    this.currentPlayer = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayer) + 1) % Object.keys(this.playerStates).length];
+    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
   }
 
   public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
@@ -108,7 +109,7 @@ export class Instance {
     playerState.co2Saved -= card.carbon_loss;
     //Poser la question
     this.answerCount = 0;
-    this.lobby.dispatchPracticeQuestion(card, playerState.playerId);
+    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {
@@ -119,7 +120,7 @@ export class Instance {
     if(playerState.badPractice == actor){
       playerState.badPractice = null;
     }
-    this.lobby.dispatchCardPlayed(card, playerState.playerId);
+    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
   }
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
@@ -132,7 +133,7 @@ export class Instance {
         targetPlayerState.badPractice = card.actor;
         // Ask the question
         this.answerCount = 0;
-        this.lobby.dispatchPracticeQuestion(card, playerState.playerId);
+        this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
       } else {
         throw new ServerException(SocketExceptions.GameError, 'Player has the expert card associated');
       }
@@ -148,7 +149,7 @@ export class Instance {
     if(playerState.badPractice == actor){
       playerState.badPractice = null;
     }
-    this.lobby.dispatchCardPlayed(card, playerState.playerId);
+    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
   }
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
