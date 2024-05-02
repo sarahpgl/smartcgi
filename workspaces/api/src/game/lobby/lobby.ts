@@ -4,7 +4,7 @@ import { ServerEvents } from '@shared/server/ServerEvents';
 import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { Practice_Card } from '@shared/common/Cards';
+import { Card, Practice_Card } from '@shared/common/Cards';
 import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 
@@ -21,7 +21,10 @@ export class Lobby {
 
   public readonly clients: Map<Socket['id'], AuthenticatedSocket> = new Map<Socket['id'], AuthenticatedSocket>();
 
-  public readonly instance: Instance = new Instance(this);
+  // Keep in memory the clients that disconnected Map<clientInGameId, playerName>
+  public readonly disconnectedClients: Map<string, string> = new Map<string, string>();
+
+  public readonly instance: Instance = new Instance(this, this.cardService);
 
   constructor(
     private readonly server: Server,
@@ -46,10 +49,16 @@ export class Lobby {
       this.lobbyOwnerId = clientInGameId;
     }
     this.emitToClient(client, ServerEvents.LobbyJoined, { clientInGameId });
-    this.dispatchLobbyState();
+    console.log(`[Lobby] Client ${client.id} joined lobby ${this.id} as ${clientInGameId}`);
+    if (this.instance.gameStarted) {
+      this.dispatchGameState();
+    } else {
+      this.dispatchLobbyState();
+    }
   }
 
   public removeClient(client: AuthenticatedSocket): void {
+    this.disconnectedClients.set(client.gameData.clientInGameId, client.gameData.playerName);
     this.clients.delete(client.id);
     client.leave(this.id);
     client.gameData.lobby = null;
@@ -60,6 +69,13 @@ export class Lobby {
     // TODO: Notify other players that someone left
 
     this.dispatchLobbyState();
+  }
+
+  public reconnectClient(client: AuthenticatedSocket, clientInGameId: string): void {
+    console.log(`[Lobby] Client`, client.id, 'reconnected as', clientInGameId);
+    const playerName = this.disconnectedClients.get(clientInGameId);
+    this.addClient(client, playerName, clientInGameId);
+    this.disconnectedClients.delete(clientInGameId);
   }
 
   public dispatchLobbyState(): void {
@@ -78,9 +94,9 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
   }
 
-  public dispatchPracticeQuestion(card: Practice_Card, playerName: string): void {
+  public dispatchPracticeQuestion(card: Practice_Card, playerId: string): void {
     const payload: ServerPayloads[ServerEvents.PracticeQuestion] = {
-      playerName,
+      playerId,
       cardType: card.cardType,
     };
 
@@ -107,6 +123,19 @@ export class Lobby {
       sensibilisationQuestion: question,
     };
     this.dispatchToLobby(ServerEvents.GameStart, payload);
+  }
+
+  public dispatchCardPlayed(card: Card, playerId: string): void {
+    const payload: ServerPayloads[ServerEvents.CardPlayed] = {
+      playerId,
+      cardType: card.cardType,
+      gameState: {
+        currentPlayerId: this.instance.currentPlayerId,
+        playerStates: Object.values(this.instance.playerStates),
+        discardPile: this.instance.discardPile,
+      },
+    };
+    this.dispatchToLobby(ServerEvents.CardPlayed, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {

@@ -33,7 +33,8 @@ export type ClientPayloads = {
   [ClientEvents.PlayCard]: {
     card: Card;
   }
-  [ClientEvents.ClientReconnect]: {
 
+  [ClientEvents.ClientReconnect]: {
+    clientInGameId: string;
   }
 };

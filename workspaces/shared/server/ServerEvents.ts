@@ -11,4 +11,5 @@ export enum ServerEvents {
   GameState = 'server.game.state',
   SensibilisationQuestion = 'server.game.sensibilisation_question',
   PracticeQuestion = 'server.game.practice_question',
+  CardPlayed = 'server.game.card_played',
 }
