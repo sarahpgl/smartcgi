@@ -23,7 +23,7 @@ const QuestionnaireBP: React.FC = () => {
         <div className={styles.container}>
             <label className={styles.label}>La bonne pratique est-elle :</label> <br />
             <button className={styles.button} onClick={answer}>Applicable</button> <br />
-            <button className={styles.button} onClick={answer}>Appliquée</button> <br />
+            <button className={styles.button} onClick={answer}>Déjà appliquée</button> <br />
             <button className={styles.button} onClick={answer}>Non appliquable</button> <br />
             {createMessage && <p className={styles.message}>{createMessage}</p>}
         </div>
