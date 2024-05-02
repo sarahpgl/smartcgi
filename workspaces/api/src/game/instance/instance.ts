@@ -19,7 +19,7 @@ export class Instance {
   public playerStates: Record<Socket['id'], PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
-  public currentPlayer: string;
+  public currentPlayerId: string;
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
   private answerCount: number = 0;
@@ -42,7 +42,7 @@ export class Instance {
     });
 
     //Set the first player
-    this.currentPlayer = this.players[0];
+    this.currentPlayerId = this.players[0];
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
   }

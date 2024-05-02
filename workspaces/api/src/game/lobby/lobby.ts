@@ -5,7 +5,7 @@ import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { Practice_Card } from '@shared/common/Cards';
-import { PublicPlayerState, SensibilisationQuestion } from '@shared/common/Game';
+import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 
 export class Lobby {
@@ -87,7 +87,7 @@ export class Lobby {
 
   public dispatchGameState(): void {
     const payload: ServerPayloads[ServerEvents.GameState] = {
-      currentPlayer: this.instance.currentPlayer,
+      currentPlayerId: this.instance.currentPlayerId,
       playerStates: Object.values(this.instance.playerStates),
       discardPile: this.instance.discardPile,
     };
@@ -98,7 +98,7 @@ export class Lobby {
   public dispatchGameStart(question: SensibilisationQuestion): void {
     const payload: ServerPayloads[ServerEvents.GameStart] = {
       gameState: {
-        currentPlayer: this.instance.currentPlayer,
+        currentPlayerId: this.instance.currentPlayerId,
         playerStates: Object.values(this.instance.playerStates),
         discardPile: this.instance.discardPile,
       },
