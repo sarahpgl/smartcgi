@@ -14,7 +14,7 @@ function PlayerBoard({ MPSelected , noMPSelected }) {
         co2Saved: 800,
         sensibilisationPoints: 3,
         expertCards: ["Developer"],
-        badPractice: "Developer",
+        badPractice: "Architect",
         playerName: "Jean",
         cardsInHand: [],
         practiceAnswers: [],
