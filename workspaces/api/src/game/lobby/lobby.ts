@@ -112,7 +112,7 @@ export class Lobby {
       playerId,
       cardType: card.cardType,
       gameState: {
-        currentPlayer: this.instance.currentPlayer,
+        currentPlayerId: this.instance.currentPlayerId,
         playerStates: Object.values(this.instance.playerStates),
         discardPile: this.instance.discardPile,
       },
