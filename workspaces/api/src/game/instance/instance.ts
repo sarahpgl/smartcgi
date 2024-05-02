@@ -21,8 +21,10 @@ export class Instance {
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
   public currentPlayerId: string;
+  // NOTE: May not be necessary
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
+  public gameStarted: boolean = false;
   private answerCount: number = 0;
 
   constructor(
@@ -36,13 +38,14 @@ export class Instance {
     // TODO: Implement this service in Sensibilisation Module
     // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
     this.lobby.clients.forEach((client) => {
-      this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.id, this.co2Quantity);
+      this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
       while (this.playerStates[client.id].cardsInHand.length <= 8) {
         this.drawCard(this.playerStates[client.id]);
       }
     });
 
     //Set the first player
+    this.gameStarted = true;
     this.currentPlayerId = this.players[0];
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
@@ -117,7 +120,7 @@ export class Instance {
     // add the expert card to the player
     playerState.expertCards.push(actor);
     // remove the bad practice card if the player has it
-    if(playerState.badPractice == actor){
+    if (playerState.badPractice == actor) {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
@@ -125,7 +128,7 @@ export class Instance {
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
     const target = card.targetedPlayerId;
-    const targetPlayerState = this.playerStates[target]; 
+    const targetPlayerState = this.playerStates[target];
     // check if the target is already blocked
     if (targetPlayerState.badPractice == null) {
       // check if the target has the expert card associated
@@ -141,12 +144,12 @@ export class Instance {
       throw new ServerException(SocketExceptions.GameError, 'Player already targeted by a bad practice card');
     }
   }
-  
+
 
   private playFormation(card: Formation_Card, playerState: PlayerState) {
     const actor = card.actor;
     // remove the bad practice card if the player has it
-    if(playerState.badPractice == actor){
+    if (playerState.badPractice == actor) {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);

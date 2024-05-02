@@ -77,6 +77,14 @@ export default class SocketManager {
         });
         this.connectionLost = false;
       }
+      if (localStorage.getItem('clientInGameId')) {
+        this.emit({
+          event: ClientEvents.ClientReconnect,
+          data: {
+            clientInGameId: localStorage.getItem('clientInGameId')!,
+          },
+        });
+      }
       this.setSocketState((currVal) => {
         return { ...currVal, connected: true };
       });

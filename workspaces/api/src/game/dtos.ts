@@ -38,7 +38,7 @@ export class ClientReconnectDto {
   clientToken: string;
 
   @IsString()
-  playerInGameId: string;
+  clientInGameId: string;
 
   // See later if this will be useful, on how we can send back messages to the disconnect/reconnect client
   @IsNumber()
