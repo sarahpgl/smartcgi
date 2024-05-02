@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+/*import React, { useEffect, useState } from 'react';
 
 import styles from './PlayerBoard.module.css';
 
@@ -69,4 +69,44 @@ function PlayerBoard({ MPSelected, noMPSelected }) {
 }
 
 export default PlayerBoard;
+*/
+
+import React, { useEffect } from 'react';
+import styles from './PlayerBoard.module.css';
+import PlayerHand from '../PlayerHand/PlayerHand';
+import PlayerStatus from '../PlayerStatus/PlayerStatus';
+import PlayerInGameHistory from '../PlayerInGameHistory/PlayerInGameHistory';
+import { useRecoilState } from 'recoil';
+import { CurrentGameState } from '../Game/states';
+import useSocketManager from '@hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
+
+function PlayerBoard({ MPSelected, noMPSelected, playerState }) {
+    const [gameState] = useRecoilState(CurrentGameState);
+
+    useEffect(() => {
+        console.log('gameState dans playerBoard ', gameState);
+    });
+
+    return (
+        <div className={styles.board}>
+            {playerState && (
+                <>
+                    <div className={styles.status}>
+                        <PlayerStatus playerstate={playerState} me={1} />
+                    </div>
+                    <div className={styles.hand}>
+                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} Cards={playerState.cardsInHand} />
+                    </div>
+                    <div className={styles.history}>
+                        <PlayerInGameHistory Cards={playerState.cardsHistory} />
+                    </div>
+                </>
+            )}
+        </div>
+    );
+}
+
+export default PlayerBoard;
+
 

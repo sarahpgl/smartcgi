@@ -9,8 +9,13 @@ import GameManager from '@app/js/components/Game/GameManager';
 import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP';
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
+import { useRecoilState } from 'recoil';
+import { CurrentGameState } from '@app/js/components/Game/states';
+import useSocketManager from '@hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
 
 function GamePage() {
+    const [gameState] = useRecoilState(CurrentGameState);
     let playerAbleToMP = ["Top"];
 
     const [MP, setMP] = useState(0);
@@ -42,9 +47,28 @@ function GamePage() {
         <div className={styles.page}>
             <Header />
             <div className={styles.container}>
-                <div className={styles.playerBoard}>
-                    <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} />
-                </div>
+                {gameState ? (
+                    Object.keys(gameState.playerStates).map((playerId) => {
+                        const playerState = gameState.playerStates[playerId];
+                        if (playerState.clientInGameId === localStorage.getItem('clientInGameId')) {
+                            return (
+                                <>
+                                    <div className={styles.playerBoard}>
+                                        <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} />
+                                    </div>
+
+                                </>
+
+                            );
+                        }
+                        return null;
+                    })
+                ) : (
+                    <div className={styles.status}>
+                        <PlayerStatus playerstate={player} me={1} />
+                    </div>
+                )}
+
                 <div className={`${styles.opponentBoardLeft} ${MP === 1 ? (playerAbleToMP.includes("Left") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardLeft}`}>
                     <div onClick={() => handleMPPersonSelected("Left")}>
                         <OpponentBoard />
@@ -67,7 +91,7 @@ function GamePage() {
             <GameManager />
         </div>
     );
-    
+
 }
 
 export default GamePage;
