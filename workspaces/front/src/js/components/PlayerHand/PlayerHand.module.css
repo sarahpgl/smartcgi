@@ -20,10 +20,10 @@
     border-radius: 10px;
     margin-bottom: 0px;
     transition: transform 0.2s;
-    user-select: none; /* Rend le contenu non sélectionnable */
+    user-select: none; 
 }
 .card:hover{
-    transform: translateY(-50px) scale(2.3) translateX(-20px); /* Zoom on hover */
+    transform: translateY(-50px) scale(2.3) translateX(-20px); 
     z-index: 1;
 }
 .selected {
