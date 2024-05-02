@@ -64,6 +64,17 @@ export class LobbyManager {
     lobby.instance.triggerStart();
   }
 
+  public reconnectClient(client: AuthenticatedSocket, clientInGameId: string): void {
+    const lobby = Array.from(this.lobbies.values()).find((lobby) => lobby.disconnectedClients.has(clientInGameId));
+
+    if (!lobby) {
+      throw new ServerException(SocketExceptions.LobbyError, 'Client not found');
+    }
+
+    lobby.reconnectClient(client, clientInGameId);
+
+  }
+
   // Periodically clean up lobbies
   @Cron('*/5 * * * *')
   private lobbiesCleaner(): void {

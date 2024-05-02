@@ -25,7 +25,7 @@ export interface Best_Practice_Card extends Practice_Card {
 
 export interface Bad_Practice_Card extends Practice_Card {
   cardType: 'BadPractice';
-  targetedPlayer?: string;
+  targetedPlayerId?: string;
 }
 
 export interface Formation_Card extends BaseCard {

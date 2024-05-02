@@ -30,9 +30,16 @@ export type ServerPayloads = {
   [ServerEvents.SensibilisationQuestion]: SensibilisationQuestion;
 
   [ServerEvents.PracticeQuestion]: {
-    playerName: string;
+    playerId: string;
     cardType: CardType;
   };
+
+  [ServerEvents.CardPlayed]: {
+    playerId: string;
+    cardType: CardType;
+    gameState: GameState;
+  };
+  
 };
 
 
