@@ -35,7 +35,7 @@ function GamePage() {
     }
 
     return (
-        <div>
+        <div className={styles.page}>
             <Header />
             <div className={styles.container}>
                 <div className={styles.playerBoard}>
