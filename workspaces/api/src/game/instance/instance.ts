@@ -52,7 +52,7 @@ export class Instance {
   }
 
   public triggerFinish(): void {
-
+    
   }
 
   public discardCard(card: Card, client: AuthenticatedSocket) {
