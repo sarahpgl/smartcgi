@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './QuestionnaireMP.module.css';
+import styles from './QuestionnaireBP.module.css';
 import useSocketManager from '@app/js/hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { BestPracticeAnswerType } from '@shared/common/Game';
@@ -21,7 +21,7 @@ const QuestionnaireBP: React.FC = () => {
             }
         });
 
-        setCreateMessage(`Vous avez classé la mauvaise pratique comme ${selectedOption}`);
+        setCreateMessage(`Vous avez classé la bonne pratique comme ${selectedOption}`);
         setTimeout(() => {
             setIsVisible(false);
         }, 2000);
@@ -41,5 +41,6 @@ const QuestionnaireBP: React.FC = () => {
         </div>
     );
 };
+
 
 export default QuestionnaireBP;
