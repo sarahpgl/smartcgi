@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './QuestionnaireBP.module.css';
+import styles from './QuestionnaireMP.module.css';
+import useSocketManager from '@app/js/hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
+import { BestPracticeAnswerType } from '@shared/common/Game';
 
-const QuestionnaireBP: React.FC = () => {
+const QuestionnaireMP: React.FC = () => {
     const [createMessage, setCreateMessage] = useState("");
     const [isVisible, setIsVisible] = useState(true);
     const navigate = useNavigate();
+    const { sm } = useSocketManager();
 
-    const answer = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const selectedOption = event.currentTarget.textContent;
-        setCreateMessage(`Vous avez classé la bonne pratique comme ${selectedOption}`);
+    const answer = (selectedOption: BestPracticeAnswerType) => {
+
+        sm.emit({
+            event: ClientEvents.AnswerPracticeQuestion,
+            data: {
+                cardId: 'cardId',
+                answer: selectedOption,
+            }
+        });
+
+        setCreateMessage(`Vous avez classé la mauvaise pratique comme ${selectedOption}`);
         setTimeout(() => {
             setIsVisible(false);
         }, 2000);
@@ -30,4 +42,4 @@ const QuestionnaireBP: React.FC = () => {
     );
 };
 
-export default QuestionnaireBP;
+export default QuestionnaireMP;

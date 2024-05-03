@@ -54,6 +54,8 @@ export class Instance {
   public triggerFinish(): void {
   }
 
+  p
+
   public playCard(card: Card, client: AuthenticatedSocket) {
     const playerState = this.playerStates[client.id];
 
@@ -112,7 +114,7 @@ export class Instance {
   public answerBadPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
     const playerState = this.playerStates[playerId];
     if (answer.answer !== BadPracticeAnswerType.TO_BE_BANNED && answer.answer !== BadPracticeAnswerType.ALREADY_BANNED && answer.answer !== BadPracticeAnswerType.TOO_COMPLEX) {
-      throw new ServerException(SocketExceptions.GameError, 'Invalid best practice answer type');
+      throw new ServerException(SocketExceptions.GameError, 'Invalid bad practice answer type');
     }
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
