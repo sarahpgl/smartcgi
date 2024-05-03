@@ -102,6 +102,6 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.logger.log('Client reconnecting', data.clientInGameId);
     this.lobbyManager.reconnectClient(client, data.clientInGameId);
   }
-// TODO: Handler for practice question
+
 
 }
