@@ -21,8 +21,9 @@ const MyEndGameSummary: React.FC = () => {
     ];
 
     const [isVisible, setIsVisible] = useState(true);
-    const [startBPIndex, setStartBPIndex] = useState(0); // Index de départ des bonnes pratiques
-    const [startMPIndex, setStartMPIndex] = useState(0); // Index de départ des mauvaises pratiques
+    const [startBPIndex, setStartBPIndex] = useState(0); 
+    const [startMPIndex, setStartMPIndex] = useState(0);
+    const [selectedCard, setSelectedCard] = useState(null);
     const navigate = useNavigate();
 
     if (!isVisible) {
@@ -53,12 +54,22 @@ const MyEndGameSummary: React.FC = () => {
         }
     };
 
+    // Fonction pour gérer le clic sur une carte et afficher en grand
+    const handleCardClick = (card) => {
+        setSelectedCard(card);
+    };
+
+    // Fonction pour fermer la carte agrandie
+    const handleCloseCard = () => {
+        setSelectedCard(null);
+    };
+
     return (
         <div className={styles.container}>
             <label className={styles.label}>Mes bonnes pratiques applicables</label><br />
             <div className={styles.cardContainer}>
                 {data.filter(card => card.type === 'BestPractice').slice(startBPIndex, startBPIndex + 3).map((card, index) => (
-                    <div key={`BP${index}`} className={styles.card}>
+                    <div key={`BP${index}`} className={styles.card} onClick={() => handleCardClick(card)}>
                         <BestPracticeCard
                             cardType={card.type}
                             id={card.id}
@@ -66,19 +77,19 @@ const MyEndGameSummary: React.FC = () => {
                             contents={card.contents}
                             carbon_loss={card.carbon_loss}
                         />
-                        <span className={styles.cardNumber}>{index + startBPIndex + 1}</span>
                     </div>
                 ))}
             </div>
             <div className={styles.navigationButtons}>
                 {startBPIndex > 0 && <img src={next} alt="Previous" className={styles.prevButton} onClick={prevBP} />}
+                {startBPIndex <= 0 && <img src="" alt="" className={styles.prevButton} onClick={prevBP} />}
                 {startBPIndex + 3 < data.filter(card => card.type === 'BestPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextBP} />}
             </div>
             <hr className={styles.separator} />
             <label className={styles.label}>Mes mauvaises pratiques à bannir</label><br />
             <div className={styles.cardContainer}>
                 {data.filter(card => card.type === 'BadPractice').slice(startMPIndex, startMPIndex + 3).map((card, index) => (
-                    <div key={`MP${index}`} className={styles.card}>
+                    <div key={`MP${index}`} className={styles.card} onClick={() => handleCardClick(card)}>
                         <BadPracticeCard
                             cardType={card.type}
                             id={card.id}
@@ -86,14 +97,37 @@ const MyEndGameSummary: React.FC = () => {
                             contents={card.contents}
                             targetedPlayer={card.targetedPlayer}
                         />
-                        <span className={styles.cardNumber}>{index + startMPIndex + 1}</span>
                     </div>
                 ))}
             </div>
             <div className={styles.navigationButtons}>
                 {startMPIndex > 0 && <img src={next} alt="Previous" className={styles.prevButton} onClick={prevMP} />}
-                {startMPIndex + 3 < data.filter(card => card.type === 'BestPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextMP} />}
+                {startMPIndex <= 0 && <img src="" alt="" className={styles.prevButton} onClick={prevMP} />}
+                {startMPIndex + 3 < data.filter(card => card.type === 'BadPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextMP} />}
             </div>
+            {selectedCard && (
+    <div className={styles.modalBackdrop} onClick={handleCloseCard}>
+        <div className={`${styles.modalContent} ${styles.bigCard}`}>
+            {selectedCard.type === 'BestPractice' ? (
+                <BestPracticeCard
+                    cardType={selectedCard.type}
+                    id={selectedCard.id}
+                    title={selectedCard.title}
+                    contents={selectedCard.contents}
+                    carbon_loss={selectedCard.carbon_loss}
+                />
+            ) : (
+                <BadPracticeCard
+                    cardType={selectedCard.type}
+                    id={selectedCard.id}
+                    title={selectedCard.title}
+                    contents={selectedCard.contents}
+                    targetedPlayer={selectedCard.targetedPlayer}
+                />
+            )}
+        </div>
+    </div>
+)}
         </div>
     );
 };
