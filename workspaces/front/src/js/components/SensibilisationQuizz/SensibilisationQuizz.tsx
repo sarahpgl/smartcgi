@@ -21,9 +21,7 @@ const Quizz: React.FC = () => {
         answer3: 0,
         answerTrue: 0
     };
-
-
-    
+  
    
 
     const [answerCorrect, setanswerCorrect] = useState(false);
