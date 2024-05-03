@@ -57,3 +57,29 @@ body {
     bottom: -50px;
     right: 100px;
 }
+
+.modalBackdrop {
+  
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    z-index: 9999; /* Définit la pile de l'élément au-dessus des autres */
+  }
+  
+  .modalContent {
+    background-color: white;
+    padding: 0px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 10000; /* Assure que le contenu est au-dessus du backdrop */
+    pointer-events: auto; /* Autorise les événements de pointer sur le contenu */
+  }
+  

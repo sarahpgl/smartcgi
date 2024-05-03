@@ -51,7 +51,7 @@ export class Instance {
     //Set the first player
     this.gameStarted = true;
     this.currentPlayerId = this.players[0];
-    const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
+    const question: SensibilisationQuestion = (await this.SensibilisationQuizz()).content;
     this.lobby.dispatchGameStart(question);
   }
 

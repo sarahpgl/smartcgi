@@ -19,6 +19,7 @@ function GamePage() {
     let playerAbleToMP = ["Top"];
 
     const [MP, setMP] = useState(0);
+    const [showQuizz, setShowQuizz] = useState(true);
 
     const handleMPSelected = () => {
         setMP(1);
@@ -41,11 +42,15 @@ function GamePage() {
 
             }
         }
+    
     }
 
     return (
         <div className={styles.page}>
             <Header />
+            <div className={`${styles.modalBackdrop} ${styles.container}`}>
+            {showQuizz && <SensibilisationQuizz />}
+            </div>
             <div className={styles.container}>
                 {gameState ? (
                     Object.keys(gameState.playerStates).map((playerId) => {

@@ -18,13 +18,10 @@ const Quizz: React.FC = () => {
     const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
     const [quizzPlay, setQuizzPlay] = useState(false);
     const [tempsRestant, setTempsRestant] = useState(15);
-
-
+    const [showQuizz, setShowQuizz] = useState(true)
     useEffect(() => {
-        
-       
         let timer: NodeJS.Timeout;
-
+    
         if (tempsRestant > 0) {
             timer = setTimeout(() => {
                 setTempsRestant(tempsRestant - 1);
@@ -32,10 +29,15 @@ const Quizz: React.FC = () => {
         } else if (!quizzPlay && tempsRestant === 0) {
             setResultMessage("Temps écoulé !");
             setQuizzPlay(true);
+            
+            setTimeout(() => {
+                setShowQuizz(false);    
+            }, 2000);
         }
-
+    
         return () => clearTimeout(timer);
     }, [quizzPlay, tempsRestant]);
+    
 
 
 // au clic
@@ -64,7 +66,10 @@ const Quizz: React.FC = () => {
             setanswerChoisie(answerIndex);
             setQuizzPlay(true);
         }
+       
     }; 
+
+    
 
     const getButtonColor = (answerIndex: number) => {
         if (quizzPlay) {
@@ -83,11 +88,12 @@ const Quizz: React.FC = () => {
             data: {
             }
         })
-        console.log("ici",sensibilisationQuestion?.question_id )
+        
     }
 
-    return (
-        <div className={styles.container}>
+
+    return showQuizz ? (
+        <div className={styles.container }>
             <label className={styles.titre}>Quizz de sensibilisation</label> <br />
             <label className={styles.label}>{sensibilisationQuestion?.question}</label> <br />
             <button className={`${styles.button} ${getButtonColor(1)}`} onClick={() => handleResult(1)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response1}</button> <br />
@@ -101,8 +107,7 @@ const Quizz: React.FC = () => {
             )}
             <button onClick={getData}></button>
         </div>
-        
-    );
+    ) : null ;
 };
 
 export default Quizz;
