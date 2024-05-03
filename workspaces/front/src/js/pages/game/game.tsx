@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from "@app/js/components/header/Header";
 import PlayerBoard from '@app/js/components/PlayerBoard/PlayerBoard';
 
@@ -15,6 +15,8 @@ import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
 function GamePage() {
+
+    
     const [gameState] = useRecoilState(CurrentGameState);
     let playerAbleToMP = ["Top"];
 
@@ -42,6 +44,10 @@ function GamePage() {
             }
         }
     }
+
+    useEffect(() => {
+        console.log('gameState dans game', gameState);
+    });
 
     let pos = 0;
     let positions = ['Right', 'Left', 'Top'];

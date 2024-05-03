@@ -85,7 +85,7 @@ function PlayerBoard({ MPSelected, noMPSelected, playerState}) {
     const [gameState] = useRecoilState(CurrentGameState);
 
     useEffect(() => {
-        console.log('gameState dans playerBoard ', gameState);
+        //console.log('gameState dans playerBoard ', gameState);
     });
 
     return (

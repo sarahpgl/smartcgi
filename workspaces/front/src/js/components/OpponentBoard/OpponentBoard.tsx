@@ -15,7 +15,7 @@ import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
 
 function OpponentBoard({ playerState }: { playerState: PlayerStateInterface }) {
-    console.log('PlayerState dans oponnentBoard', playerState);
+    //console.log('PlayerState dans oponnentBoard', playerState);
 
     const data = {
         name: "Jean",
