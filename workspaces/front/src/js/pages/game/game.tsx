@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from "@app/js/components/header/Header";
 import PlayerBoard from '@app/js/components/PlayerBoard/PlayerBoard';
 
@@ -15,6 +15,8 @@ import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
 function GamePage() {
+
+    
     const [gameState] = useRecoilState(CurrentGameState);
     let playerAbleToMP = ["Top"];
 
@@ -43,6 +45,13 @@ function GamePage() {
         }
     }
 
+    useEffect(() => {
+        console.log('gameState dans game', gameState);
+    });
+
+    let pos = 0;
+    let positions = ['Right', 'Left', 'Top'];
+
     return (
         <div className={styles.page}>
             <Header />
@@ -53,7 +62,7 @@ function GamePage() {
                         if (playerState.clientInGameId === localStorage.getItem('clientInGameId')) {
                             return (
                                 <>
-                                    <div className={styles.playerBoard}>
+                                    <div className={styles.playerBoard} key={playerId}>
                                         <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} />
                                     </div>
 
@@ -67,21 +76,30 @@ function GamePage() {
                     <></>
                 )}
 
-                <div className={`${styles.opponentBoardLeft} ${MP === 1 ? (playerAbleToMP.includes("Left") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardLeft}`}>
-                    <div onClick={() => handleMPPersonSelected("Left")}>
-                        <OpponentBoard />
-                    </div>
-                </div>
-                <div className={`${styles.opponentBoardRight} ${MP === 1 ? (playerAbleToMP.includes("Right") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardRight}`}>
-                    <div onClick={() => handleMPPersonSelected("Right")}>
-                        <OpponentBoard />
-                    </div>
-                </div>
-                <div className={`${styles.opponentBoardTop} ${MP === 1 ? (playerAbleToMP.includes("Top") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardTop}`}>
-                    <div onClick={() => handleMPPersonSelected("Top")}>
-                        <OpponentBoard />
-                    </div>
-                </div>
+                {gameState && Object.keys(gameState.playerStates).map((playerId) => {
+                    const playerState = gameState.playerStates[playerId];
+                    if (playerState.clientInGameId !== localStorage.getItem('clientInGameId')) {
+                        let positionClass = '';
+                        if (pos === 0) {
+                            positionClass = styles.opponentBoardRight;
+                        } else if (pos === 1) {
+                            positionClass = styles.opponentBoardLeft;
+                        } else if (pos === 2) {
+                            positionClass = styles.opponentBoardTop;
+                        }
+                        console.log('playerSate',playerState.co2Saved);
+                        pos = (pos + 1) % 3;
+                        return (
+                            <div key={playerId} className={`${positionClass} ${MP === 1 ? (playerAbleToMP.includes(positions[pos]) ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>
+                                <div onClick={() => handleMPPersonSelected(playerState.position)}>
+                                    <OpponentBoard playerState={playerState} />
+                                </div>
+                            </div>
+                        );
+                    }
+                    return null;
+                })}
+
                 <div className={styles.deck}>
                     <CardDeck />
                 </div>
