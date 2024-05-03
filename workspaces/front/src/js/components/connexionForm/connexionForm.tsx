@@ -54,7 +54,7 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
+            <div style={{ marginBottom: "15px" }}>
                 <label htmlFor="email"></label>
                 <input className={styles.input}
                     type="email"
@@ -80,8 +80,8 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
             <div>
                 <label className={styles.label} >Pas de compte ?</label>
             </div>
-            <div>
-                <button onClick={onShowRegisterForm} className={styles.buttonregister}>S'inscrire</button>
+            <div style={{ marginTop: "-10px" }}>
+                <button onClick={onShowRegisterForm} className={styles.buttoninscr}>S'inscrire</button>
             </div>
             {openSnackbar && (
                 <div className={styles.snackbar}>

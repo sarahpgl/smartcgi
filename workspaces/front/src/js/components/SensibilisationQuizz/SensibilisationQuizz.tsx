@@ -66,8 +66,8 @@ const Quizz: React.FC = () => {
             <button className={`${styles.button} ${getButtonColor(3)}`} onClick={() => handleResult(3)} disabled={quizzPlay}>{data.answer3}</button> <br />
             {resultMessage && <p className={styles.message}>{resultMessage}</p>}
             {(tempsRestant > 0 &&
-                <div>
-                    <p>Temps restant: {tempsRestant} secondes</p>
+                <div style={{marginBottom: "15px"}}>
+                <p>Temps restant: {tempsRestant} secondes</p>
                 </div>
             )}
         </div>

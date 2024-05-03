@@ -23,7 +23,7 @@
     user-select: none; 
 }
 .card:hover{
-    transform: translateY(-50px) scale(2.3) translateX(-20px); 
+    transform: translateY(-70px) scale(2.3) translateX(-20px); 
     z-index: 1;
 }
 .selected {

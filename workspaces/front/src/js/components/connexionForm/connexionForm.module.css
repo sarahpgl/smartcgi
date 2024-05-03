@@ -1,4 +1,4 @@
-div {
+.div {
   margin-bottom: 15px;
 }
 
@@ -29,7 +29,20 @@ div {
 }
 
 .button {
-  width: 60%;
+  width: 170px;
+  padding: 10px;
+  background-color: #4b957a; /* Modifiez la couleur de fond */
+  color: #000000;
+  border: none;
+  border-radius: 4px; /* Gardez la même valeur de border-radius */
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  border-radius: 30px;
+  margin-bottom: 40px;
+}
+.buttoninscr {
+  width: 130px;
   padding: 10px;
   background-color: #4b957a; /* Modifiez la couleur de fond */
   color: #000000;

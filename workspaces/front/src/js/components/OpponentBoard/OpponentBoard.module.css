@@ -20,6 +20,7 @@
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;  
   margin-top: 0px;
   margin-bottom: 0px;
 }
@@ -81,7 +82,7 @@
   border-radius: 20px;
   justify-content: center; /* Centrer horizontalement */
   align-items: center; /* Centrer verticalement */
-  margin-top: 10px;
+  margin-top: 0px;
   margin-right: 50px;
 }
 
