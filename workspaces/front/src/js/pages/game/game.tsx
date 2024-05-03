@@ -13,6 +13,8 @@ import { useRecoilState } from 'recoil';
 import { CurrentGameState } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { PlayerStateInterface } from '@shared/common/Game';
+import { BaseCard } from '@shared/common/Cards';
 
 function GamePage() {
     const [gameState] = useRecoilState(CurrentGameState);
@@ -43,29 +45,40 @@ function GamePage() {
         }
     }
 
+    let cards : Card[] = [
+        { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss : 150 },
+        { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
+        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blablabla blabal blabal' },
+        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
+        { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 80 }
+    ];
+        
+    let player:PlayerStateInterface = {
+        badPractice: null,
+        canPlay: true,
+        cardsHistory: [],
+        cardsInHand: cards,
+        co2Saved: 900,
+        expertCards: [],
+        sensibilisationPoints: 0,
+        practiceAnswers: [],
+        clientInGameId: "1",
+        playerName: "test"
+    }
+
     return (
         <div className={styles.page}>
             <Header />
             <div className={styles.container}>
-                {gameState ? (
-                    Object.keys(gameState.playerStates).map((playerId) => {
-                        const playerState = gameState.playerStates[playerId];
-                        if (playerState.clientInGameId === localStorage.getItem('clientInGameId')) {
-                            return (
-                                <>
+                
+            <>
                                     <div className={styles.playerBoard}>
-                                        <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} />
+                                        <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={player} />
                                     </div>
 
                                 </>
-
-                            );
-                        }
-                        return null;
-                    })
-                ) : (
-                    <></>
-                )}
 
                 <div className={`${styles.opponentBoardLeft} ${MP === 1 ? (playerAbleToMP.includes("Left") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardLeft}`}>
                     <div onClick={() => handleMPPersonSelected("Left")}>
