@@ -26,6 +26,8 @@ export interface BadPracticeAnswer {
 
 export type PracticeAnswer = BestPracticeAnswer | BadPracticeAnswer;
 
+export type PracticeAnswerType = BestPracticeAnswerType | BadPracticeAnswerType;
+
 export enum BestPracticeAnswerType {
   APPLICABLE = 'applicable',
   ALREADY_APPLICABLE = 'already_applicable',
