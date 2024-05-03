@@ -9,10 +9,9 @@ import image from '../../../icons/Welcome_Photo.webp';
 function Menu() {
     return (
         <div className={styles.container}>
-            <Header /> {/* Ajoutez l'en-tête */}
+            <Header /> 
             <div className={styles.content}>
                 <div className={styles.imageContainer}>
-                    {/* Ajoutez votre photo ici */}
                     <img src={image} alt="Image de la tonne de bonnes pratiques" className={styles.image} />
                 </div>
                 <div className={styles.menuContainer}>

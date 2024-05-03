@@ -28,6 +28,20 @@ button:hover {
     background-color: #2c5c4a;
 }
 
+.buttoninscr {
+    width: 130px;
+    padding: 10px;
+    background-color: #4b957a; /* Modifiez la couleur de fond */
+    color: #000000;
+    border: none;
+    border-radius: 4px; /* Gardez la même valeur de border-radius */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    border-radius: 30px;
+    margin-bottom: 40px;
+  }
+
 .snackbar {
     background-color: rgb(255, 255, 255);
     width: 100%;

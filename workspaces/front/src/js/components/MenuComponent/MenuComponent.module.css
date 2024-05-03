@@ -1,6 +1,6 @@
 .container{
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    align-self: center;
     background-color: #ffffff;
     color: black;
     width: 400px;
