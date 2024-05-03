@@ -9,7 +9,7 @@ import ExpertCard from "@app/js/components/ExpertCard/ExpertCard";
 const RulesPage1: React.FC = () => {
     const cards= [
         { cardType: 'BestPractice', id: '32', title: 'Titre de la bonne pratique', contents: 'Description ', carbon_loss : 50 },
-        { cardType: 'BadPractice', id: '32', title: 'Titre de la mauvaise pratique', contents: 'Description ', targetedPlayer: 'Pierre' },
+        { cardType: 'BadPractice', id: '32', title: 'Titre de la mauvaise pratique', contents: 'Description ', targetedPlayer: 'Architect' },
         { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'Type dexpertise', contents: '' },
         { cardType: 'Formation', id: '32', actor: 'Developer', title: 'Nom de la ressource', contents: 'Description' },
     ];
@@ -37,7 +37,7 @@ const RulesPage1: React.FC = () => {
                         <div key={index} className={styles.card}>
                             {card.cardType === 'BestPractice' && (
                                 <>
-                                    <BestPracticeCard  title={card.title} contents={card.contents} carbonLoss={card.carbon_loss} />
+                                    <BestPracticeCard  title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} />
                                     <p className={styles.cardTitle}>Carte bonne pratique</p>
                                 </>
                             )}
