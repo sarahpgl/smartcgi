@@ -51,7 +51,20 @@ export class Instance {
   public triggerFinish(): void {
   }
 
-  p
+  public discardCard(card: Card, client: AuthenticatedSocket) {
+    const playerState = this.playerStates[client.id];
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    if (!playerState.canPlay) {
+      throw new ServerException(SocketExceptions.GameError, 'Player cannot play');
+    }
+    playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
+    this.discardPile.push(card);
+    this.drawCard(playerState);
+    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+
+  }
 
   public playCard(card: Card, client: AuthenticatedSocket) {
     const playerState = this.playerStates[client.id];
@@ -178,7 +191,8 @@ export class Instance {
   }
 
   private transitionToNextRound(): void {
-
+    this.currentPlayerId = this.players[0];
+    this.lobby.dispatchGameState();
   }
 
 }

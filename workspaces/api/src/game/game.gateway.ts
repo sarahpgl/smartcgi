@@ -98,6 +98,6 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   onClientReconnect(client: AuthenticatedSocket, data: ClientReconnectDto): void {
 
   }
-// TODO: Handler for practice question
+
 
 }
