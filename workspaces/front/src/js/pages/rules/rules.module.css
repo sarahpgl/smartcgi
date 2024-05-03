@@ -38,14 +38,21 @@
 
 .navigationButtons img {
   position: fixed;
-  top: 660px;
-  left: 1450px;
   width: 30px; 
   height: auto; 
 }
 
 .prevButton {
+  position: fixed;
+  top: 90%;
+  left: 5%;
   rotate: 180deg;
+}
+
+.nextButton {
+  position: fixed;
+  top: 90%;
+  left: 95%;
 }
 
 .navigationButtons img:hover{

@@ -41,6 +41,7 @@
   padding: 40px;
   text-align: left;
   flex-direction: row;
+  overflow-y: auto;
 }
 
 .container strong {
