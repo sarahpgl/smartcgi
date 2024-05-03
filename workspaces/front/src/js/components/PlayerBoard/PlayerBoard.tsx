@@ -13,7 +13,7 @@ import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
 
-function PlayerBoard() {
+function PlayerBoard({ MPSelected, noMPSelected }) {
     const [gameState] = useRecoilState(CurrentGameState);
 
     useEffect(() => {
