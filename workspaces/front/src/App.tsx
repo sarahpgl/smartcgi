@@ -21,46 +21,53 @@ function App() {
   return (
     <RecoilRoot>
       <SocketManagerProvider>
-      <BrowserRouter>
-      <Routes>
-      <Route path="/register" element={<Register />} />
-        <Route
-          path="/menu"
-          element={
-            <RequireAuth>
-              <Menu />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/createGame"
-          element={
-            <RequireAuth>
-              <CreateGame />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/joinGame"
-          element={
-            <RequireAuth>
-              <JoinGame />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/lobby/:lobbyId"
-          element={
-            <RequireAuth>
-              <Lobby />
-            </RequireAuth>
-          }
-        />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/menu"
+              element={
+                <RequireAuth>
+                  <Menu />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/createGame"
+              element={
+                <RequireAuth>
+                  <CreateGame />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/joinGame"
+              element={
+                <RequireAuth>
+                  <JoinGame />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/lobby/:lobbyId"
+              element={
+                <RequireAuth>
+                  <Lobby />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/game"
+              element={
+                <RequireAuth>
+                  <Game />
+                </RequireAuth>
+              }
+            />
 
 
             <Route path="/home" element={<Home />} />
             <Route path="/" element={<Navigate to="/register" />} />
-            <Route path="/game" element={<Game />} />
           </Routes>
 
         </BrowserRouter>

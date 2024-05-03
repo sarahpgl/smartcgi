@@ -22,9 +22,9 @@ const QuestionnaireMP: React.FC = () => {
     return (
         <div className={styles.container}>
             <label className={styles.label}>La mauvaise pratique est-elle :</label> <br />
-            <button className={styles.button} onClick={answer}>Bannissable</button> <br />
+            <button className={styles.button} onClick={answer}>A bannir</button> <br />
             <button className={styles.button} onClick={answer}>Déjà bannie</button> <br />
-            <button className={styles.button} onClick={answer}>Compliquée à éviter</button> <br />
+            <button className={styles.button} onClick={answer}>Compliquée à bannir</button> <br />
             {createMessage && <p className={styles.message}>{createMessage}</p>}
         </div>
     );

@@ -9,16 +9,15 @@ import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { CO2Quantity } from '@app/game/lobby/types';
 import { Cron } from '@nestjs/schedule'
 import { CardService } from '@app/card/card.service';
+import { Injectable, Inject } from '@nestjs/common';
 
 export class LobbyManager {
   public server: Server;
 
   private readonly lobbies: Map<Lobby['id'], Lobby> = new Map<Lobby['id'], Lobby>();
 
-  constructor(
-    private readonly cardService: CardService,
-  ) {
-  }
+  @Inject(CardService)
+  private readonly cardService: CardService;
 
   public initializeSocket(client: AuthenticatedSocket): void {
     client.gameData.lobby = null;
@@ -30,7 +29,7 @@ export class LobbyManager {
 
   public createLobby(co2Quantity: CO2Quantity): Lobby {
     const lobby = new Lobby(this.server, this.cardService, co2Quantity);
-
+    //console.log('Creating lobby', co2Quantity);
     this.lobbies.set(lobby.id, lobby);
 
     return lobby;

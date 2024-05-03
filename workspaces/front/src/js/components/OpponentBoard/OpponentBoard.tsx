@@ -37,25 +37,25 @@ const OpponentBoard: React.FC = () => {
 
     return (
         <div className={styles.opponentBoard}>
-            <div className={styles.nameContainer}> </div>
-            <div className={styles.container}>
-                <img src={userIcon} alt="user icon" className={styles.userIcon} />
-                <label className={styles.labelname}>{data.name}</label>
+                <div className={styles.nameContainer}> </div>
+                <div className={styles.container}>
+                    <img src={userIcon} alt="user icon" className={styles.userIcon} />
+                    <label className={styles.labelname}>{data.name}</label>
 
-                <div className={styles.container2}>
-                    <PlayerStatus playerstate={player} />
-                </div>
-                <div className={styles.opponentHistory}>
-                    <div className={styles.card}>
-                        <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
+                    <div className={styles.container2}>
+                        <PlayerStatus playerstate={player} />
                     </div>
-                    <div className={styles.card}>
-                        <BadPracticeCard cardType="BadPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " targetedPlayer="Pierre" />
+                    <div className={styles.opponentHistory}>
+                        <div className={styles.card}>
+                            <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
+                        </div>
+                        <div className={styles.card}>
+                            <BadPracticeCard cardType="BadPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " targetedPlayer="Pierre" />
+                        </div>
+                        <div className={styles.card}>
+                            <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
+                        </div>
                     </div>
-                    <div className={styles.card}>
-                        <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
-                    </div>
-            </div>
             </div>
 
         </div>

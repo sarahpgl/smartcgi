@@ -58,8 +58,10 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage(ClientEvents.LobbyCreate)
   onLobbyCreate(client: AuthenticatedSocket, data: LobbyCreateDto) {
+    //console.log('Creating lobby', data.co2Quantity);
     const lobby = this.lobbyManager.createLobby(data.co2Quantity);
     lobby.addClient(client, data.playerName, null, true);
+    //console.log('Lobby created', lobby.instance.co2Quantity);
   }
 
   @SubscribeMessage(ClientEvents.LobbyJoin)
