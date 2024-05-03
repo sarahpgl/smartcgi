@@ -31,4 +31,11 @@ export class Question_Content {
 
     @Column({nullable: false})
     response3: string;
+
+
+
+public getDescription(){
+    return this.description;
+}
+
 }

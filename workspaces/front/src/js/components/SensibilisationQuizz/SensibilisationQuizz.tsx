@@ -4,58 +4,25 @@ import Instance from "@app/"
 import useSocketManager from '@app/js/hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { Listener } from '@components/websocket/types';
-
+import { useRecoilState } from 'recoil';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
+import { CurrentSensibilisationQuestion } from '../Game/states';
 
 
 const Quizz: React.FC = () => {
     const {sm,socket} = useSocketManager();
-
-//futur data de la question
-    const d = {
-        question_content :"",
-        question_id : 0,
-        answer1: 0,
-        answer2: 0,
-        answer3: 0,
-        answerTrue: 0
-    };
-  
-   
-
+    const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
     const [answerCorrect, setanswerCorrect] = useState(false);
     const [resultMessage, setResultMessage] = useState("");
     const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
     const [quizzPlay, setQuizzPlay] = useState(false);
     const [tempsRestant, setTempsRestant] = useState(15);
 
-    
+
     useEffect(() => {
-        //un listener pour get la question de sensibilisation 
-        const onSensibilisationState: Listener<ServerPayloads[ServerEvents.GetSensibilisationQuestion]> = async (data) => {
-            console.log(data);
-            
-            d.question_content = data.question ;
-            d.question_id = data.question_id;
-            d.answer1 = data.answers.response1;
-            d.answer2 = data.answers.response2;
-            d.answer3 = data.answers.response3;
-            d.answerTrue= data.answers.answer;
-          };
-          
-      
-          if (!socket.connected) {
-            sm.connect();
-          }
-          if (!sm.socket.hasListeners(ServerEvents.GetSensibilisationQuestion)) sm.registerListener(ServerEvents.LobbyState, onSensibilisationState);
-    
-      
-          return () => {
-            sm.removeListener(ServerEvents.GetSensibilisationQuestion, onSensibilisationState);
-          };
-
-
+        
+       
         let timer: NodeJS.Timeout;
 
         if (tempsRestant > 0) {
@@ -82,13 +49,13 @@ const Quizz: React.FC = () => {
         sm.emit({
             event: ClientEvents.AnswerSensibilisationQuestion,
             data: {
-                questionId: d.question_id,
+                questionId: sensibilisationQuestion.question_id,
                 answer: answ,
             }
         })
 
         if (!quizzPlay) {
-            if (d.answerTrue ==answerIndex) {
+            if (sensibilisationQuestion?.answers.answer==answerIndex) {
                 setResultMessage(`Bien joué, vous avez gagné un point de sensibilisation !`);
                 setanswerCorrect(true);
             } else {
@@ -97,34 +64,44 @@ const Quizz: React.FC = () => {
             setanswerChoisie(answerIndex);
             setQuizzPlay(true);
         }
-    };
+    }; 
 
     const getButtonColor = (answerIndex: number) => {
         if (quizzPlay) {
-            if (answerIndex === d.answerTrue) {
+            if (answerIndex ==sensibilisationQuestion?.answers.answer) {
                 return styles.green;
             }
-            if (answerIndex !== d.answerTrue && answerIndex === answerChoisie) {
+            if (answerIndex !== sensibilisationQuestion?.answers.answer && answerIndex === answerChoisie) {
                 return styles.red;
             }
         }
         return '';
     };
+    const getData = () =>{
+        sm.emit({
+            event: ClientEvents.GetSensibilisationQuestion,
+            data: {
+            }
+        })
+        console.log("ici",sensibilisationQuestion?.question_id )
+    }
 
     return (
         <div className={styles.container}>
             <label className={styles.titre}>Quizz de sensibilisation</label> <br />
-            <label className={styles.label}>{d.question_content}</label> <br />
-            <button className={`${styles.button} ${getButtonColor(1)}`} onClick={() => handleResult(1)} disabled={quizzPlay}>{d.answer1}</button> <br />
-            <button className={`${styles.button} ${getButtonColor(2)}`} onClick={() => handleResult(2)} disabled={quizzPlay}>{d.answer2}</button> <br />
-            <button className={`${styles.button} ${getButtonColor(3)}`} onClick={() => handleResult(3)} disabled={quizzPlay}>{d.answer3}</button> <br />
+            <label className={styles.label}>{sensibilisationQuestion?.question}</label> <br />
+            <button className={`${styles.button} ${getButtonColor(1)}`} onClick={() => handleResult(1)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response1}</button> <br />
+            <button className={`${styles.button} ${getButtonColor(2)}`} onClick={() => handleResult(2)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response2}</button> <br />
+            <button className={`${styles.button} ${getButtonColor(3)}`} onClick={() => handleResult(3)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response3}</button> <br />
             {resultMessage && <p className={styles.message}>{resultMessage}</p>}
             {(tempsRestant > 0 &&
                 <div>
                     <p>Temps restant: {tempsRestant} secondes</p>
                 </div>
             )}
+            <button onClick={getData}></button>
         </div>
+        
     );
 };
 

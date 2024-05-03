@@ -12,6 +12,10 @@ type EmitOptions<T extends ClientEvents> = {
   event: T;
   data?: ClientPayloads[T];
 };
+type EmitOptionsServer<T extends ServerEvents> = {
+  event: T;
+  data?: ServerEvents[T];
+};
 
 export default class SocketManager {
   public readonly socket: Socket;
@@ -34,6 +38,11 @@ export default class SocketManager {
   }
 
   emit<T extends ClientEvents>(options: EmitOptions<T>): this {
+    this.socket.emit(options.event, options.data);
+
+    return this;
+  }
+  emitToServer<T extends ServerEvents>(options: EmitOptionsServer<T>): this {
     this.socket.emit(options.event, options.data);
 
     return this;

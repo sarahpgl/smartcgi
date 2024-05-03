@@ -25,7 +25,7 @@ export class Instance {
   public currentPlayerId: string;
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
-  public cardService: CardService;
+
   public gameStarted: boolean = false;
   private answerCount: number = 0;
 
@@ -110,9 +110,13 @@ export class Instance {
       this.lobby.dispatchGameState();
     }
   }
-  public getSensibilisationQuizz(): Promise<{ content: SensibilisationQuestion }> {
-    return this.getSensibilisationQuizz() ;
-  }
+ 
+  public async SensibilisationQuizz(): Promise<{ content: SensibilisationQuestion }> {
+    const questionsData = await this.sensibilisationService.getSensibilisationQuizz();
+    const sensibilisationQuestion: SensibilisationQuestion = questionsData.questions;
+    this.lobby.dispatchSensibilisationQuestion(sensibilisationQuestion);
+    return { content: sensibilisationQuestion };
+}
 
   public answerSensibilisationQuestion(playerId: string, questionId: number, answer: SensibilisationQuestionAnswer): Promise<{trial :boolean }> {
     let response = false;

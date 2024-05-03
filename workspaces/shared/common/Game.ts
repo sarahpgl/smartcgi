@@ -35,9 +35,9 @@ export interface SensibilisationQuestion {
   question_id : number,
   question: string;
   answers: {
-    response1 : number,
-    response2 : number,
-    response3 : number,
+    response1 : string,
+    response2 : string,
+    response3 : string,
     answer : number
   }
 };

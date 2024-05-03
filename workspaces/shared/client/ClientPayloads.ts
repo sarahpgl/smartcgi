@@ -36,6 +36,10 @@ export type ClientPayloads = {
   }
 
 
+  [ClientEvents.GetSensibilisationQuestion]: {
+  }
+
+
 
 
   [ClientEvents.PlayCard]: {

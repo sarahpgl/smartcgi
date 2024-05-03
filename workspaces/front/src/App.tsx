@@ -7,7 +7,7 @@ import Home from './js/pages/home/home'
 import CreateGame from './js/pages/createGame/createGame'
 import JoinGame from './js/pages/joinGame/joinGame'
 import Lobby from './js/pages/lobby/lobby'
-import PageTest from './js/pages/test/test'
+import PageTest from './js/pages/testpips/testpips'
 import Menu from './js/pages/menu/menu'
 import Game from './js/pages/game/game'
 
@@ -68,6 +68,9 @@ function App() {
 
             <Route path="/home" element={<Home />} />
             <Route path="/" element={<Navigate to="/register" />} />
+            <Route path="/sensibilisation" element = {<PageTest />}>
+              
+            </Route>
           </Routes>
 
         </BrowserRouter>

@@ -9,6 +9,7 @@ import { Card, Practice_Card } from '@shared/common/Cards';
 import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 import { CO2Quantity } from './types';
+import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
 
 export class Lobby {
   public readonly id: string = v4();
@@ -26,15 +27,17 @@ export class Lobby {
   // Keep in memory the clients that disconnected Map<clientInGameId, playerName>
   public readonly disconnectedClients: Map<string, string> = new Map<string, string>();
 
-  public readonly instance: Instance = new Instance(this);
+  public readonly instance: Instance = new Instance(this, this.cardService, this.sensibilisationService);
+  
 
   constructor(
     private readonly server: Server,
     private readonly cardService: CardService,
+    private readonly sensibilisationService : SensibilisationService,
     co2Quantity: number,
   ) {
     //console.log(cardService);
-    this.instance.cardService = cardService;
+    this.cardService = cardService;
     this.instance.co2Quantity = co2Quantity; 
   }
 
@@ -104,6 +107,20 @@ export class Lobby {
     };
 
     this.dispatchToLobby(ServerEvents.PracticeQuestion, payload);
+  }
+
+  public dispatchSensibilisationQuestion(question: SensibilisationQuestion): void {
+    const payload: ServerPayloads[ServerEvents.GetSensibilisationQuestion ] = {
+      question_id : question.question_id,
+      question: question.question,
+      answers: {
+        response1 : question.answers.response1,
+        response2 : question.answers.response2,
+        response3 : question.answers.response3,
+        answer : question.answers.answer
+      }
+    };
+    this.dispatchToLobby(ServerEvents.GetSensibilisationQuestion, payload);
   }
 
   public dispatchGameState(): void {

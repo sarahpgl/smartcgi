@@ -103,16 +103,16 @@ onSensibilisationQuestion(client : AuthenticatedSocket, data : SensibilisationAn
   client.gameData.lobby.instance.answerSensibilisationQuestion(client.id, data.questionId, data.answer);
 }
 
-@SubscribeMessage(ServerEvents.GetSensibilisationQuestion)
-async onSensibilisationQuestionGet(client : AuthenticatedSocket) : Promise<{ content : SensibilisationQuestion}>
- {
-  if (!client.gameData.lobby) {
+@SubscribeMessage(ClientEvents.GetSensibilisationQuestion)
+onSensibilisationQuestionGet(client : AuthenticatedSocket) : void  {
+  /*if (!client.gameData.lobby) {
     throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
-  }
-  
-  const content = await client.gameData.lobby.instance.getSensibilisationQuizz();
+  }*/
+  console.log("salut");
+  client.gameData.lobby.instance.SensibilisationQuizz();
+
 
   // Retourner le contenu dans un objet littéral
-  return { content : content.content };
+  
 }
 }
