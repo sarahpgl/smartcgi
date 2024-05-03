@@ -81,7 +81,7 @@ import { CurrentGameState } from '../Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
-function PlayerBoard({ MPSelected, noMPSelected, playerState }) {
+function PlayerBoard({ MPSelected, noMPSelected, playerState}) {
     const [gameState] = useRecoilState(CurrentGameState);
 
     useEffect(() => {
