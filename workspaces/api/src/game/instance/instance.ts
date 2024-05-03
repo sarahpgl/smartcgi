@@ -49,6 +49,7 @@ export class Instance {
   }
 
   public triggerFinish(): void {
+    
   }
 
   public discardCard(card: Card, client: AuthenticatedSocket) {
@@ -137,9 +138,7 @@ export class Instance {
   }
 
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
-    //Ajouter le CO2
     playerState.co2Saved -= card.carbon_loss;
-    //Poser la question
     this.answerCount = 0;
     this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
   }
