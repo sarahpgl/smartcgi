@@ -6,9 +6,9 @@
 .container {
   width: 560px;
   height: 525px;
-  position: fixed; /* position fixe par rapport à la fenêtre */
-  top: 57%; /* position à 50% de la hauteur de la fenêtre */
-  left: 25%; /* position à 50% de la largeur de la fenêtre */
+  position: fixed; 
+  top: 57%; 
+  left: 25%; 
   transform: translate(-50%, -50%); 
   align-items: center;
   justify-content: center;

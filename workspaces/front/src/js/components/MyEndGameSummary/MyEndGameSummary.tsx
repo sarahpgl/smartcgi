@@ -106,27 +106,27 @@ const MyEndGameSummary: React.FC = () => {
                 {startMPIndex + 3 < data.filter(card => card.type === 'BadPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextMP} />}
             </div>
             {selectedCard && (
-    <div className={styles.modalBackdrop} onClick={handleCloseCard}>
-        <div className={`${styles.modalContent} ${styles.bigCard}`}>
-            {selectedCard.type === 'BestPractice' ? (
-                <BestPracticeCard
-                    cardType={selectedCard.type}
-                    id={selectedCard.id}
-                    title={selectedCard.title}
-                    contents={selectedCard.contents}
-                    carbon_loss={selectedCard.carbon_loss}
-                />
-            ) : (
-                <BadPracticeCard
-                    cardType={selectedCard.type}
-                    id={selectedCard.id}
-                    title={selectedCard.title}
-                    contents={selectedCard.contents}
-                    targetedPlayer={selectedCard.targetedPlayer}
-                />
-            )}
-        </div>
-    </div>
+            <div className={styles.modalBackdrop} onClick={handleCloseCard}>
+                <div className={`${styles.modalContent} ${styles.bigCard}`}>
+                    {selectedCard.type === 'BestPractice' ? (
+                        <BestPracticeCard
+                            cardType={selectedCard.type}
+                            id={selectedCard.id}
+                            title={selectedCard.title}
+                            contents={selectedCard.contents}
+                            carbon_loss={selectedCard.carbon_loss}
+                        />
+                    ) : (
+                        <BadPracticeCard
+                            cardType={selectedCard.type}
+                            id={selectedCard.id}
+                            title={selectedCard.title}
+                            contents={selectedCard.contents}
+                            targetedPlayer={selectedCard.targetedPlayer}
+                        />
+                    )}
+                </div>
+            </div>
 )}
         </div>
     );
