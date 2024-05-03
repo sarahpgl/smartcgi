@@ -52,7 +52,7 @@ export class Instance {
   }
 
   public triggerFinish(): void {
-    
+
   }
 
   public discardCard(card: Card, client: AuthenticatedSocket) {
@@ -70,7 +70,7 @@ export class Instance {
 
   }
 
-  public playCard(card: Card, client: AuthenticatedSocket) {
+  public playCard(card: Card, client: AuthenticatedSocket): void {
     const playerState = this.playerStates[client.id];
 
     if (!playerState) {
