@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { ClientPayloads } from '@shared/client/ClientPayloads';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { LobbyManager } from '@app/game/lobby/lobby.manager';
 import { Logger, UsePipes } from '@nestjs/common';
@@ -86,15 +87,24 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const cardType = data.cardType;
     switch (cardType) {
       case 'BestPractice':
-        client.gameData.lobby.instance.answerBestPracticeQuestion(client.id, data.cardId, data.answer);
+        client.gameData.lobby.instance.answerBestPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer); 
         break;
       case 'BadPractice':
-        client.gameData.lobby.instance.answerBadPracticeQuestion(client.id, data.cardId, data.answer);
+        client.gameData.lobby.instance.answerBadPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
         break;
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
   }
+
+  @SubscribeMessage(ClientEvents.PlayCard)
+  onPlayCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.PlayCard]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.playCard(data.card, client);
+  }
+
 
   // TODO: Deal with client reconnect
   @SubscribeMessage(ClientEvents.ClientReconnect)

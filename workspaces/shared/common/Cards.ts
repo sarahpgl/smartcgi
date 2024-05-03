@@ -30,7 +30,7 @@ export interface Bad_Practice_Card extends Practice_Card {
 
 export interface Formation_Card extends BaseCard {
   cardType: 'Formation';
-  linkToFormation : string; 
+  linkToFormation: string;
 }
 
 export interface Expert_Card extends BaseCard {

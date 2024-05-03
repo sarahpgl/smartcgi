@@ -4,7 +4,8 @@ import { PlayerStateInterface, BestPracticeAnswer, BadPracticeAnswer, PracticeAn
 export class PlayerState implements PlayerStateInterface {
 
   public badPractice: Actor | null = null;
-  public canPlay: boolean = false;
+  // TODO: Once sensibilisation module is implemented, set to false
+  public canPlay: boolean = true;
   public cardsHistory: Card[] = [];
   public cardsInHand: Card[] = [];
   public co2Saved: number = 1000;
@@ -14,9 +15,9 @@ export class PlayerState implements PlayerStateInterface {
   public badPracticeAnswers: BadPracticeAnswer[] = [];
 
   public clientInGameId: string;
-  public playerName:string;
+  public playerName: string;
 
-  constructor(playerName:string, playerId:string, co2Quantity:number){
+  constructor(playerName: string, playerId: string, co2Quantity: number) {
     this.playerName = playerName;
     this.clientInGameId = playerId;
     this.co2Saved = co2Quantity;

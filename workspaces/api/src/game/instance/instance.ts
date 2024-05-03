@@ -37,26 +37,25 @@ export class Instance {
     // TODO: Implement this service in Sensibilisation Module
     // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
     this.lobby.clients.forEach((client) => {
-      //console.log('CO2', this.co2Quantity);
-      this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
-      while (this.playerStates[client.id].cardsInHand.length <= 6) {
-        this.drawCard(this.playerStates[client.id]);
+      this.playerStates[client.gameData.clientInGameId] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
+      while (this.playerStates[client.gameData.clientInGameId].cardsInHand.length <= 6) {
+        this.drawCard(this.playerStates[client.gameData.clientInGameId]);
       }
     });
 
     //Set the first player
     this.gameStarted = true;
-    this.currentPlayerId = this.players[0];
+    this.currentPlayerId = this.playerStates[Object.keys(this.playerStates)[0]].clientInGameId;
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
   }
 
   public triggerFinish(): void {
-    
+
   }
 
   public discardCard(card: Card, client: AuthenticatedSocket) {
-    const playerState = this.playerStates[client.id];
+    const playerState = this.playerStates[client.gameData.clientInGameId];
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
@@ -71,10 +70,13 @@ export class Instance {
   }
 
   public playCard(card: Card, client: AuthenticatedSocket): void {
-    const playerState = this.playerStates[client.id];
-
+    const playerState = this.playerStates[client.gameData.clientInGameId];
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+
+    if (this.currentPlayerId !== client.gameData.clientInGameId) {
+      throw new ServerException(SocketExceptions.GameError, 'Not your turn');
     }
 
     if (!playerState.canPlay) {
@@ -144,6 +146,7 @@ export class Instance {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
     this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+    this.lobby.dispatchGameState();
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {

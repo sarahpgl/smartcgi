@@ -4,10 +4,9 @@ import { ServerEvents } from '@shared/server/ServerEvents';
 import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { Card, Practice_Card } from '@shared/common/Cards';
+import { Card } from '@shared/common/Cards';
 import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
-import { CO2Quantity } from './types';
 
 export class Lobby {
   public readonly id: string = v4();
@@ -29,12 +28,12 @@ export class Lobby {
 
   constructor(
     private readonly server: Server,
-    private readonly cardService: CardService,
+    cardService: CardService,
     co2Quantity: number,
   ) {
     //console.log(cardService);
     this.instance.cardService = cardService;
-    this.instance.co2Quantity = co2Quantity; 
+    this.instance.co2Quantity = co2Quantity;
   }
 
   public addClient(client: AuthenticatedSocket, playerName: string, clientInGameId: string | null = null, isOwner: boolean = false): void {
@@ -76,7 +75,8 @@ export class Lobby {
   public reconnectClient(client: AuthenticatedSocket, clientInGameId: string): void {
     console.log(`[Lobby] Client`, client.id, 'reconnected as', clientInGameId);
     const playerName = this.disconnectedClients.get(clientInGameId);
-    this.addClient(client, playerName, clientInGameId);
+    const isOwner = clientInGameId === this.lobbyOwnerId;
+    this.addClient(client, playerName, clientInGameId, isOwner);
     this.disconnectedClients.delete(clientInGameId);
   }
 
@@ -96,10 +96,10 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
   }
 
-  public dispatchPracticeQuestion(card: Practice_Card, playerId: string): void {
+  public dispatchPracticeQuestion(card: Card, playerId: string): void {
     const payload: ServerPayloads[ServerEvents.PracticeQuestion] = {
       playerId,
-      cardType: card.cardType,
+      card: card,
     };
 
     this.dispatchToLobby(ServerEvents.PracticeQuestion, payload);
