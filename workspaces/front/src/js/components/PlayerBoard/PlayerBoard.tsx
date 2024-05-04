@@ -80,31 +80,37 @@ import { useRecoilState } from 'recoil';
 import { CurrentGameState } from '../Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { Bad_Practice_Card } from '@shared/common/Cards';
+import { PlayerStateInterface } from '@shared/common/Game';
 
-function PlayerBoard({ MPSelected, noMPSelected, playerState}) {
-    const [gameState] = useRecoilState(CurrentGameState);
+function PlayerBoard({ MPSelected, noMPSelected, playerState }: {
+  MPSelected: (card: Bad_Practice_Card) => void,
+  noMPSelected: () => void,
+  playerState: PlayerStateInterface,
+}) {
+  const [gameState] = useRecoilState(CurrentGameState);
 
-    useEffect(() => {
-        //console.log('gameState dans playerBoard ', gameState);
-    });
+  useEffect(() => {
+    //console.log('gameState dans playerBoard ', gameState);
+  });
 
-    return (
-        <div className={styles.board}>
-            {playerState && (
-                <>
-                    <div className={styles.status}>
-                        <PlayerStatus playerstate={playerState} me={1} />
-                    </div>
-                    <div className={styles.hand}>
-                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} Cards={playerState.cardsInHand} />
-                    </div>
-                    <div className={styles.history}>
-                        <PlayerInGameHistory Cards={playerState.cardsHistory} />
-                    </div>
-                </>
-            )}
-        </div>
-    );
+  return (
+    <div className={styles.board}>
+      {playerState && (
+        <>
+          <div className={styles.status}>
+            <PlayerStatus playerstate={playerState} me={1} />
+          </div>
+          <div className={styles.hand}>
+            <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} cards={playerState.cardsInHand} />
+          </div>
+          <div className={styles.history}>
+            <PlayerInGameHistory Cards={playerState.cardsHistory} />
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default PlayerBoard;
