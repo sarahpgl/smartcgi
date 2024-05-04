@@ -81,7 +81,7 @@ import { CurrentGameState } from '../Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
-function PlayerBoard({ MPSelected, noMPSelected, playerState }) {
+function PlayerBoard({ MPSelected, noMPSelected, playerState ,myTurn}) {
     const [gameState] = useRecoilState(CurrentGameState);
 
     useEffect(() => {
@@ -95,7 +95,7 @@ function PlayerBoard({ MPSelected, noMPSelected, playerState }) {
                     <div className={styles.status}>
                         <PlayerStatus playerstate={playerState} me={1} />
                     </div>
-                    <div className={styles.hand}>
+                    <div className={`${styles.hand} ${myTurn ? styles.handMyTurn : ''}`}>
                         <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} Cards={playerState.cardsInHand} />
                     </div>
                     <div className={styles.history}>

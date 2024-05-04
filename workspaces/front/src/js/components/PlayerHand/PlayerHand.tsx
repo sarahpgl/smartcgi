@@ -12,9 +12,12 @@ import iconOk from '../../../icons/ok_icon.webp';
 import iconBin from '../../../icons/bin_icon.webp';
 
 import { Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
+import EmptyCard from '../EmptyCard/EmptyCard';
 
 function PlayerHand({MPSelected , noMPSelected, Cards}) {
+
     
+    const [typeSelected, setTypeSelected] = useState<string>("");
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
     const handleCardClick = (cardId: number,cardType:string) => {
@@ -25,6 +28,7 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
         }
         noMPSelected();
         setSelectedCard(cardId);
+        setTypeSelected(cardType);
         if (cardType === "BadPractice") {
             MPSelected();
         }
@@ -34,7 +38,9 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
     };
 
     const handleCardLeave = (cardType:string) => {
-        setSelectedCard(null);
+        if(typeSelected !== "BadPractice"){
+            setSelectedCard(null);
+        }
     };
 
     let cards2 : BaseCard[] = [

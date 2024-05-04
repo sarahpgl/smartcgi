@@ -111,10 +111,15 @@
 }
 
 .descriptionbody{
+    height: 89px;
     align-items: start;
     display: flex;
     color: black;
     font-family: 'KulimFont', sans-serif;
     font-size: 4px;
     padding: 1px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #D9D9D9 rgba(0, 0, 0, 0.2);
+
 }

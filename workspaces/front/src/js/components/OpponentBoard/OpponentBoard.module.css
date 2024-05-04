@@ -25,6 +25,22 @@
   margin-bottom: 0px;
 }
 
+.containerMyTurn {
+  position: relative;
+  width: 310px;
+  height: 158px;
+  color: black;
+  background-color: #9ECD8E;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+  margin-top: 0px;
+  margin-bottom: 0px;
+  box-shadow: 0px 8px 20px rgba(19, 9, 90, 0.9);
+}
+
 .container2 {
   position: absolute;
   align-items: center;
@@ -42,14 +58,16 @@
 }
 
 .labelname {
+  position: absolute;
+  left:60px;
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
   text-align: left;
   color: #1f1f1f;
   margin: 0px;
   font-family: 'Inria';
   font-size: 20px;
   margin-top: -37px;
-  position: relative;
-  align-self: flex-start
+  align-self: flex-start;
 }
 
 .userIcon {
@@ -77,13 +95,15 @@
 }
 
 .opponentHistory {
+  position: absolute;
+  left:125px;
   display: flex;
   flex-direction: row-reverse; /* Inverser l'ordre des cartes */
   border-radius: 20px;
   justify-content: center; /* Centrer horizontalement */
   align-items: center; /* Centrer verticalement */
   margin-top: 0px;
-  margin-right: 50px;
+  margin-right: 5px;
 }
 
 

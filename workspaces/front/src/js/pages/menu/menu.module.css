@@ -23,6 +23,7 @@
 }
 
 .menuContainer {
+  height: 30%;
   width: 47%;
   position: relative;
   display: flex;

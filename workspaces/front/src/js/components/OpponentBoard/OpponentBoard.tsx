@@ -9,10 +9,13 @@ import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCa
 import styles from './OpponentBoard.module.css';
 import userIcon from '../../../icons/user_icon.webp';
 import PlayerStatus from '../PlayerStatus/PlayerStatus';
-import { PlayerStateInterface, PublicPlayerState } from '@shared/common/Game';
+import { PlayerStateInterface } from '@shared/common/Game';
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
+import ExpertCard from '../ExpertCard/ExpertCard';
+import FormationCard from '../FormationCard/FormationCard';
 
-const OpponentBoard: React.FC = () => {
+function OpponentBoard({ playerState, myTurn }) {
+    //console.log('PlayerState dans oponnentBoard', playerState);
 
     const data = {
         name: "Jean",
@@ -27,7 +30,7 @@ const OpponentBoard: React.FC = () => {
         sensibilisationPoints: 3,
         expertCards: ["Developer", "ProductOwner", "Architect"],
         badPractice: "Developer",
-        playerName: "Jean",
+        playerName: "Zizi",
         cardsInHand: [],
         practiceAnswers: [],
         playerId: '',
@@ -35,27 +38,76 @@ const OpponentBoard: React.FC = () => {
         cardsHistory: []
     };
 
+    //const lastThreeCards = playerState.cardsHistory.slice(-3);
+    const lastThreeCards: BaseCard[] = [
+        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
+    ];
+
+
+    // Cartes par défaut
+    const defaultCards: BaseCard[] = [
+        { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
+        { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150 },
+        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
+    ];
+
+    const cards = [...defaultCards.slice(0, 3 - lastThreeCards.length),...lastThreeCards];
+
+    
+
     return (
         <div className={styles.opponentBoard}>
-                <div className={styles.nameContainer}> </div>
-                <div className={styles.container}>
-                    <img src={userIcon} alt="user icon" className={styles.userIcon} />
-                    <label className={styles.labelname}>{data.name}</label>
+            <div className={styles.nameContainer}> </div>
+            <div className={`${styles.container} ${myTurn ? styles.containerMyTurn : ''}`}>
+                <img src={userIcon} alt="user icon" className={styles.userIcon} />
+                <label className={styles.labelname}>{playerState.playerName}</label>
 
-                    <div className={styles.container2}>
-                        <PlayerStatus playerstate={player} />
-                    </div>
-                    <div className={styles.opponentHistory}>
-                        <div className={styles.card}>
-                            <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
+                <div className={styles.container2}>
+                    <PlayerStatus playerstate={playerState} me={0} />
+                </div>
+
+                <div className={styles.opponentHistory}>
+                    {cards.slice(-3).map((card, index) => (
+                        <div key={index} className={`${styles.card}`}>
+                            {card.cardType === 'BestPractice' && (
+                                <BestPracticeCard
+                                    cardType={card.cardType}
+                                    id={card.id}
+                                    title={card.title}
+                                    contents={card.contents}
+                                    carbon_loss={card.carbon_loss} network_gain={false} memory_gain={false} cpu_gain={false} storage_gain={false} difficulty={"c:/Users/thiba/Desktop/Devoir/4IF/S2/SMART/smartcgi/workspaces/shared/common/Cards".ONE} actor={'ProductOwner'} />
+                            )}
+                            {card.cardType === 'BadPractice' && (
+                                <BadPracticeCard
+                                    cardType={card.cardType}
+                                    id={card.id}
+                                    title={card.title}
+                                    contents={card.contents}
+                                    targetedPlayer={card.targetedPlayer}
+                                />
+                            )}
+                            {card.cardType === 'Expert' && (
+                                <ExpertCard
+                                    cardType={card.cardType}
+                                    id={card.id}
+                                    actor={card.actor}
+                                    title={card.title}
+                                    contents={card.contents}
+                                />
+                            )}
+                            {card.cardType === 'Formation' && (
+                                <FormationCard
+                                    cardType={card.cardType}
+                                    id={card.id}
+                                    actor={card.actor}
+                                    title={card.title}
+                                    contents={card.contents} linkToFormation={''} />
+                            )}
                         </div>
-                        <div className={styles.card}>
-                            <BadPracticeCard cardType="BadPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " targetedPlayer="Pierre" />
-                        </div>
-                        <div className={styles.card}>
-                            <BestPracticeCard cardType="BestPractice" id="32" title="titre de la carte" contents="blabla blabla blabla blabla blabla blabla blabla blabla blabla " carbon_loss={50} />
-                        </div>
-                    </div>
+                    ))}
+                </div>
+
             </div>
 
         </div>
