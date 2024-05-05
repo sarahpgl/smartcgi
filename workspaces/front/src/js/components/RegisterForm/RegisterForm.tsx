@@ -66,51 +66,45 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
   return (
     <div className={styles.registerFormContainer}>
       <form onSubmit={handleSubmit}>
-        <div className="inputContainerRegisterForm">
-          <input
+        <input className={styles.input}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             required
           />
-        </div>
-        <div className="inputContainerRegisterForm">
-          <input
+         
+          <input className={styles.input}
             type="text"
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
             placeholder="Nom"
             required
           />
-        </div>
-        <div className="inputContainerRegisterForm">
-          <input
+        
+          <input className={styles.input}
             type="text"
             value={firstname}
             onChange={(e) => setFirstname(e.target.value)}
             placeholder="Prénom"
             required
           />
-        </div>
-        <div className="inputContainerRegisterForm">
-          <input
+
+          <input className={styles.input}
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Mot de passe"
             required
           />
-        </div>
-        <div className="inputContainerRegisterForm">
-          <input
+
+          <input className={styles.input}
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirmation du mot de passe"
             required
           />
-        </div>
         <div>
           <button className={styles.buttoninscr} type="submit">S'inscrire</button>
         </div>

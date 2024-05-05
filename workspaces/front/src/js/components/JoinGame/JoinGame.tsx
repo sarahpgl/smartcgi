@@ -56,7 +56,7 @@ const JoinGame: React.FC = () => {
             </div>
             <div className={styles.container}>
                 <label className={styles.label}>Entrez le code de la partie</label> <br />
-                <input className={styles.input} type="text" value={codePartie} onChange={handleInputChange} /> <br />
+                <input className={styles.inputCode} type="text" value={codePartie} onChange={handleInputChange} /> <br />
                 {errorMessage && <p className={styles.error}>{errorMessage}</p>}
                 <label className={styles.label}>Rejoindre avec le pseudo : </label> <br />
                 <input className={styles.input} type="text" value={pseudo} onChange={handlePseudoChange} /> <br />
