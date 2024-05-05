@@ -1,77 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import styles from './SensibilisationQuizz.module.css';
+import useSocketManager from '@app/js/hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
+import { useRecoilState } from 'recoil';
+import { CurrentSensibilisationQuestion } from '../Game/states';
+
 
 const Quizz: React.FC = () => {
+  const { sm } = useSocketManager();
+  const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
+  const [answerCorrect, setanswerCorrect] = useState(false);
+  const [resultMessage, setResultMessage] = useState("");
+  const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
+  const [quizzPlay, setQuizzPlay] = useState(false);
+  const [tempsRestant, setTempsRestant] = useState(15);
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
 
-    const data = {
-        question: "Visionner un film en basse résolution plutôt qu’en haute définition, divise de combien la consommation d’énergie totale nécessaire ?",
-        answer1: "Entre 2 et 4 fois",
-        answer2: "Entre 4 et 10 fois",
-        answer3: "Entre 10 et 20 fois",
-        answerTrue: 2
+    if (tempsRestant > 0) {
+      timer = setTimeout(() => {
+        setTempsRestant(tempsRestant - 1);
+      }, 1000);
+    } else if (!quizzPlay && tempsRestant === 0) {
+      setResultMessage("Temps écoulé !");
+      setQuizzPlay(true);
+    }
+
+    return () => clearTimeout(timer);
+  }, [quizzPlay, tempsRestant]);
+
+
+  // TODO: Pour meije
+  // Lorsque l'on ferme le quizz 
+  // setSensibilisationQuestion(null);
+  const handleotherclick = () => {
+    setSensibilisationQuestion(null);
+  }
+
+  // au clic
+  const handleResult = async (answerIndex: number) => {
+
+    const answ = {
+      answer: answerIndex,
     };
-    const [answerCorrect, setanswerCorrect] = useState(false);
+    // envoie de la réponse du client au serveur
+    sm.emit({
+      event: ClientEvents.AnswerSensibilisationQuestion,
+      data: {
+        questionId: sensibilisationQuestion.question_id,
+        answer: answ,
+      }
+    })
 
-    const [resultMessage, setResultMessage] = useState("");
-    const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
-    const [quizzPlay, setQuizzPlay] = useState(false);
-    const [tempsRestant, setTempsRestant] = useState(15);
-    
-    useEffect(() => {
-        let timer: NodeJS.Timeout;
+    if (!quizzPlay) {
+      if (sensibilisationQuestion?.answers.answer == answerIndex) {
+        setResultMessage(`Bien joué, vous avez gagné un point de sensibilisation !`);
+        setanswerCorrect(true);
+      } else {
+        setResultMessage(`Dommage, ce n’est pas la bonne réponse !`);
+      }
+      setanswerChoisie(answerIndex);
+      setQuizzPlay(true);
+    }
 
-        if (tempsRestant > 0) {
-            timer = setTimeout(() => {
-                setTempsRestant(tempsRestant - 1);
-            }, 1000);
-        } else if (!quizzPlay && tempsRestant === 0) {
-            setResultMessage("Temps écoulé !");
-            setQuizzPlay(true);
-        }
+  };
 
-        return () => clearTimeout(timer);
-    }, [quizzPlay, tempsRestant]);
 
-    const handleResult = (answerIndex: number) => {
-        if (!quizzPlay) {
-            if (answerIndex === data.answerTrue) {
-                setResultMessage(`Bien joué, vous avez gagné un point de sensibilisation !`);
-                setanswerCorrect(true);
-            } else {
-                setResultMessage(`Dommage, ce n’est pas la bonne réponse !`);
-            }
-            setanswerChoisie(answerIndex);
-            setQuizzPlay(true);
-        }
-    };
 
-    const getButtonColor = (answerIndex: number) => {
-        if (quizzPlay) {
-            if (answerIndex === data.answerTrue) {
-                return styles.green;
-            }
-            if (answerIndex !== data.answerTrue && answerIndex === answerChoisie) {
-                return styles.red;
-            }
-        }
-        return '';
-    };
+  const getButtonColor = (answerIndex: number) => {
+    if (quizzPlay) {
+      if (answerIndex == sensibilisationQuestion?.answers.answer) {
+        return styles.green;
+      }
+      if (answerIndex !== sensibilisationQuestion?.answers.answer && answerIndex === answerChoisie) {
+        return styles.red;
+      }
+    }
+    return '';
+  };
 
-    return (
-        <div className={styles.container}>
-            <label className={styles.titre}>Quizz de sensibilisation</label> <br />
-            <label className={styles.label}>{data.question}</label> <br />
-            <button className={`${styles.button} ${getButtonColor(1)}`} onClick={() => handleResult(1)} disabled={quizzPlay}>{data.answer1}</button> <br />
-            <button className={`${styles.button} ${getButtonColor(2)}`} onClick={() => handleResult(2)} disabled={quizzPlay}>{data.answer2}</button> <br />
-            <button className={`${styles.button} ${getButtonColor(3)}`} onClick={() => handleResult(3)} disabled={quizzPlay}>{data.answer3}</button> <br />
-            {resultMessage && <p className={styles.message}>{resultMessage}</p>}
-            {(tempsRestant > 0 &&
-                <div style={{marginBottom: "15px"}}>
-                <p>Temps restant: {tempsRestant} secondes</p>
-                </div>
-            )}
+  return sensibilisationQuestion !== null ? (
+    <div className={styles.container}>
+      <label className={styles.titre}>Quizz de sensibilisation</label> <br />
+      <label className={styles.label}>{sensibilisationQuestion?.question}</label> <br />
+      <button className={`${styles.button} ${getButtonColor(1)}`} onClick={() => handleResult(1)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response1}</button> <br />
+      <button className={`${styles.button} ${getButtonColor(2)}`} onClick={() => handleResult(2)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response2}</button> <br />
+      <button className={`${styles.button} ${getButtonColor(3)}`} onClick={() => handleResult(3)} disabled={quizzPlay}>{sensibilisationQuestion?.answers.response3}</button> <br />
+      {resultMessage && <p className={styles.message}>{resultMessage}</p>}
+      {(tempsRestant > 0 &&
+        <div style={{ marginBottom: "15px" }}>
+          <p>Temps restant: {tempsRestant} secondes</p>
         </div>
-    );
+      )}
+      <button className={styles.button} onClick={handleotherclick}>Fermer</button>
+    </div>
+  ) : null;
 };
 
 export default Quizz;

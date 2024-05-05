@@ -13,6 +13,8 @@ export enum ClientEvents {
   AnswerSensibilisationQuestion = 'client.game.answer_sensibilisation_question',
   PlayCard = 'client.game.play_card',
   DiscardCard = 'client.game.discard_card',
+  GetSensibilisationQuestion = " client.game.get_sensibilisation_question",
+
 
 
   // Reconnecting

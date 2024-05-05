@@ -19,4 +19,9 @@ export class Question {
     @JoinTable({ name: 'questions_games'})
     games: Game[];
 
+    
+public getQuestion_Content(){
+    return this.question_contents;
+}
+
 }

@@ -11,9 +11,11 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { BestPracticeAnswerType, BadPracticeAnswerType, SensibilisationQuestion, PracticeAnswer } from '@shared/common/Game';
+import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswer, PracticeAnswerType, SensibilisationQuestionAnswer, SensibilisationQuestion } from '@shared/common/Game';
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
+import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { Question_Content } from '@app/entity/question_content';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
@@ -21,22 +23,29 @@ export class Instance {
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
   public currentPlayerId: string;
-  public players: string[] = [];
-  public sensibilisationQuestions: SensibilisationQuestion[] = [];
-  public cardService: CardService;
+
+
   public gameStarted: boolean = false;
   private answerCount: number = 0;
+  private currentSensibilisationQuestion: SensibilisationQuestion
+  private startingPlayerId: string;
+
+  public cardService: CardService;
+  public sensibilisationService: SensibilisationService;
 
   constructor(
     private readonly lobby: Lobby,
+    cardService: CardService,
+    sensibilisationService: SensibilisationService
   ) {
+    this.cardService = cardService;
+    this.sensibilisationService = sensibilisationService;
+
   }
 
   public async triggerStart(): Promise<void> {
 
     this.cardDeck = await this.cardService.getDeck();
-    // TODO: Implement this service in Sensibilisation Module
-    // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
 
     this.lobby.clients.forEach((client) => {
       this.playerStates[client.gameData.clientInGameId] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
@@ -48,8 +57,9 @@ export class Instance {
     //Set the first player
     this.gameStarted = true;
     this.currentPlayerId = this.playerStates[Object.keys(this.playerStates)[0]].clientInGameId;
-    const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
-    this.lobby.dispatchGameStart(question);
+    this.startingPlayerId = this.currentPlayerId;
+    this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
+    this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
   public triggerFinish(): void {
@@ -90,6 +100,7 @@ export class Instance {
     }
 
     playerState.cardsHistory.push(card);
+    // TODO: Not working remove card from hand later
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
     switch (card.cardType) {
       case 'BestPractice':
@@ -111,9 +122,7 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
-    // TODO: delete later
-    this.lobby.dispatchGameState();
+    this.transitionToNextTurn();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
@@ -146,6 +155,22 @@ export class Instance {
     }
   }
 
+  public answerSensibilisationQuestion(playerId: string, answer: SensibilisationQuestionAnswer) {
+    const playerState = this.playerStates[playerId];
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    if (this.currentSensibilisationQuestion.answers.answer === answer.answer) {
+      if (!playerState.canPlay) {
+        playerState.canPlay = true;
+      }
+      else {
+        playerState.sensibilisationPoints++;
+      }
+    }
+  }
+
+
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
@@ -162,6 +187,7 @@ export class Instance {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
+    this.lobby.dispatchGameState();
   }
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
@@ -178,6 +204,7 @@ export class Instance {
         // Ask the question
         this.answerCount = 0;
         this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+        this.lobby.dispatchGameState();
       } else {
         throw new ServerException(SocketExceptions.GameError, 'Player has the expert card associated');
       }
@@ -194,6 +221,7 @@ export class Instance {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
+    this.lobby.dispatchGameState();
   }
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
@@ -202,9 +230,12 @@ export class Instance {
     }
   }
 
-  private transitionToNextRound(): void {
-    this.currentPlayerId = this.players[0];
-    this.lobby.dispatchGameState();
+  private async transitionToNextTurn() {
+    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+    if (this.currentPlayerId === this.startingPlayerId) {
+      this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
+      this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
+    }
   }
 
 }

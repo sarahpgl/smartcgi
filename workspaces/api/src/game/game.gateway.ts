@@ -16,9 +16,11 @@ import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto } from '@app/game/dtos';
+import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto, SensibilisationAnswerDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
 import { BestPracticeAnswerType } from '@shared/common/Game';
+import { Question_Content } from '@app/entity/question_content';
+import { SensibilisationQuestion } from '@shared/common/Game';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -87,7 +89,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const cardType = data.cardType;
     switch (cardType) {
       case 'BestPractice':
-        client.gameData.lobby.instance.answerBestPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer); 
+        client.gameData.lobby.instance.answerBestPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
         break;
       case 'BadPractice':
         client.gameData.lobby.instance.answerBadPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
@@ -112,6 +114,22 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.logger.log('Client reconnecting', data.clientInGameId);
     this.lobbyManager.reconnectClient(client, data.clientInGameId);
   }
+  // TODO: Handler for practice question
 
+  @SubscribeMessage(ClientEvents.AnswerSensibilisationQuestion)
+  onSensibilisationQuestion(client: AuthenticatedSocket, data: SensibilisationAnswerDto): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.answerSensibilisationQuestion(client.gameData.clientInGameId, data.answer);
+  }
 
+  @SubscribeMessage(ClientEvents.GetSensibilisationQuestion)
+  onSensibilisationQuestionGet(client: AuthenticatedSocket): void {
+    /*if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }*/
+    // Retourner le contenu dans un objet littéral
+
+  }
 }
