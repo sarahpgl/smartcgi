@@ -56,3 +56,11 @@ export class ClientReconnectDto {
   @IsNumber()
   lastMessageReceived: number;
 }
+
+export class CreateGameDto{
+  @IsNumber()
+  winnerId: number;
+
+}
+
+

@@ -16,6 +16,7 @@ import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
 import { Question_Content } from '@app/entity/question_content';
+import { GameService } from '../game.service';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
@@ -32,6 +33,7 @@ export class Instance {
 
   public cardService: CardService;
   public sensibilisationService: SensibilisationService;
+  public gameService: GameService;
 
   constructor(
     private readonly lobby: Lobby,
@@ -62,12 +64,15 @@ export class Instance {
     this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
-  public triggerFinish(): void {
+  public triggerFinish(winnerId : string, winnerName: string): void {
     const nbPlayer = Object.keys(this.playerStates).length;
+    this.saveToDatabase(winnerId);
+
     Object.keys(this.playerStates).forEach((playerId) => {
       const gameReport = this.generateGameReport(playerId);
-      this.lobby.emitGameReport(gameReport, playerId);
+      this.lobby.emitGameReport(gameReport, playerId, winnerName);
     });
+
   }
 
   public discardCard(card: Card, client: AuthenticatedSocket) {
@@ -180,6 +185,9 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
     this.lobby.dispatchGameState();
+    if(playerState.co2Saved <= 0){
+      this.triggerFinish(playerState.clientInGameId, playerState.playerName);
+    }
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {
@@ -243,6 +251,7 @@ export class Instance {
   }
 
   private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] }  {
+    
     const myArchivedCards: Card[] = [];
     const bestPracticeAnswers = this.playerStates[clientInGameId].bestPracticeAnswers;
     for (const answer of bestPracticeAnswers) {
@@ -325,6 +334,10 @@ export class Instance {
     }
 
     return {myArchivedCards, mostPopularCards};
+  }
+
+  private saveToDatabase(winnerId: string): void {
+    this.gameService.createGame(Number(winnerId));
   }
 
 }

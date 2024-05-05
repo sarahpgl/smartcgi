@@ -11,6 +11,7 @@ import { Cron } from '@nestjs/schedule'
 import { CardService } from '@app/card/card.service';
 import { Injectable, Inject } from '@nestjs/common';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { IsNull } from 'typeorm';
 
 export class LobbyManager {
   public server: Server;
@@ -89,7 +90,7 @@ export class LobbyManager {
       if (lobbyLifetime > LOBBY_MAX_LIFETIME) {
         //TODO: Notify clients that lobby is closing
 
-        lobby.instance.triggerFinish();
+        lobby.instance.triggerFinish(null, null);
 
         this.lobbies.delete(lobby.id);
       }
