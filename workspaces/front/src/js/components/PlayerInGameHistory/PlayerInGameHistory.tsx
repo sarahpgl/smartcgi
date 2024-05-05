@@ -6,22 +6,22 @@ import BestPracticeCard from '@app/js/components/BestPracticeCard/BestPracticeCa
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
+import EmptyCard from '../EmptyCard/EmptyCard';
+import { Card } from '@shared/common/Cards';
 
 import { BaseCard } from '@shared/common/Cards';
 
-function PlayerInGameHistory(Cards) {
+function PlayerInGameHistory({Cards} : {Cards: Card[]}) {
 
-    let cards2: BaseCard[] = [
-        { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss : 150 },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
-    ];   
+    const defaultCards: BaseCard[] = [
+        { cardType: 'EmpyCard','id': '1', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '2', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '3', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' }
+    ];
     
-    let cards = cards2;
-    if(Cards.length > 0){
-        cards = Cards;
-    }
+    const lastThreeCards = Cards.slice(-3);
+
+    const cards = [...defaultCards.slice(0, 3 - lastThreeCards.length),...lastThreeCards];
 
 
     return (
@@ -63,6 +63,9 @@ function PlayerInGameHistory(Cards) {
                             title={card.title}
                             contents={card.contents}
                         />
+                    )}
+                    {card.cardType === 'EmpyCard' && (
+                        <EmptyCard/>
                     )}
                 </div>
             ))}

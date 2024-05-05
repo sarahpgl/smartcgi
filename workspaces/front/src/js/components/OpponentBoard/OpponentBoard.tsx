@@ -13,6 +13,7 @@ import { PlayerStateInterface } from '@shared/common/Game';
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
+import EmptyCard from '../EmptyCard/EmptyCard';
 
 function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterface , myTurn: boolean}) {
     //console.log('PlayerState dans oponnentBoard', playerState);
@@ -38,18 +39,14 @@ function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterf
         cardsHistory: []
     };
 
-    //const lastThreeCards = playerState.cardsHistory.slice(-3);
-    const lastThreeCards: BaseCard[] = [
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
-    ];
+    const lastThreeCards = playerState.cardsHistory.slice(-3);
 
 
     // Cartes par défaut
     const defaultCards: BaseCard[] = [
-        { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150 },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
+        { cardType: 'EmpyCard','id': '1', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '2', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '3', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' }
     ];
 
     const cards = [...defaultCards.slice(0, 3 - lastThreeCards.length),...lastThreeCards];
@@ -103,6 +100,9 @@ function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterf
                                     actor={card.actor}
                                     title={card.title}
                                     contents={card.contents} linkToFormation={''} />
+                            )}
+                            {card.cardType === 'EmpyCard' && (
+                                <EmptyCard/>
                             )}
                         </div>
                     ))}

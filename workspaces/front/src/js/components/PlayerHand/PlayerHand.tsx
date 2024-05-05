@@ -16,10 +16,11 @@ import EmptyCard from '../EmptyCard/EmptyCard';
 import useSocketManager from '@app/js/hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
-function PlayerHand({ MPSelected, noMPSelected, cards }: {
+function PlayerHand({ MPSelected, noMPSelected, cards, myTurn }: {
   MPSelected: (card: Bad_Practice_Card) => void,
   noMPSelected: () => void,
   cards: Card[],
+  myTurn: boolean,
 }) {
 
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
@@ -28,25 +29,27 @@ function PlayerHand({ MPSelected, noMPSelected, cards }: {
   const { sm } = useSocketManager();
 
   const handleCardClick = (cardId: number, cardType: string) => {
-    if (selectedCard === cardId) {
-      setSelectedCard(null);
+    if (myTurn) {
+      if (selectedCard === cardId) {
+        setSelectedCard(null);
+        noMPSelected();
+        return;
+      }
       noMPSelected();
-      return;
-    }
-    noMPSelected();
-    setSelectedCard(cardId);
-    if (cardType === "BadPractice") {
-      MPSelected();
+      setSelectedCard(cardId);
+      if (cardType === "BadPractice") {
+        MPSelected();
+      }
     }
   };
 
   const handleCardHover = (cardId: number) => {
   };
-    const handleCardLeave = (cardType:string) => {
-        if(typeSelected !== "BadPractice"){
-            setSelectedCard(null);
-        }
-    };
+  const handleCardLeave = (cardType: string) => {
+    if (typeSelected !== "BadPractice") {
+      setSelectedCard(null);
+    }
+  };
 
   const handlePlayCard = (card: Card) => {
     console.log("play card", card);
