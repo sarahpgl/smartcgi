@@ -62,7 +62,7 @@ export default function GameManager() {
       console.log('Reception SensibilisationAnswered');
       setTimeout(() => {
         setSensibilisationQuestion(null);
-      }, 3000);
+      }, 2000);
     }
 
 

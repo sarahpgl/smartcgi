@@ -10,18 +10,19 @@ import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP'
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 import { useRecoilState } from 'recoil';
-import { CurrentGameState } from '@app/js/components/Game/states';
-import { CurrentSensibilisationQuestion } from '@app/js/components/Game/states';
+import { CurrentSensibilisationQuestion, CurrentPracticeQuestion, CurrentGameState } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
 import { Bad_Practice_Card } from '@shared/common/Cards';
 import { Difficulty } from '@shared/common/Cards';
+import PracticeQuestion from '@app/js/components/PracticeQuestion/PracticeQuestion';
 
 function GamePage() {
 
   const [gameState] = useRecoilState(CurrentGameState);
   const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
+  const [practiceQuestion] = useRecoilState(CurrentPracticeQuestion);
   const { sm } = useSocketManager();
   const playerAbleToMP = ["Top"];
 
@@ -73,6 +74,12 @@ function GamePage() {
       <Header />
       {sensibilisationQuestion ? (
         <div className={styles.quizz}><SensibilisationQuizz/></div>
+      ) : (
+        <>
+        </>
+      )}
+      {practiceQuestion ? (
+        <div className={styles.quizz}><PracticeQuestion card={practiceQuestion.card} /></div>
       ) : (
         <>
         </>
