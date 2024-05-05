@@ -21,11 +21,13 @@
     margin-bottom: 0px;
     transition: transform 0.2s;
     user-select: none; 
+    cursor: pointer;
 }
 .card:hover{
     transform: translateY(-70px) scale(2.3) translateX(-20px); 
     z-index: 1;
 }
+
 .selected {
     width: 120px;
     background-color: rgb(230, 230, 230);
