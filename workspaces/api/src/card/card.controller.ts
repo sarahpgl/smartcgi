@@ -31,4 +31,10 @@ export class CardController {
     async getBadPractice(){
         return this.cardService.getBadPracticeCard();
     }
+
+    @Get('all-cards')
+    async getAllCards(){
+        return this.cardService.getAllCards();
+    }
+
   }
