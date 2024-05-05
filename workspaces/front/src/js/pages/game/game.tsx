@@ -10,7 +10,7 @@ import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP'
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 import { useRecoilState } from 'recoil';
-import { CurrentGameState } from '@app/js/components/Game/states';
+import { CurrentGameState, CurrentSensibilisationQuestion } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';

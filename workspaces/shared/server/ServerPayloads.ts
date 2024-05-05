@@ -31,6 +31,7 @@ export type ServerPayloads = {
 
   [ServerEvents.PracticeQuestion]: {
     playerId: string;
+    playerName: string;
     card: Card;
   };
 
@@ -40,7 +41,7 @@ export type ServerPayloads = {
     gameState: GameState;
   };
   
-  [ServerEvents.GetSensibilisationQuestion] : {
+  [ServerEvents.SensibilisationQuestion] : {
     question_id : number,
     question: string;
     answers: {

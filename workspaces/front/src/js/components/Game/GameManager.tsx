@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Listener } from '@components/websocket/types';
 import { useRecoilState } from 'recoil';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { CurrentLobbyState, CurrentGameState, CurrentSensibilisationQuestion } from './states';
+import { CurrentLobbyState, CurrentGameState, CurrentSensibilisationQuestion, CurrentPracticeQuestion } from './states';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import LobbyComponent from '../LobbyComponent/LobbyComponent';
@@ -18,6 +18,7 @@ export default function GameManager() {
   const [lobbyState, setLobbyState] = useRecoilState(CurrentLobbyState);
   const [gameState, setGameState] = useRecoilState(CurrentGameState);
   const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion)
+  const [practiceQuestion, setPracticeQuestion] = useRecoilState(CurrentPracticeQuestion);
 
   useEffect(() => {
     const onLobbyState: Listener<ServerPayloads[ServerEvents.LobbyState]> = async (data) => {
@@ -47,12 +48,13 @@ export default function GameManager() {
     };
 
     const onPracticeQuestion: Listener<ServerPayloads[ServerEvents.PracticeQuestion]> = (data) => {
-      // TODO: Show a modal with the question
+      setPracticeQuestion(data);
     }
 
-    const onGetSensibilisationQuestion: Listener<ServerPayloads[ServerEvents.GetSensibilisationQuestion]> = (data) => {
+    const onGetSensibilisationQuestion: Listener<ServerPayloads[ServerEvents.SensibilisationQuestion]> = (data) => {
       setSensibilisationQuestion(data);
     };
+
 
     if (!socket.connected) {
       sm.connect();
@@ -62,18 +64,15 @@ export default function GameManager() {
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);
     if (!sm.socket.hasListeners(ServerEvents.GameStart)) sm.registerListener(ServerEvents.GameStart, onGameStart);
     if (!sm.socket.hasListeners(ServerEvents.PracticeQuestion)) sm.registerListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
-    if (!sm.socket.hasListeners(ServerEvents.GetSensibilisationQuestion)) sm.registerListener(ServerEvents.GetSensibilisationQuestion, onGetSensibilisationQuestion);
+    if (!sm.socket.hasListeners(ServerEvents.SensibilisationQuestion)) sm.registerListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
 
-    if (!socket.connected) {
-      sm.connect();
-    }
     return () => {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);
       sm.removeListener(ServerEvents.LobbyJoined, onLobbyJoined);
       sm.removeListener(ServerEvents.GameState, onGameState);
       sm.removeListener(ServerEvents.GameStart, onGameStart);
       sm.removeListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
-      sm.removeListener(ServerEvents.GetSensibilisationQuestion, onGetSensibilisationQuestion);
+      sm.removeListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
     };
   }, []);
 
