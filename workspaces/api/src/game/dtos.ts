@@ -41,8 +41,7 @@ export class SensibilisationAnswerDto {
   @IsNumber()
   questionId: number;
 
-  @IsString()
-  answer: SensibilisationQuestionAnswer;
+  answer: SensibilisationQuestionAnswer | null;
 }
 
 export class ClientReconnectDto {

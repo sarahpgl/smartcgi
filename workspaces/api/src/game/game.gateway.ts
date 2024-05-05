@@ -81,6 +81,28 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.lobbyManager.startGame(client, data.clientInGameId);
   }
 
+  @SubscribeMessage(ClientEvents.ClientReconnect)
+  onClientReconnect(client: AuthenticatedSocket, data: ClientReconnectDto): void {
+    this.logger.log('Client reconnecting', data.clientInGameId);
+    this.lobbyManager.reconnectClient(client, data.clientInGameId);
+  }
+
+  @SubscribeMessage(ClientEvents.PlayCard)
+  onPlayCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.PlayCard]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.playCard(data.card, client);
+  }
+
+  @SubscribeMessage(ClientEvents.DiscardCard)
+  onDiscardCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.DiscardCard]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.discardCard(data.card, client);
+  }
+
   @SubscribeMessage(ClientEvents.AnswerPracticeQuestion)
   onPracticeQuestion(client: AuthenticatedSocket, data: PracticeAnswerDto): void {
     if (!client.gameData.lobby) {
@@ -98,23 +120,6 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
   }
-
-  @SubscribeMessage(ClientEvents.PlayCard)
-  onPlayCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.PlayCard]): void {
-    if (!client.gameData.lobby) {
-      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
-    }
-    client.gameData.lobby.instance.playCard(data.card, client);
-  }
-
-
-  // TODO: Deal with client reconnect
-  @SubscribeMessage(ClientEvents.ClientReconnect)
-  onClientReconnect(client: AuthenticatedSocket, data: ClientReconnectDto): void {
-    this.logger.log('Client reconnecting', data.clientInGameId);
-    this.lobbyManager.reconnectClient(client, data.clientInGameId);
-  }
-  // TODO: Handler for practice question
 
   @SubscribeMessage(ClientEvents.AnswerSensibilisationQuestion)
   onSensibilisationQuestion(client: AuthenticatedSocket, data: SensibilisationAnswerDto): void {

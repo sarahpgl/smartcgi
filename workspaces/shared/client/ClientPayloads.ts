@@ -39,10 +39,11 @@ export type ClientPayloads = {
   [ClientEvents.GetSensibilisationQuestion]: {
   }
 
-
-
-
   [ClientEvents.PlayCard]: {
+    card: Card;
+  }
+  
+  [ClientEvents.DiscardCard]: {
     card: Card;
   }
 

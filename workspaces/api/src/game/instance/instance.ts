@@ -15,7 +15,6 @@ import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswer, Practice
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
-import { Question_Content } from '@app/entity/question_content';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
@@ -72,13 +71,18 @@ export class Instance {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
     if (!playerState.canPlay) {
-      throw new ServerException(SocketExceptions.GameError, 'Player cannot play');
+      throw new ServerException(SocketExceptions.GameError, 'You need to answer a sensibilisation question first');
     }
-    playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
+    playerState.cardsInHand = playerState.cardsInHand.filter((c) => c.id !== card.id);
     this.discardPile.push(card);
     this.drawCard(playerState);
-    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
 
+    // On best or bad practice discard, ask the question
+    if (card.cardType === 'BestPractice' || card.cardType === 'BadPractice') {
+      this.answerCount = 0;
+      this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+    }
+    
   }
 
   public playCard(card: Card, client: AuthenticatedSocket): void {
@@ -101,7 +105,8 @@ export class Instance {
 
     playerState.cardsHistory.push(card);
     // TODO: Not working remove card from hand later
-    playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
+    playerState.cardsInHand = playerState.cardsInHand.filter((c) => c.id !== card.id);
+    this.answerCount = 0;
     switch (card.cardType) {
       case 'BestPractice':
         this.playBestPractice(card, playerState);
@@ -109,6 +114,7 @@ export class Instance {
 
       case 'Expert':
         this.playExpert(card, playerState);
+        this.transitionToNextTurn();
         break;
 
       case 'BadPractice':
@@ -117,12 +123,12 @@ export class Instance {
 
       case 'Formation':
         this.playFormation(card, playerState);
-
+        this.transitionToNextTurn();
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    this.transitionToNextTurn();
+    this.lobby.dispatchGameState();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
@@ -136,7 +142,7 @@ export class Instance {
     playerState.bestPracticeAnswers.push({ cardId, answer: answer.answer as BestPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
-      this.lobby.dispatchGameState();
+      this.transitionToNextTurn();
     }
   }
 
@@ -151,16 +157,16 @@ export class Instance {
     playerState.badPracticeAnswers.push({ cardId, answer: answer.answer as BadPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
-      this.lobby.dispatchGameState();
+      this.transitionToNextTurn();
     }
   }
 
-  public answerSensibilisationQuestion(playerId: string, answer: SensibilisationQuestionAnswer) {
+  public answerSensibilisationQuestion(playerId: string, answer: SensibilisationQuestionAnswer | null) {
     const playerState = this.playerStates[playerId];
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
-    if (this.currentSensibilisationQuestion.answers.answer === answer.answer) {
+    if (answer && this.currentSensibilisationQuestion.answers.answer === answer.answer) {
       if (!playerState.canPlay) {
         playerState.canPlay = true;
       }
@@ -232,6 +238,11 @@ export class Instance {
 
   private async transitionToNextTurn() {
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+    const playerState = this.playerStates[this.currentPlayerId];
+    if( !playerState.canPlay){
+      this.lobby.dispatchPlayerPassed(playerState.playerName);
+      this.transitionToNextTurn();
+    }
     if (this.currentPlayerId === this.startingPlayerId) {
       this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
       this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);

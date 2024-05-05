@@ -15,9 +15,9 @@ export class PlayerState implements PlayerStateInterface {
   public badPracticeAnswers: BadPracticeAnswer[] = [];
 
   public clientInGameId: string;
-  public playerName: string;
+  public playerName:string;
 
-  constructor(playerName: string, playerId: string, co2Quantity: number) {
+  constructor(playerName:string, playerId:string, co2Quantity:number){
     this.playerName = playerName;
     this.clientInGameId = playerId;
     this.co2Saved = co2Quantity;
