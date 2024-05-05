@@ -21,6 +21,7 @@ const PracticeQuestion: React.FC<{ card: Practice_Card }> = ({ card }) => {
             data: {
                 cardId: card.id,
                 answer: option,
+                cardType: card.cardType,
             }
         });
         setCreateMessage(`Vous avez classé la ${card.cardType === 'BestPractice' ? 'bonne' : 'mauvaise'} pratique comme ${option}`);

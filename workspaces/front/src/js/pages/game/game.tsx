@@ -73,13 +73,13 @@ function GamePage() {
     <div className={styles.page}>
       <Header />
       {sensibilisationQuestion ? (
-        <div className={styles.quizz}><SensibilisationQuizz/></div>
+        <div className={styles.quizzSensibilisation}><SensibilisationQuizz/></div>
       ) : (
         <>
         </>
       )}
       {practiceQuestion ? (
-        <div className={styles.quizz}><PracticeQuestion card={practiceQuestion.card} /></div>
+        <div className={styles.quizzPractice}><PracticeQuestion card={practiceQuestion.card} /></div>
       ) : (
         <>
         </>
