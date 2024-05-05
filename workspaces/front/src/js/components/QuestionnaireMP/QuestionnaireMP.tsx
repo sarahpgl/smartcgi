@@ -7,12 +7,13 @@ import { BadPracticeAnswerType } from '@shared/common/Game';
 
 const QuestionnaireMP: React.FC = () => {
     const [createMessage, setCreateMessage] = useState("");
+    const [selectedOption, setSelectedOption] = useState<BadPracticeAnswerType | null>(null);
     const [isVisible, setIsVisible] = useState(true);
     const navigate = useNavigate();
     const { sm } = useSocketManager();
 
     const answer = (selectedOption: BadPracticeAnswerType) => {
-
+        setSelectedOption(selectedOption);
         sm.emit({
             event: ClientEvents.AnswerPracticeQuestion,
             data: {
@@ -22,9 +23,6 @@ const QuestionnaireMP: React.FC = () => {
         });
 
         setCreateMessage(`Vous avez classé la mauvaise pratique comme ${selectedOption}`);
-        setTimeout(() => {
-            setIsVisible(false);
-        }, 2000);
     }
 
     if (!isVisible) {
@@ -34,10 +32,10 @@ const QuestionnaireMP: React.FC = () => {
     return (
         <div className={styles.container}>
             <label className={styles.label}>La mauvaise pratique est-elle :</label> <br />
-            <button className={styles.button} onClick={() => answer(BadPracticeAnswerType.TO_BE_BANNED)}>Bannissable</button> <br />
-            <button className={styles.button} onClick={() => answer(BadPracticeAnswerType.ALREADY_BANNED)}>Déjà bannie</button> <br />
-            <button className={styles.button} onClick={() => answer(BadPracticeAnswerType.TOO_COMPLEX)}>Compliquée à éviter</button> <br />
-            {createMessage && <p className={styles.message}>{createMessage}</p>}
+            <button className={`${styles.button} ${selectedOption === BadPracticeAnswerType.TO_BE_BANNED ? styles.selected : ''}`} onClick={() => answer(BadPracticeAnswerType.TO_BE_BANNED)}>Bannissable</button> <br />
+            <button className={`${styles.button} ${selectedOption === BadPracticeAnswerType.ALREADY_BANNED ? styles.selected : ''}`} onClick={() => answer(BadPracticeAnswerType.ALREADY_BANNED)}>Déjà bannie</button> <br />
+            <button className={`${styles.button} ${selectedOption === BadPracticeAnswerType.TOO_COMPLEX ? styles.selected : ''}`} onClick={() => answer(BadPracticeAnswerType.TOO_COMPLEX)}>Compliquée à éviter</button> <br />
+            {createMessage && <p className={styles.message}></p>}
         </div>
     );
 };

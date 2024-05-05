@@ -7,24 +7,21 @@ import { BestPracticeAnswerType } from '@shared/common/Game';
 
 const QuestionnaireBP: React.FC = () => {
     const [createMessage, setCreateMessage] = useState("");
+    const [selectedOption, setSelectedOption] = useState<BestPracticeAnswerType | null>(null);
     const [isVisible, setIsVisible] = useState(true);
     const navigate = useNavigate();
     const { sm } = useSocketManager();
 
-    const answer = (selectedOption: BestPracticeAnswerType) => {
-
+    const answer = (option: BestPracticeAnswerType) => {
+        setSelectedOption(option); 
         sm.emit({
             event: ClientEvents.AnswerPracticeQuestion,
             data: {
                 cardId: 'cardId',
-                answer: selectedOption,
+                answer: option,
             }
         });
-
-        setCreateMessage(`Vous avez classé la bonne pratique comme ${selectedOption}`);
-        setTimeout(() => {
-            setIsVisible(false);
-        }, 2000);
+        setCreateMessage(`Vous avez classé la bonne pratique comme ${option}`);
     }
 
     if (!isVisible) {
@@ -34,10 +31,10 @@ const QuestionnaireBP: React.FC = () => {
     return (
         <div className={styles.container}>
             <label className={styles.label}>La bonne pratique est-elle :</label> <br />
-            <button className={styles.button} onClick={() => answer(BestPracticeAnswerType.APPLICABLE)}>Applicable</button> <br />
-            <button className={styles.button} onClick={() => answer(BestPracticeAnswerType.ALREADY_APPLICABLE)}>Déjà appliquée</button> <br />
-            <button className={styles.button} onClick={() => answer(BestPracticeAnswerType.NOT_APPLICABLE)}>Non applicable</button> <br />
-            {createMessage && <p className={styles.message}>{createMessage}</p>}
+            <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.APPLICABLE)}>Applicable</button> <br />
+            <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.ALREADY_APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.ALREADY_APPLICABLE)}>Déjà appliquée</button> <br />
+            <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.NOT_APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.NOT_APPLICABLE)}>Non applicable</button> <br />
+            {createMessage && <p className={styles.message}></p>}
         </div>
     );
 };
