@@ -154,16 +154,35 @@
 
 .footericon {
     top: 50%; /* Positionner au milieu verticalement */
-    max-width: 10px;
-    max-height: 10px;
+    max-width: 14px;
+    max-height: 14px;
     margin-left: auto;
     margin-right: auto;
-    transform: translateY(-20%); /* Ajuster pour centrer verticalement */
+    transform: translateY(-30%); /* Ajuster pour centrer verticalement */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.footericonGains {
+    top: 50%; /* Positionner au milieu verticalement */
+    max-width: 14px;
+    max-height: 14px;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateY(-30%); /* Ajuster pour centrer verticalement */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.footericonGains img {
+    max-height: 6px; /* Permettre à la hauteur de s'ajuster automatiquement en proportion */
+    width: auto;
 }
 
 .footericon img {
-    width: 100%; /* Assurer que l'image s'adapte à la taille de son conteneur */
-    height: auto; /* Permettre à la hauteur de s'ajuster automatiquement en proportion */
+    max-height: 8px; /* Permettre à la hauteur de s'ajuster automatiquement en proportion */
+    width: auto;
 }
 
 .stars{

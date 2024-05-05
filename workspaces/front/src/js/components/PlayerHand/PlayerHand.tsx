@@ -82,10 +82,10 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
                     onMouseLeave={() => handleCardLeave(card.cardType)}
                 >
                     {card.cardType === 'BestPractice' && (
-                        <BestPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} difficulty={card.difficulty} />
+                        <BestPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} difficulty={card.difficulty} actor={card.actor} network_gain={card.network_gain} memory_gain={card.memory_gain} cpu_gain={card.cpu_gain} storage_gain={card.storage_gain} />
                     )}
                     {card.cardType === 'BadPractice' && (
-                        <BadPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} targetedPlayer={card.targetedPlayer} actor={card.actor} difficulty={card.difficulty} />
+                        <BadPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} targetedPlayer={card.targetedPlayer} actor={card.actor} difficulty={card.difficulty} network_gain={card.network_gain} memory_gain={card.memory_gain} cpu_gain={card.cpu_gain} storage_gain={card.storage_gain} />
                     )}
                     {card.cardType === 'Expert' && (
                         <ExpertCard cardType={card.cardType} id={card.id} actor={card.actor} title={card.title} contents={card.contents} />
