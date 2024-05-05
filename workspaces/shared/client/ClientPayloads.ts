@@ -28,6 +28,7 @@ export type ClientPayloads = {
   [ClientEvents.AnswerPracticeQuestion]: {
     cardId: string;
     answer: PracticeAnswerType;
+    cardType: 'BestPractice' | 'BadPractice';
   }
 
   [ClientEvents.AnswerSensibilisationQuestion]: {
