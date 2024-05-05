@@ -63,7 +63,7 @@ function GamePage() {
   }
 
   useEffect(() => {
-    console.log('gameState dans game', gameState);
+    //console.log('gameState dans game', gameState);
   });
 
   let pos = 0;

@@ -24,7 +24,7 @@ export default function GameManager() {
   useEffect(() => {
     const onLobbyState: Listener<ServerPayloads[ServerEvents.LobbyState]> = async (data) => {
       if (!location.pathname.includes('/game')) {
-        console.log('Reception du lobbyState', data);
+        //console.log('Reception du lobbyState', data);
         setLobbyState(data);
         if (!location.pathname.includes('/lobby')) {
           naviguate(`/lobby/${data.lobbyId}`);
@@ -75,6 +75,7 @@ export default function GameManager() {
     }
 
     const onPracticeAnswered: Listener<ServerPayloads[ServerEvents.PracticeAnswered]> = () => {
+      console.log('Reception PracticeAnswered');
       setPracticeQuestion(null);
     }
 

@@ -123,6 +123,7 @@ export class Instance {
 
       case 'Expert':
         this.playExpert(card, playerState);
+        this.transitionToNextTurn();
         break;
 
       case 'BadPractice':
@@ -131,10 +132,11 @@ export class Instance {
 
       case 'Formation':
         this.playFormation(card, playerState);
+        this.transitionToNextTurn();
+        break;
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
-    this.transitionToNextTurn();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
@@ -270,6 +272,7 @@ export class Instance {
 
     // 3: If all players have played, ask a sensibilisation question
     if (this.currentPlayerId === this.startingPlayerId) {
+      this.answerCount = 0;
       this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
       this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
     }
