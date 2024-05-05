@@ -12,6 +12,7 @@ import Menu from './js/pages/menu/menu'
 import Game from './js/pages/game/game'
 import Rules from './js/pages/rules/rules'
 import ViewCards from './js/pages/viewCards/viewCards'
+import GreenIt from './js/pages/greenIt/greenIt'
 
 import './CSS/App.css'
 import { SocketManagerProvider } from '@components/websocket/SocketManagerProvider'
@@ -73,6 +74,7 @@ function App() {
             <Route path="/" element={<Navigate to="/register" />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/viewCards" element={<ViewCards />} />
+            <Route path="/greenIt" element={<GreenIt />} />
           </Routes>
 
         </BrowserRouter>

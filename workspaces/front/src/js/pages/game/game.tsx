@@ -10,7 +10,8 @@ import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP'
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 import { useRecoilState } from 'recoil';
-import { CurrentGameState, CurrentSensibilisationQuestion } from '@app/js/components/Game/states';
+import { CurrentGameState } from '@app/js/components/Game/states';
+import { CurrentSensibilisationQuestion } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
@@ -20,7 +21,7 @@ import { Difficulty } from '@shared/common/Cards';
 function GamePage() {
 
   const [gameState] = useRecoilState(CurrentGameState);
-  const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
+  const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
   const { sm } = useSocketManager();
   const playerAbleToMP = ["Top"];
 
@@ -76,7 +77,6 @@ function GamePage() {
         <>
         </>
       )}
-      
       <div className={styles.container}>
         {gameState ? (
           gameState.playerStates.map((playerState, index) => {

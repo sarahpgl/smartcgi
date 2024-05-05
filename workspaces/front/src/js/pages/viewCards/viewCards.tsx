@@ -7,6 +7,7 @@ import ExpertCard from "@app/js/components/ExpertCard/ExpertCard";
 import QuestionnaireBP from "@app/js/components/QuestionnaireBP/QuestionnaireBP";
 import QuestionnaireMP from "@app/js/components/QuestionnaireMP/QuestionnaireMP";
 import next from '@app/icons/next.webp';
+import closeIcon from '@app/icons/close.webp';
 import styles from './viewCards.module.css';
 
 function ViewCards() {
@@ -36,7 +37,6 @@ function ViewCards() {
         { type: 'BestPractice', id: '32', title: 'Carte 22', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100 },
         { type: 'BadPractice', id: '32', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'ProductOwner' },
         { type: 'BadPractice', id: '32', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'ProductOwner' },
-        { type: 'BadPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'ProductOwner' },
         { type: 'BadPractice', id: '32', title: 'Carte 4', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Architect' },
         { type: 'BadPractice', id: '32', title: 'Carte 5', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Architect' },
         { type: 'BadPractice', id: '32', title: 'Carte 6', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Architect' },
@@ -57,6 +57,8 @@ function ViewCards() {
     const [startCardIndex, setStartCardIndex] = useState(0);
     const [selectedCard, setSelectedCard] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isQuestionnaireBPOpen, setIsQuestionnaireBPOpen] = useState(false);
+    const [isQuestionnaireMPOpen, setIsQuestionnaireMPOpen] = useState(false);
 
     const nextPage = () => {
         if (startCardIndex + 14 < cards.length) {
@@ -76,15 +78,29 @@ function ViewCards() {
     const openModal = (card) => {
         setSelectedCard(card);
         setIsModalOpen(true);
+        if (card.type === 'BestPractice') {
+            setIsQuestionnaireBPOpen(true);
+            setIsQuestionnaireMPOpen(false);
+        } else if (card.type === 'BadPractice') {
+            setIsQuestionnaireMPOpen(true);
+            setIsQuestionnaireBPOpen(false);
+        } else {
+            setIsQuestionnaireBPOpen(false);
+            setIsQuestionnaireMPOpen(false);
+        }
+        document.body.classList.add('openedQuestionnaire');
     };
 
     const closeModal = () => {
         setSelectedCard(null);
         setIsModalOpen(false);
+        setIsQuestionnaireBPOpen(false);
+        setIsQuestionnaireMPOpen(false);
+        document.body.classList.remove('openedQuestionnaire');
     };
 
     return (
-        <div>
+        <>
             <Header />
             <div className={styles.container}>
                 <div className={styles.cardsContainer}>
@@ -103,20 +119,44 @@ function ViewCards() {
                 </div>
             </div>
             {isModalOpen && (
-                <div className={styles.modalBackdrop} onClick={closeModal}>
-                    <div className={`${styles.modalContent} ${styles.bigCard}`}>
+                <div className={styles.modalBackdrop}>
+                    <div className={`${styles.modalContent} ${isQuestionnaireBPOpen || isQuestionnaireMPOpen ? styles.openedQuestionnaire : ''}`}>
+                        {/* Ajout du bouton de fermeture */}
+                        <div className={styles.closeButton} onClick={closeModal}>
+                            <img src={closeIcon} alt="Close" />
+                        </div>
                         {selectedCard && (
                             <div>
-                                {selectedCard.type === 'BestPractice' && <BestPracticeCard cardType={selectedCard.type} id={selectedCard.id} title={selectedCard.title} contents={selectedCard.contents} carbon_loss={selectedCard.carbon_loss} />}
-                                {selectedCard.type === 'BadPractice' && <BadPracticeCard title={selectedCard.title} contents={selectedCard.contents} targetedPlayer={selectedCard.targetedPlayer} />}
-                                {selectedCard.type === 'Formation' && <FormationCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />}
-                                {selectedCard.type === 'Expert' && <ExpertCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />}
+                                {selectedCard.type === 'BestPractice' && (
+                                    <>
+                                        {isQuestionnaireBPOpen && (
+                                                <QuestionnaireBP bestPracticeCard={selectedCard} />
+                                        )}
+                                    </>
+                                )}
+                                {selectedCard.type === 'BadPractice' && (
+                                    <>
+                                        {isQuestionnaireMPOpen && (
+                                            <QuestionnaireMP badPracticeCard={selectedCard} />
+                                        )}
+                                    </>
+                                )}
+                                {(selectedCard.type === 'Formation' || selectedCard.type === 'Expert') && ( // Condition ajoutée pour appliquer la classe .bigcard
+                                    <div className={`${styles.bigCard}`}>
+                                        {selectedCard.type === 'Formation' && (
+                                            <FormationCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />
+                                        )}
+                                        {selectedCard.type === 'Expert' && (
+                                            <ExpertCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }
 

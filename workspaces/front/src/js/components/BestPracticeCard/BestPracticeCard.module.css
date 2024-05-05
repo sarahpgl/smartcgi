@@ -17,9 +17,6 @@
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
     position: relative; /* Ajouter position relative */
 }
-.card:hover{
-    cursor: pointer;
-}
 
 
 .cardheader {
@@ -35,7 +32,7 @@
     align-items: center;
     font-family: 'JetBrainsFont', sans-serif;
     font-weight: 400;
-    margin-bottom: -18px;
+    margin-bottom: -22px;
 }
 
 .cardPoids p {
@@ -54,7 +51,8 @@
     font-family: 'JetBrainsFont', sans-serif;
     font-weight: 700;
     padding-left: 10px;
-    margin-bottom: 23px;
+    margin-top:-3px;
+    margin-bottom: 17px;
 }
 
 .icon img {
@@ -71,12 +69,14 @@
     background-color: #D9D9D9;
     margin: 10px;
     margin-top: -15px;
-    height: 60px;
+    height: 74px;
+    
 }
 
 .descriptionheader{
     background-color: rgba(53, 52, 52, 0.6);
-    font-size: 4px;
+    font-size: 3px;
+    line-height: 4px;    
     color: white;
     width: auto;
     height: 14px;
@@ -92,7 +92,8 @@
 }
 
 .descriptionbody{
-    height:44px;
+    height:58px;
+    line-height: 4.5px;
     align-items: start;
     display: flex;
     color: black;
@@ -102,7 +103,9 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #D9D9D9 rgba(0, 0, 0, 0.2);
-    }
+    padding-left: 4px;
+    padding-right: 4px;
+}
 
 
 
