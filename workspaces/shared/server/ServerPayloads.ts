@@ -51,6 +51,11 @@ export type ServerPayloads = {
       answer : number
     }
   };
+
+  [ServerEvents.GameReport] : {
+    mostPopularCards : Card[],
+    myArchivedCards : Card[],
+  };
 };
 
 

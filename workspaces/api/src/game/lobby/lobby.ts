@@ -158,6 +158,14 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.CardPlayed, payload);
   }
 
+  public emitGameReport(gameReport: { myArchivedCards: Card[], mostPopularCards: Card[] } , playerId: string): void{
+    const payload: ServerPayloads[ServerEvents.GameReport] = {
+      mostPopularCards : gameReport.mostPopularCards,
+      myArchivedCards : gameReport.myArchivedCards,
+    };
+    this.emitToClient(this.clients.get(playerId), ServerEvents.GameReport, payload);
+  }
+
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
     this.server.to(this.id).emit(event, payload);
   }
