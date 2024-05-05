@@ -112,7 +112,7 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
           />
         </div>
         <div>
-          <button className={styles.buttonregister} type="submit">S'inscrire</button>
+          <button className={styles.buttoninscr} type="submit">S'inscrire</button>
         </div>
       </form>
       {openSnackbar && (

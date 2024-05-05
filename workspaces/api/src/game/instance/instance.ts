@@ -33,9 +33,11 @@ export class Instance {
   }
 
   public async triggerStart(): Promise<void> {
+
     this.cardDeck = await this.cardService.getDeck();
     // TODO: Implement this service in Sensibilisation Module
     // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
+
     this.lobby.clients.forEach((client) => {
       this.playerStates[client.gameData.clientInGameId] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
       while (this.playerStates[client.gameData.clientInGameId].cardsInHand.length <= 6) {

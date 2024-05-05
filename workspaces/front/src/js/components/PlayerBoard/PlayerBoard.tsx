@@ -83,10 +83,11 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { Bad_Practice_Card } from '@shared/common/Cards';
 import { PlayerStateInterface } from '@shared/common/Game';
 
-function PlayerBoard({ MPSelected, noMPSelected, playerState }: {
+function PlayerBoard({ MPSelected, noMPSelected, playerState, myTurn }: {
   MPSelected: (card: Bad_Practice_Card) => void,
   noMPSelected: () => void,
   playerState: PlayerStateInterface,
+  myTurn: boolean,
 }) {
   const [gameState] = useRecoilState(CurrentGameState);
 
@@ -94,23 +95,23 @@ function PlayerBoard({ MPSelected, noMPSelected, playerState }: {
     //console.log('gameState dans playerBoard ', gameState);
   });
 
-  return (
-    <div className={styles.board}>
-      {playerState && (
-        <>
-          <div className={styles.status}>
-            <PlayerStatus playerstate={playerState} me={1} />
-          </div>
-          <div className={styles.hand}>
-            <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} cards={playerState.cardsInHand} />
-          </div>
-          <div className={styles.history}>
-            <PlayerInGameHistory Cards={playerState.cardsHistory} />
-          </div>
-        </>
-      )}
-    </div>
-  );
+    return (
+        <div className={styles.board}>
+            {playerState && (
+                <>
+                    <div className={styles.status}>
+                        <PlayerStatus playerstate={playerState} me={1} />
+                    </div>
+                    <div className={`${styles.hand} ${myTurn ? styles.handMyTurn : ''}`}>
+                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} cards={playerState.cardsInHand} />
+                    </div>
+                    <div className={styles.history}>
+                        <PlayerInGameHistory Cards={playerState.cardsHistory} />
+                    </div>
+                </>
+            )}
+        </div>
+    );
 }
 
 export default PlayerBoard;

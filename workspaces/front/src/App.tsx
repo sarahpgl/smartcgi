@@ -10,6 +10,8 @@ import Lobby from './js/pages/lobby/lobby'
 import PageTest from './js/pages/test/test'
 import Menu from './js/pages/menu/menu'
 import Game from './js/pages/game/game'
+import Rules from './js/pages/rules/rules'
+import ViewCards from './js/pages/viewCards/viewCards'
 
 import './CSS/App.css'
 import { SocketManagerProvider } from '@components/websocket/SocketManagerProvider'
@@ -67,7 +69,10 @@ function App() {
 
 
             <Route path="/home" element={<Home />} />
+            <Route path="/test" element={<PageTest />} />
             <Route path="/" element={<Navigate to="/register" />} />
+            <Route path="/rules" element={<Rules />} />
+            <Route path="/viewCards" element={<ViewCards />} />
           </Routes>
 
         </BrowserRouter>

@@ -1,11 +1,13 @@
 import React from 'react';
 import Header from "@app/js/components/header/Header";
-import QuizzComponent from '@app/js/components/Quizz/Quizz';
+import EndGameSummary from '@app/js/components/EndGameSummary/EndGameSummary';
+import MyEndGameSummary from '@app/js/components/MyEndGameSummary/MyEndGameSummary';
 function PageTest(){
     return (
         <div>
         <Header />
-        <QuizzComponent />
+        <EndGameSummary />
+        <MyEndGameSummary />
         </div>
     )
 }

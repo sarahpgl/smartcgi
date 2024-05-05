@@ -14,7 +14,7 @@ import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
 
-function OpponentBoard({ playerState }: { playerState: PlayerStateInterface }) {
+function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterface , myTurn: boolean}) {
     //console.log('PlayerState dans oponnentBoard', playerState);
 
     const data = {
@@ -59,7 +59,7 @@ function OpponentBoard({ playerState }: { playerState: PlayerStateInterface }) {
     return (
         <div className={styles.opponentBoard}>
             <div className={styles.nameContainer}> </div>
-            <div className={styles.container}>
+            <div className={`${styles.container} ${myTurn ? styles.containerMyTurn : ''}`}>
                 <img src={userIcon} alt="user icon" className={styles.userIcon} />
                 <label className={styles.labelname}>{playerState.playerName}</label>
 

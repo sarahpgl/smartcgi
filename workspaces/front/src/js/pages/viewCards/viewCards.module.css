@@ -1,0 +1,68 @@
+.card {
+  width: calc(100% / 7 - 20px);
+  margin: 10px; 
+  flex-grow: 1;
+  min-width: 100px;
+  max-width: 300px; 
+}
+
+.cardsContainer {
+  width: 80%;
+  margin: 0 auto;
+  transform: scale(1.4);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px; 
+}
+
+.container {
+  margin-top: 200px; 
+  padding-bottom: 50px; 
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.navigationButtons img {
+  width: 30px;
+  height: auto;
+  margin: 0 10px;
+}
+
+.navigationButtons img.disabled {
+  opacity: 0.1; 
+}
+
+.prevButton {
+  transform: rotate(180deg); 
+}
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 0px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.bigCard {
+  transform: scale(3);
+}
+

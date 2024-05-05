@@ -12,6 +12,7 @@ import iconOk from '../../../icons/ok_icon.webp';
 import iconBin from '../../../icons/bin_icon.webp';
 
 import { Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
+import EmptyCard from '../EmptyCard/EmptyCard';
 import useSocketManager from '@app/js/hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 
@@ -22,6 +23,8 @@ function PlayerHand({ MPSelected, noMPSelected, cards }: {
 }) {
 
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [typeSelected, setTypeSelected] = useState<string>("");
+
   const { sm } = useSocketManager();
 
   const handleCardClick = (cardId: number, cardType: string) => {
@@ -39,10 +42,11 @@ function PlayerHand({ MPSelected, noMPSelected, cards }: {
 
   const handleCardHover = (cardId: number) => {
   };
-
-  const handleCardLeave = (cardType: string) => {
-    setSelectedCard(null);
-  };
+    const handleCardLeave = (cardType:string) => {
+        if(typeSelected !== "BadPractice"){
+            setSelectedCard(null);
+        }
+    };
 
   const handlePlayCard = (card: Card) => {
     console.log("play card", card);

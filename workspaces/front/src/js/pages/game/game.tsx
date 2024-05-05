@@ -18,7 +18,6 @@ import { Bad_Practice_Card } from '@shared/common/Cards';
 
 function GamePage() {
 
-
   const [gameState] = useRecoilState(CurrentGameState);
   const { sm } = useSocketManager();
   const playerAbleToMP = ["Top"];
@@ -74,7 +73,7 @@ function GamePage() {
               return (
                 <>
                   <div className={styles.playerBoard} key={index}>
-                    <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} />
+                    <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} myTurn={gameState.currentPlayerId===playerState.clientInGameId} />
                   </div>
 
                 </>
@@ -102,7 +101,7 @@ function GamePage() {
             return (
               <div key={index} className={`${positionClass} ${MP !== null ? (playerState.badPractice === null ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>
                 <div onClick={() => handleMPPersonSelected(playerState)}>
-                  <OpponentBoard playerState={playerState} />
+                  <OpponentBoard playerState={playerState} myTurn={gameState.currentPlayerId===playerState.clientInGameId} />
                 </div>
               </div>
             );
