@@ -23,24 +23,29 @@ export class Instance {
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
   public currentPlayerId: string;
-  public players: string[] = [];
-  public sensibilisationQuestions: SensibilisationQuestion[] = [];
+
 
   public gameStarted: boolean = false;
   private answerCount: number = 0;
+  private currentSensibilisationQuestion: SensibilisationQuestion
+  private startingPlayerId: string;
+
+  public cardService: CardService;
+  public sensibilisationService: SensibilisationService;
 
   constructor(
     private readonly lobby: Lobby,
-    private readonly cardService: CardService,
-    private readonly sensibilisationService : SensibilisationService
+    cardService: CardService,
+    sensibilisationService: SensibilisationService
   ) {
+    this.cardService = cardService;
+    this.sensibilisationService = sensibilisationService;
+
   }
 
   public async triggerStart(): Promise<void> {
 
     this.cardDeck = await this.cardService.getDeck();
-    // TODO: Implement this service in Sensibilisation Module
-    // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
 
     this.lobby.clients.forEach((client) => {
       this.playerStates[client.gameData.clientInGameId] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
@@ -52,8 +57,9 @@ export class Instance {
     //Set the first player
     this.gameStarted = true;
     this.currentPlayerId = this.playerStates[Object.keys(this.playerStates)[0]].clientInGameId;
-    const question: SensibilisationQuestion = (await this.SensibilisationQuizz()).content;
-    this.lobby.dispatchGameStart(question);
+    this.startingPlayerId = this.currentPlayerId;
+    this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
+    this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
   public triggerFinish(): void {
@@ -94,6 +100,7 @@ export class Instance {
     }
 
     playerState.cardsHistory.push(card);
+    // TODO: Not working remove card from hand later
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
     switch (card.cardType) {
       case 'BestPractice':
@@ -115,7 +122,7 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+    this.transitionToNextTurn();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
@@ -147,30 +154,20 @@ export class Instance {
       this.lobby.dispatchGameState();
     }
   }
- 
-  public async SensibilisationQuizz(): Promise<{ content: SensibilisationQuestion }> {
-    const questionsData = await this.sensibilisationService.getSensibilisationQuizz();
-    const sensibilisationQuestion: SensibilisationQuestion = questionsData.questions;
-    this.lobby.dispatchSensibilisationQuestion(sensibilisationQuestion);
-    return { content: sensibilisationQuestion };
-}
 
-  public answerSensibilisationQuestion(playerId: string, questionId: number, answer: SensibilisationQuestionAnswer): Promise<{trial :boolean }> {
-    let response = false;
+  public answerSensibilisationQuestion(playerId: string, answer: SensibilisationQuestionAnswer) {
     const playerState = this.playerStates[playerId];
-
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
-    let solution = this.sensibilisationService.getGoodSolution(questionId);
-    if( solution[0] == answer.answer){
-      response = true;
-      if(!this.playerStates.canPlay){
-        this.playerStates.canPlay.canPlay = true;
+    if (this.currentSensibilisationQuestion.answers.answer === answer.answer) {
+      if (!playerState.canPlay) {
+        playerState.canPlay = true;
       }
-      this.playerStates.sensibilisationPoints.sensibilisationPoints ++;
+      else {
+        playerState.sensibilisationPoints++;
+      }
     }
-    return Promise.resolve({ trial: response });
   }
 
 
@@ -190,6 +187,7 @@ export class Instance {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
+    this.lobby.dispatchGameState();
   }
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
@@ -203,6 +201,7 @@ export class Instance {
         // Ask the question
         this.answerCount = 0;
         this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+        this.lobby.dispatchGameState();
       } else {
         throw new ServerException(SocketExceptions.GameError, 'Player has the expert card associated');
       }
@@ -219,6 +218,7 @@ export class Instance {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
+    this.lobby.dispatchGameState();
   }
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
@@ -227,9 +227,12 @@ export class Instance {
     }
   }
 
-  private transitionToNextRound(): void {
-    this.currentPlayerId = this.players[0];
-    this.lobby.dispatchGameState();
+  private async transitionToNextTurn() {
+    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+    if (this.currentPlayerId === this.startingPlayerId) {
+      this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
+      this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
+    }
   }
 
 }

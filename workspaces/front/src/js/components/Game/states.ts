@@ -12,7 +12,7 @@ export const CurrentGameState = atom<ServerPayloads[ServerEvents.GameState] | nu
   default: null,
 });
 
-export const CurrentSensibilisationQuestion = atom <ServerPayloads[ServerEvents.GetSensibilisationQuestion] | null>({
+export const CurrentSensibilisationQuestion = atom<ServerPayloads[ServerEvents.GetSensibilisationQuestion] | null>({
   key: 'CurrentSensibilisationQuestion',
   default: null,
 });

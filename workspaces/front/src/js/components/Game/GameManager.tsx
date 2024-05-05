@@ -40,6 +40,7 @@ export default function GameManager() {
     const onGameStart: Listener<ServerPayloads[ServerEvents.GameStart]> = (data) => {
       console.log(data);
       setGameState(data.gameState);
+      setSensibilisationQuestion(data.sensibilisationQuestion);
       naviguate('/game/');
     };
 
