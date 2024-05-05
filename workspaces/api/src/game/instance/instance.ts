@@ -112,6 +112,8 @@ export class Instance {
     }
     this.drawCard(playerState);
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+    // TODO: delete later
+    this.lobby.dispatchGameState();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
@@ -164,6 +166,9 @@ export class Instance {
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
     const target = card.targetedPlayerId;
+    if (!target) {
+      throw new ServerException(SocketExceptions.GameError, 'No target specified');
+    }
     const targetPlayerState = this.playerStates[target];
     // check if the target is already blocked
     if (targetPlayerState.badPractice == null) {
