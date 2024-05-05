@@ -54,12 +54,11 @@ const MyEndGameSummary: React.FC = () => {
         }
     };
 
-    // Fonction pour gérer le clic sur une carte et afficher en grand
+
     const handleCardClick = (card) => {
         setSelectedCard(card);
     };
 
-    // Fonction pour fermer la carte agrandie
     const handleCloseCard = () => {
         setSelectedCard(null);
     };
