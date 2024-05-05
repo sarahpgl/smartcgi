@@ -199,7 +199,7 @@ export class Instance {
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
-    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
     this.lobby.dispatchGameState();
     if(playerState.co2Saved <= 0){
       this.triggerFinish(playerState.clientInGameId, playerState.playerName);
