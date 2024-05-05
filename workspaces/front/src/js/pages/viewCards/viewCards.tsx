@@ -120,7 +120,7 @@ function ViewCards() {
             </div>
             {isModalOpen && (
                 <div className={styles.modalBackdrop}>
-                    <div className={`${styles.modalContent} ${styles.bigCard} ${isQuestionnaireBPOpen || isQuestionnaireMPOpen ? styles.openedQuestionnaire : ''}`} style={{ left: isQuestionnaireBPOpen || isQuestionnaireMPOpen ? '-15%' : '0%' }}>
+                    <div className={`${styles.modalContent} ${isQuestionnaireBPOpen || isQuestionnaireMPOpen ? styles.openedQuestionnaire : ''}`}>
                         {/* Ajout du bouton de fermeture */}
                         <div className={styles.closeButton} onClick={closeModal}>
                             <img src={closeIcon} alt="Close" />
@@ -129,26 +129,28 @@ function ViewCards() {
                             <div>
                                 {selectedCard.type === 'BestPractice' && (
                                     <>
-                                        <BestPracticeCard cardType={selectedCard.type} id={selectedCard.id} title={selectedCard.title} contents={selectedCard.contents} carbon_loss={selectedCard.carbon_loss} />
                                         {isQuestionnaireBPOpen && (
-                                            <div className={styles.questionnaireContainer}>
-                                                <QuestionnaireBP />
-                                            </div>
+                                                <QuestionnaireBP bestPracticeCard={selectedCard} />
                                         )}
                                     </>
                                 )}
                                 {selectedCard.type === 'BadPractice' && (
                                     <>
-                                        <BadPracticeCard title={selectedCard.title} contents={selectedCard.contents} targetedPlayer={selectedCard.targetedPlayer} />
                                         {isQuestionnaireMPOpen && (
-                                            <div className={styles.questionnaireContainer}>
-                                                <QuestionnaireMP />
-                                            </div>
+                                            <QuestionnaireMP badPracticeCard={selectedCard} />
                                         )}
                                     </>
                                 )}
-                                {selectedCard.type === 'Formation' && <FormationCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />}
-                                {selectedCard.type === 'Expert' && <ExpertCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />}
+                                {(selectedCard.type === 'Formation' || selectedCard.type === 'Expert') && ( // Condition ajoutée pour appliquer la classe .bigcard
+                                    <div className={`${styles.bigCard}`}>
+                                        {selectedCard.type === 'Formation' && (
+                                            <FormationCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />
+                                        )}
+                                        {selectedCard.type === 'Expert' && (
+                                            <ExpertCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
