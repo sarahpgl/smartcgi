@@ -4,7 +4,7 @@
   justify-content: center;
   color: black;
   font-size: small;
-  background-color: rgba(75, 149, 122, 0.5);
+  background-color: #A4C9BC;
   padding: 20px;
   border-radius: 40px;
 }
@@ -61,5 +61,6 @@
   font-size: 16px;
   margin-top: 10px;
 }
+
 
 

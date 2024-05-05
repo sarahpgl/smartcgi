@@ -23,6 +23,7 @@ function GamePage() {
   const playerAbleToMP = ["Top"];
 
   const [MP, setMP] = useState<Bad_Practice_Card | null>(null);
+    const [showQuizz, setShowQuizz] = useState(true);
 
   const handleMPSelected = (card: Bad_Practice_Card) => {
     setMP(card);
@@ -66,6 +67,9 @@ function GamePage() {
   return (
     <div className={styles.page}>
       <Header />
+            <div className={`${styles.modalBackdrop} ${styles.container}`}>
+            {showQuizz && <SensibilisationQuizz />}
+            </div>
       <div className={styles.container}>
         {gameState ? (
           gameState.playerStates.map((playerState, index) => {

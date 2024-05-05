@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Entity, Repository } from "typeorm";
 import { Question_Answer } from '@app/entity/question_answer';
 import { Question_Content } from '@app/entity/question_content';
+import { SensibilisationQuestion } from '@shared/common/Game';
 
 @Injectable()
 export class SensibilisationService {
@@ -94,26 +95,34 @@ export class SensibilisationService {
 
         const index = Math.floor(Math.random() * (cards.length))
         let chosenCard = cards[index];
-        console.log(chosenCard)
         return { card: chosenCard };
     }
 
-    async getSensibilisationQuizz(): Promise<{ jsonString: string }> {
-
+    async getSensibilisationQuizz(): Promise<{ questions: SensibilisationQuestion }> {
         let card_id = (await this.randomQuestionToStart()).card.id;
         let card_content: Question_Content = await this.question_content_repository.findOne({ where: { question_id: card_id } });
         let card_answer: Question_Answer = await this.question_answer_repository.findOne({ where: { question_id: card_id } });
-
-        const jsonData = {
-            card_content: card_content,
-            card_answer: card_answer
+    
+        // Initialise sensibilisation avec des valeurs par défaut
+        let sensibilisation: SensibilisationQuestion = {
+            question_id: card_content.question_id,
+            question: card_content.description,
+            answers: {
+                response1: card_content.response1,
+                response2: card_content.response2,
+                response3: card_content.response3,
+                answer: card_answer.answer
+            }
         };
+    
+        return { questions: sensibilisation };
+    }
 
-        const jsonString = JSON.stringify(jsonData, null, 2);
+    async getGoodSolution(question_id : number): Promise<{ solution : number}> {
 
-        console.log(jsonString);
+        let solution : Question_Answer= await this.question_answer_repository.findOne({ where: { question_id: question_id } });
 
-        return { jsonString: jsonString }
+        return {solution : solution.answer}
     }
 
 

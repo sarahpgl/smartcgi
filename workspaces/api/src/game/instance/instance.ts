@@ -11,9 +11,11 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { BestPracticeAnswerType, BadPracticeAnswerType, SensibilisationQuestion, PracticeAnswer } from '@shared/common/Game';
+import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswer, PracticeAnswerType, SensibilisationQuestionAnswer, SensibilisationQuestion } from '@shared/common/Game';
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
+import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { Question_Content } from '@app/entity/question_content';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
@@ -23,12 +25,14 @@ export class Instance {
   public currentPlayerId: string;
   public players: string[] = [];
   public sensibilisationQuestions: SensibilisationQuestion[] = [];
-  public cardService: CardService;
+
   public gameStarted: boolean = false;
   private answerCount: number = 0;
 
   constructor(
     private readonly lobby: Lobby,
+    private readonly cardService: CardService,
+    private readonly sensibilisationService : SensibilisationService
   ) {
   }
 
@@ -48,7 +52,7 @@ export class Instance {
     //Set the first player
     this.gameStarted = true;
     this.currentPlayerId = this.playerStates[Object.keys(this.playerStates)[0]].clientInGameId;
-    const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
+    const question: SensibilisationQuestion = (await this.SensibilisationQuizz()).content;
     this.lobby.dispatchGameStart(question);
   }
 
@@ -143,6 +147,32 @@ export class Instance {
       this.lobby.dispatchGameState();
     }
   }
+ 
+  public async SensibilisationQuizz(): Promise<{ content: SensibilisationQuestion }> {
+    const questionsData = await this.sensibilisationService.getSensibilisationQuizz();
+    const sensibilisationQuestion: SensibilisationQuestion = questionsData.questions;
+    this.lobby.dispatchSensibilisationQuestion(sensibilisationQuestion);
+    return { content: sensibilisationQuestion };
+}
+
+  public answerSensibilisationQuestion(playerId: string, questionId: number, answer: SensibilisationQuestionAnswer): Promise<{trial :boolean }> {
+    let response = false;
+    const playerState = this.playerStates[playerId];
+
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    let solution = this.sensibilisationService.getGoodSolution(questionId);
+    if( solution[0] == answer.answer){
+      response = true;
+      if(!this.playerStates.canPlay){
+        this.playerStates.canPlay.canPlay = true;
+      }
+      this.playerStates.sensibilisationPoints.sensibilisationPoints ++;
+    }
+    return Promise.resolve({ trial: response });
+  }
+
 
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     playerState.co2Saved -= card.carbon_loss;
