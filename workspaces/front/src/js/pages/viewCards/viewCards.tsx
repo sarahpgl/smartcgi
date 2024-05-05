@@ -122,9 +122,9 @@ function ViewCards() {
                 <div className={styles.modalBackdrop}>
                     <div className={`${styles.modalContent} ${styles.bigCard} ${isQuestionnaireBPOpen || isQuestionnaireMPOpen ? styles.openedQuestionnaire : ''}`} style={{ left: isQuestionnaireBPOpen || isQuestionnaireMPOpen ? '-15%' : '0%' }}>
                         {/* Ajout du bouton de fermeture */}
-                        <button className={styles.closeButton} onClick={closeModal}>
+                        <div className={styles.closeButton} onClick={closeModal}>
                             <img src={closeIcon} alt="Close" />
-                        </button>
+                        </div>
                         {selectedCard && (
                             <div>
                                 {selectedCard.type === 'BestPractice' && (
