@@ -117,7 +117,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         client.gameData.lobby.instance.answerBadPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
         break;
       default:
-        throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
+        throw new ServerException(SocketExceptions.GameError, 'Answer question invalid card type');
     }
   }
 

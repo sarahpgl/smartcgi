@@ -148,6 +148,7 @@ export class Instance {
     playerState.bestPracticeAnswers.push({ cardId, answer: answer as BestPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
+      this.lobby.dispatchPracticeAnswered();
       this.transitionToNextTurn();
     }
   }
@@ -163,6 +164,7 @@ export class Instance {
     playerState.badPracticeAnswers.push({ cardId, answer: answer as BadPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
+      this.lobby.dispatchPracticeAnswered();
       this.transitionToNextTurn();
     }
   }

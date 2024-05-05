@@ -8,6 +8,7 @@ import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import LobbyComponent from '../LobbyComponent/LobbyComponent';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { notifications } from '@mantine/notifications';
 
 export default function GameManager() {
   const { sm, socket } = useSocketManager();
@@ -65,6 +66,18 @@ export default function GameManager() {
       }, 2000);
     }
 
+    const onPlayerPast: Listener<ServerPayloads[ServerEvents.PlayerPassed]> = (data) => {
+      notifications.show({
+        title: 'Player passed turn',
+        message: `${data.playerName} passed his turn because he has not yet answered correctly to the sensibilisation question`,
+        color: 'orange',
+      })
+    }
+
+    const onPracticeAnswered: Listener<ServerPayloads[ServerEvents.PracticeAnswered]> = () => {
+      setPracticeQuestion(null);
+    }
+
 
     if (!socket.connected) {
       sm.connect();
@@ -74,8 +87,10 @@ export default function GameManager() {
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);
     if (!sm.socket.hasListeners(ServerEvents.GameStart)) sm.registerListener(ServerEvents.GameStart, onGameStart);
     if (!sm.socket.hasListeners(ServerEvents.PracticeQuestion)) sm.registerListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
+    if (!sm.socket.hasListeners(ServerEvents.PracticeAnswered)) sm.registerListener(ServerEvents.PracticeAnswered, onPracticeAnswered);
     if (!sm.socket.hasListeners(ServerEvents.SensibilisationQuestion)) sm.registerListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
     if (!sm.socket.hasListeners(ServerEvents.SensibilisationAnswered)) sm.registerListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
+    if (!sm.socket.hasListeners(ServerEvents.PlayerPassed)) sm.registerListener(ServerEvents.PlayerPassed, onPlayerPast);
 
     return () => {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);
@@ -85,6 +100,8 @@ export default function GameManager() {
       sm.removeListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
       sm.removeListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
       sm.removeListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
+      sm.removeListener(ServerEvents.PlayerPassed, onPlayerPast);
+      sm.removeListener(ServerEvents.PracticeAnswered, onPracticeAnswered);
     };
   }, []);
 
