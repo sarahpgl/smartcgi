@@ -20,10 +20,12 @@ export default function GameManager() {
 
   useEffect(() => {
     const onLobbyState: Listener<ServerPayloads[ServerEvents.LobbyState]> = async (data) => {
-      console.log(data);
-      setLobbyState(data);
-      if (!location.pathname.includes('/lobby')) {
-        naviguate(`/lobby/${data.lobbyId}`);
+      if (!location.pathname.includes('/game')) {
+        console.log(data);
+        setLobbyState(data);
+        if (!location.pathname.includes('/lobby')) {
+          naviguate(`/lobby/${data.lobbyId}`);
+        }
       }
     };
 

@@ -18,7 +18,7 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
 
 function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
-  MPSelected: (card: Bad_Practice_Card) => void,
+  MPSelected: () => void,
   noMPSelected: () => void,
   playerState: PlayerStateInterface,
   myTurn: boolean,
@@ -26,6 +26,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
 
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [typeSelected, setTypeSelected] = useState<string>("");
+  const [MPblocked, setMPblocked] = useState<string>("");
 
   const { sm } = useSocketManager();
 
@@ -38,6 +39,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
       }
       noMPSelected();
       setSelectedCard(cardId);
+      setTypeSelected(cardType);
       if (cardType === "BadPractice") {
         MPSelected();
       }
