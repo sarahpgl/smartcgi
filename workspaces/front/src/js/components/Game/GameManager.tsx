@@ -55,6 +55,10 @@ export default function GameManager() {
       setSensibilisationQuestion(data);
     };
 
+    const onSensibilisationAnswered: Listener<ServerPayloads[ServerEvents.SensibilisationAnswered]> = () => {
+      setSensibilisationQuestion(null);
+    }
+
 
     if (!socket.connected) {
       sm.connect();
@@ -65,6 +69,7 @@ export default function GameManager() {
     if (!sm.socket.hasListeners(ServerEvents.GameStart)) sm.registerListener(ServerEvents.GameStart, onGameStart);
     if (!sm.socket.hasListeners(ServerEvents.PracticeQuestion)) sm.registerListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
     if (!sm.socket.hasListeners(ServerEvents.SensibilisationQuestion)) sm.registerListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
+    if (!sm.socket.hasListeners(ServerEvents.SensibilisationAnswered)) sm.registerListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
 
     return () => {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);
@@ -73,6 +78,7 @@ export default function GameManager() {
       sm.removeListener(ServerEvents.GameStart, onGameStart);
       sm.removeListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
       sm.removeListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
+      sm.removeListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
     };
   }, []);
 

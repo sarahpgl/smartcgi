@@ -164,6 +164,10 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.PlayerPassed, payload);
   }
 
+  public dispatchSensibilisationAnswered() {
+    this.dispatchToLobby(ServerEvents.SensibilisationAnswered, {});
+  }
+
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
     this.server.to(this.id).emit(event, payload);
   }

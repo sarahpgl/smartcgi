@@ -174,6 +174,17 @@ export class Instance {
         playerState.sensibilisationPoints++;
       }
     }
+    this.answerCount++;
+    if(this.answerCount === this.lobby.clients.size){
+      const currentPlayerId = this.currentPlayerId;
+      while (this.playerStates[this.currentPlayerId].canPlay === false){
+        this.transitionToNextTurn();
+        if(currentPlayerId === this.currentPlayerId){
+          break;
+        }
+      }
+      this.lobby.dispatchSensibilisationAnswered();
+    }
   }
 
 
@@ -234,7 +245,9 @@ export class Instance {
 
   private async transitionToNextTurn() {
     // 0: Draw a card for the current player
-    this.drawCard(this.playerStates[this.currentPlayerId]);
+    if(this.playerStates[this.currentPlayerId].cardsInHand.length <= 6) {
+      this.drawCard(this.playerStates[this.currentPlayerId]);
+    }
     // 1: Change the current player
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
 

@@ -51,6 +51,8 @@ export type ServerPayloads = {
       answer : number
     }
   };
+
+  [ServerEvents.SensibilisationAnswered]: {};
   
   [ServerEvents.PlayerPassed]: {
     playerName: string; 
