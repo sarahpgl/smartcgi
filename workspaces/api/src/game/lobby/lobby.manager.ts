@@ -10,6 +10,7 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { Cron } from '@nestjs/schedule'
 import { CardService } from '@app/card/card.service';
 import { Injectable, Inject } from '@nestjs/common';
+import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
 
 export class LobbyManager {
   public server: Server;
@@ -19,6 +20,9 @@ export class LobbyManager {
   @Inject(CardService)
   private readonly cardService: CardService;
 
+  @Inject(SensibilisationService)
+  private readonly sensibilisationService: SensibilisationService;
+  private readonly co2Quantity : number;
   public initializeSocket(client: AuthenticatedSocket): void {
     client.gameData.lobby = null;
   }
@@ -28,7 +32,7 @@ export class LobbyManager {
   }
 
   public createLobby(co2Quantity: CO2Quantity): Lobby {
-    const lobby = new Lobby(this.server, this.cardService, co2Quantity);
+    const lobby = new Lobby(this.server, this.cardService,this.sensibilisationService , this.co2Quantity);
     //console.log('Creating lobby', co2Quantity);
     this.lobbies.set(lobby.id, lobby);
 
