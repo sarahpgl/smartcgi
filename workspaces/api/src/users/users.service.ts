@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { BookletService } from '@app/booklet/booklet.service';
 import { getConnection } from 'typeorm';
 import { error } from 'console';
+import { Game } from '@app/entity/game';
+import { User_Game } from '@app/entity/user_game';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +18,10 @@ export class UsersService {
         private users_repository: Repository<User>,
         @InjectRepository(Green_IT_Booklet)
         private booklet_repository: Repository<Green_IT_Booklet>,
+        @InjectRepository(User_Game)
+        private user_game_repository: Repository<User_Game>,
+        @InjectRepository(Game)
+        private game_repository: Repository<Game>,
 
     ){}
 
@@ -56,6 +62,29 @@ export class UsersService {
 
   }
 
+  async getNbGames(user_id: number): Promise<{ nb_games: number }> {
+    try {
+      const nb_games = await this.user_game_repository.count({ where: { user_id } });
+      return { nb_games };
+    } catch (error) {
+      throw new Error("Error while getting the number of games");
+    }
+  }
+
+  
+  async getVictories(user_id: number): Promise<{ nb_victories: number }> {
+    try {
+        const nb_victories = await this.game_repository.count({
+            where: {
+                winner_id: user_id
+            }
+        });
+
+        return { nb_victories };
+    } catch (error) {
+        throw new Error("Error while getting the number of victories");
+    }
+}
 
 }
 
