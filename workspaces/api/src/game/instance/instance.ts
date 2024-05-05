@@ -62,6 +62,9 @@ export class Instance {
   }
 
   public triggerFinish(): void {
+    // TODO: Save in GreenIT Booklet the cards met
+    // TODO: Generate and send the game's report
+    // TODO: Send the game's report to the players
 
   }
 
@@ -75,7 +78,6 @@ export class Instance {
     }
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c.id !== card.id);
     this.discardPile.push(card);
-    this.drawCard(playerState);
 
     // On best or bad practice discard, ask the question
     if (card.cardType === 'BestPractice' || card.cardType === 'BadPractice') {
@@ -127,7 +129,6 @@ export class Instance {
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
-    this.drawCard(playerState);
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
@@ -232,6 +233,8 @@ export class Instance {
   }
 
   private async transitionToNextTurn() {
+    // 0: Draw a card for the current player
+    this.drawCard(this.playerStates[this.currentPlayerId]);
     // 1: Change the current player
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
 
