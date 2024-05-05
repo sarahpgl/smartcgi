@@ -6,15 +6,16 @@ import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCa
 import BadPracticeCard from "@app/js/components/BadPracticeCard/BadPracticeCard";
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { BestPracticeAnswerType } from '@shared/common/Game';
+import { BadPracticeAnswerType } from '@shared/common/Game';
 
 
 const PracticeQuestion: React.FC<{ card: { type: string; id: string; title: string; contents: string; carbon_loss?: number; targetedPlayer?: string } }> = ({ card }) => {
     const [createMessage, setCreateMessage] = useState("");
-    const [selectedOption, setSelectedOption] = useState<BestPracticeAnswerType | null>(null);
+    const [selectedOption, setSelectedOption] = useState<BestPracticeAnswerType | BadPracticeAnswerType | null>(null);
     const navigate = useNavigate();
     const { sm } = useSocketManager();
 
-    const answer = (option: BestPracticeAnswerType) => {
+    const answer = (option: BestPracticeAnswerType | BadPracticeAnswerType) => { // Utilisez BestPracticeAnswerType ou BadPracticeAnswerType
         setSelectedOption(option);
         sm.emit({
             event: ClientEvents.AnswerPracticeQuestion,
@@ -48,9 +49,19 @@ const PracticeQuestion: React.FC<{ card: { type: string; id: string; title: stri
             </div>
             <div className={styles.questionnaireContainer}>
                 <label className={styles.label}>La {card.type === 'BestPractice' ? 'bonne' : 'mauvaise'} pratique est-elle :</label> <br />
-                <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.APPLICABLE)}>Applicable</button> <br />
-                <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.ALREADY_APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.ALREADY_APPLICABLE)}>Déjà appliquée</button> <br />
-                <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.NOT_APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.NOT_APPLICABLE)}>Non applicable</button> <br />
+                {card.type === 'BestPractice' ? (
+                    <>
+                        <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.APPLICABLE)}>Applicable</button> <br />
+                        <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.ALREADY_APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.ALREADY_APPLICABLE)}>Déjà appliquée</button> <br />
+                        <button className={`${styles.button} ${selectedOption === BestPracticeAnswerType.NOT_APPLICABLE ? styles.selected : ''}`} onClick={() => answer(BestPracticeAnswerType.NOT_APPLICABLE)}>Non applicable</button> <br />
+                    </>
+                ) : (
+                    <>
+                        <button className={`${styles.button} ${selectedOption === BadPracticeAnswerType.TO_BE_BANNED ? styles.selected : ''}`} onClick={() => answer(BadPracticeAnswerType.TO_BE_BANNED)}>Bannissable</button> <br />
+                        <button className={`${styles.button} ${selectedOption === BadPracticeAnswerType.ALREADY_BANNED ? styles.selected : ''}`} onClick={() => answer(BadPracticeAnswerType.ALREADY_BANNED)}>Déjà bannie</button> <br />
+                        <button className={`${styles.button} ${selectedOption === BadPracticeAnswerType.TOO_COMPLEX ? styles.selected : ''}`} onClick={() => answer(BadPracticeAnswerType.TOO_COMPLEX)}>Compliquée à éviter</button> <br />
+                    </>
+                )}
                 {createMessage && <p className={styles.message}>{createMessage}</p>}
             </div>
         </div>
