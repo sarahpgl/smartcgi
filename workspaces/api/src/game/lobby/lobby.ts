@@ -109,7 +109,7 @@ export class Lobby {
   }
 
   public dispatchSensibilisationQuestion(question: SensibilisationQuestion): void {
-    const payload: ServerPayloads[ServerEvents.GetSensibilisationQuestion ] = {
+    const payload: ServerPayloads[ServerEvents.SensibilisationQuestion] = {
       question_id : question.question_id,
       question: question.question,
       answers: {
@@ -119,7 +119,7 @@ export class Lobby {
         answer : question.answers.answer
       }
     };
-    this.dispatchToLobby(ServerEvents.GetSensibilisationQuestion, payload);
+    this.dispatchToLobby(ServerEvents.SensibilisationQuestion, payload);
   }
 
   public dispatchGameState(): void {
