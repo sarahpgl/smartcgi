@@ -28,6 +28,7 @@ export default function GameManager() {
     };
 
     const onGameState: Listener<ServerPayloads[ServerEvents.GameState]> = (data) => {
+      console.log(data);
       setGameState(data);
     };
 
@@ -41,6 +42,10 @@ export default function GameManager() {
       naviguate('/game/');
     };
 
+    const onPracticeQuestion: Listener<ServerPayloads[ServerEvents.PracticeQuestion]> = (data) => {
+      // TODO: Show a modal with the question
+    }
+
     if (!socket.connected) {
       sm.connect();
     }
@@ -48,6 +53,7 @@ export default function GameManager() {
     if (!sm.socket.hasListeners(ServerEvents.LobbyJoined)) sm.registerListener(ServerEvents.LobbyJoined, onLobbyJoined);
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);
     if (!sm.socket.hasListeners(ServerEvents.GameStart)) sm.registerListener(ServerEvents.GameStart, onGameStart);
+    if (!sm.socket.hasListeners(ServerEvents.PracticeQuestion)) sm.registerListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
 
     if (!socket.connected) {
       sm.connect();
@@ -56,6 +62,8 @@ export default function GameManager() {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);
       sm.removeListener(ServerEvents.LobbyJoined, onLobbyJoined);
       sm.removeListener(ServerEvents.GameState, onGameState);
+      sm.removeListener(ServerEvents.GameStart, onGameStart);
+      sm.removeListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
     };
   }, []);
 

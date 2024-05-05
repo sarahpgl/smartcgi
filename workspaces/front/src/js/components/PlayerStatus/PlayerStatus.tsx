@@ -12,7 +12,7 @@ import bpLT from '../../images/MP_lead_tech.webp';
 
 import Tooltip from '../Tooltip/Tooltip';
 
-function PlayerStatus({ playerstate, me }: { playerstate: PlayerStateInterface, me: number }) {
+function PlayerStatus({ playerstate, me }) {
 
     let name = "Pierre";
     let expert = playerstate.expertCards;
@@ -21,6 +21,7 @@ function PlayerStatus({ playerstate, me }: { playerstate: PlayerStateInterface, 
     let sensibilisation = playerstate.sensibilisationPoints;
 
     let bpImageSrc = null;
+
 
     if (bp === "Developer") {
         bpImageSrc = bpDev;
@@ -37,12 +38,12 @@ function PlayerStatus({ playerstate, me }: { playerstate: PlayerStateInterface, 
                     <label
                         className={styles.label}
                     >
-                        {co2}
+                        {playerstate.co2Saved}
                     </label>
                     <label className={styles.label} style={{ fontSize: '18px', letterSpacing: '0.2px', marginTop: '9px' }}> kg</label>
                 </div>
                 <div className={styles.imagesContainer}>
-                    {expert.map((e, index) => {
+                    {expert && expert.map((e, index) => {
                         let expertImageSrc = null;
                         if (e === "Developer") {
                             expertImageSrc = expertDev;

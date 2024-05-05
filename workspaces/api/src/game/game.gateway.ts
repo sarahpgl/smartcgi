@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { ClientPayloads } from '@shared/client/ClientPayloads';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { LobbyManager } from '@app/game/lobby/lobby.manager';
 import { Logger, UsePipes } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
+import { BestPracticeAnswerType } from '@shared/common/Game';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -82,8 +84,27 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     if (!client.gameData.lobby) {
       throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
     }
-    client.gameData.lobby.instance.answerPracticeQuestion(client.id, data.cardId, data.answer);
+    const cardType = data.cardType;
+    switch (cardType) {
+      case 'BestPractice':
+        client.gameData.lobby.instance.answerBestPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer); 
+        break;
+      case 'BadPractice':
+        client.gameData.lobby.instance.answerBadPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
+        break;
+      default:
+        throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
+    }
   }
+
+  @SubscribeMessage(ClientEvents.PlayCard)
+  onPlayCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.PlayCard]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.playCard(data.card, client);
+  }
+
 
   // TODO: Deal with client reconnect
   @SubscribeMessage(ClientEvents.ClientReconnect)
@@ -91,6 +112,6 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.logger.log('Client reconnecting', data.clientInGameId);
     this.lobbyManager.reconnectClient(client, data.clientInGameId);
   }
-// TODO: Handler for practice question
+
 
 }

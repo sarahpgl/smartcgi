@@ -1,4 +1,4 @@
-import { PracticeAnswerType } from '@shared/common/Game';
+import { PracticeAnswer, PracticeAnswerType } from '../common/Game';
 import { ClientEvents } from './ClientEvents';
 import { Card } from '../common/Cards';
 

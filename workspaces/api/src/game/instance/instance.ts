@@ -11,7 +11,7 @@ import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
 import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { PracticeAnswerType, SensibilisationQuestion } from '@shared/common/Game';
+import { BestPracticeAnswerType, BadPracticeAnswerType, SensibilisationQuestion, PracticeAnswer } from '@shared/common/Game';
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
 
@@ -39,28 +39,46 @@ export class Instance {
     // this.sensibilisationQuestions = await this.sensibilisationService.getQuestions();
 
     this.lobby.clients.forEach((client) => {
-      //console.log('CO2', this.co2Quantity);
-      this.playerStates[client.id] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
-      while (this.playerStates[client.id].cardsInHand.length <= 6) {
-        this.drawCard(this.playerStates[client.id]);
+      this.playerStates[client.gameData.clientInGameId] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
+      while (this.playerStates[client.gameData.clientInGameId].cardsInHand.length <= 6) {
+        this.drawCard(this.playerStates[client.gameData.clientInGameId]);
       }
     });
 
     //Set the first player
     this.gameStarted = true;
-    this.currentPlayerId = this.players[0];
+    this.currentPlayerId = this.playerStates[Object.keys(this.playerStates)[0]].clientInGameId;
     const question: SensibilisationQuestion = this.sensibilisationQuestions.pop();
     this.lobby.dispatchGameStart(question);
   }
 
   public triggerFinish(): void {
+
   }
 
-  public playCard(card: Card, client: AuthenticatedSocket) {
-    const playerState = this.playerStates[client.id];
-
+  public discardCard(card: Card, client: AuthenticatedSocket) {
+    const playerState = this.playerStates[client.gameData.clientInGameId];
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    if (!playerState.canPlay) {
+      throw new ServerException(SocketExceptions.GameError, 'Player cannot play');
+    }
+    playerState.cardsInHand = playerState.cardsInHand.filter((c) => c !== card);
+    this.discardPile.push(card);
+    this.drawCard(playerState);
+    this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+
+  }
+
+  public playCard(card: Card, client: AuthenticatedSocket): void {
+    const playerState = this.playerStates[client.gameData.clientInGameId];
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+
+    if (this.currentPlayerId !== client.gameData.clientInGameId) {
+      throw new ServerException(SocketExceptions.GameError, 'Not your turn');
     }
 
     if (!playerState.canPlay) {
@@ -96,13 +114,30 @@ export class Instance {
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
   }
 
-  public answerPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
+  public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
     const playerState = this.playerStates[playerId];
-
+    if (answer.answer !== BestPracticeAnswerType.APPLICABLE && answer.answer !== BestPracticeAnswerType.ALREADY_APPLICABLE && answer.answer !== BestPracticeAnswerType.NOT_APPLICABLE) {
+      throw new ServerException(SocketExceptions.GameError, 'Invalid best practice answer type');
+    }
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
-    playerState.practiceAnswers.push({ cardId, answer })
+    playerState.bestPracticeAnswers.push({ cardId, answer: answer.answer as BestPracticeAnswerType })
+    this.answerCount++;
+    if (this.answerCount === this.lobby.clients.size) {
+      this.lobby.dispatchGameState();
+    }
+  }
+
+  public answerBadPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
+    const playerState = this.playerStates[playerId];
+    if (answer.answer !== BadPracticeAnswerType.TO_BE_BANNED && answer.answer !== BadPracticeAnswerType.ALREADY_BANNED && answer.answer !== BadPracticeAnswerType.TOO_COMPLEX) {
+      throw new ServerException(SocketExceptions.GameError, 'Invalid bad practice answer type');
+    }
+    if (!playerState) {
+      throw new ServerException(SocketExceptions.GameError, 'Player not found');
+    }
+    playerState.badPracticeAnswers.push({ cardId, answer: answer.answer as BadPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.lobby.dispatchGameState();
@@ -110,11 +145,10 @@ export class Instance {
   }
 
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
-    //Ajouter le CO2
     playerState.co2Saved -= card.carbon_loss;
-    //Poser la question
     this.answerCount = 0;
     this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+    this.lobby.dispatchGameState();
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {
@@ -164,7 +198,8 @@ export class Instance {
   }
 
   private transitionToNextRound(): void {
-
+    this.currentPlayerId = this.players[0];
+    this.lobby.dispatchGameState();
   }
 
 }

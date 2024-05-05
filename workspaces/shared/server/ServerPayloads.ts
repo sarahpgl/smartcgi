@@ -31,7 +31,7 @@ export type ServerPayloads = {
 
   [ServerEvents.PracticeQuestion]: {
     playerId: string;
-    cardType: CardType;
+    card: Card;
   };
 
   [ServerEvents.CardPlayed]: {
@@ -39,7 +39,7 @@ export type ServerPayloads = {
     cardType: CardType;
     gameState: GameState;
   };
-  
+
 };
 
 

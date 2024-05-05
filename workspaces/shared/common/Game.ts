@@ -10,18 +10,34 @@ export interface PlayerStateInterface {
   expertCards: Actor[];
   cardsHistory: Card[];
   cardsInHand: Card[];
-  practiceAnswers: PracticeAnswer[];
+  bestPracticeAnswers: BestPracticeAnswer[];
+  badPracticeAnswers: BadPracticeAnswer[];
 }
 
-export interface PracticeAnswer {
+export interface BestPracticeAnswer {
   cardId: string;
-  answer: PracticeAnswerType;
+  answer: BestPracticeAnswerType;
 }
 
-export enum PracticeAnswerType {
+export interface BadPracticeAnswer {
+  cardId: string;
+  answer: BadPracticeAnswerType;
+}
+
+export type PracticeAnswer = BestPracticeAnswer | BadPracticeAnswer;
+
+export type PracticeAnswerType = BestPracticeAnswerType | BadPracticeAnswerType;
+
+export enum BestPracticeAnswerType {
   APPLICABLE = 'applicable',
+  ALREADY_APPLICABLE = 'already_applicable',
   NOT_APPLICABLE = 'not_applicable',
-  UNKNOWN = 'unknown',
+}
+
+export enum BadPracticeAnswerType {
+  TO_BE_BANNED = 'to_be_banned',
+  ALREADY_BANNED = 'already_banned',
+  TOO_COMPLEX = 'too_complex',
 }
 
 export interface GameState {
