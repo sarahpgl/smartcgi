@@ -5,7 +5,7 @@ export class PlayerState implements PlayerStateInterface {
 
   public badPractice: Actor | null = null;
   // TODO: Once sensibilisation module is implemented, set to false
-  public canPlay: boolean = true;
+  public canPlay: boolean = false;
   public cardsHistory: Card[] = [];
   public cardsInHand: Card[] = [];
   public co2Saved: number = 1000;
