@@ -67,6 +67,16 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
         })
     }
     }
+    
+    const handleDiscardCard = (card: Card) => {
+        console.log("discard card", card);
+        sm.emit({
+            event: ClientEvents.DiscardCard,
+            data: {
+                card
+            }
+        })
+    }
 
     let cards = playerState.cardsInHand;
 
@@ -100,7 +110,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
                     }
                     {selectedCard === index && (
                         <div className={styles.tooltip}>
-                            <img onClick={() => window.alert("La carte ''" + card.title + "'' " + index + " a été défaussée")} className={styles.iconBin} src={iconBin} alt="iconBin" />
+                            <img onClick={() => handleDiscardCard(card)} className={styles.iconBin} src={iconBin} alt="iconBin" />
                             <span className={styles.tooltiptext} style={{ backgroundColor: "rgba(165, 0, 0, 0.8)" }}>Défausser la carte</span>
                         </div>
                     )}

@@ -15,6 +15,8 @@ import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswer, Practice
 import { DrawMode } from './types';
 import { Actor } from '@shared/common/Cards';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { Question_Content } from '@app/entity/question_content';
+import { GameService } from '../game.service';
 
 export class Instance {
   public co2Quantity: CO2Quantity;
@@ -31,6 +33,7 @@ export class Instance {
 
   public cardService: CardService;
   public sensibilisationService: SensibilisationService;
+  public gameService: GameService;
 
   constructor(
     private readonly lobby: Lobby,
@@ -61,10 +64,14 @@ export class Instance {
     this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
-  public triggerFinish(): void {
-    // TODO: Save in GreenIT Booklet the cards met
-    // TODO: Generate and send the game's report
-    // TODO: Send the game's report to the players
+  public triggerFinish(winnerId : string, winnerName: string): void {
+    const nbPlayer = Object.keys(this.playerStates).length;
+    this.saveToDatabase(winnerId);
+
+    Object.keys(this.playerStates).forEach((playerId) => {
+      const gameReport = this.generateGameReport(playerId);
+      this.lobby.emitGameReport(gameReport, playerId, winnerName);
+    });
 
   }
 
@@ -193,6 +200,10 @@ export class Instance {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
     this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
+    this.lobby.dispatchGameState();
+    if(playerState.co2Saved <= 0){
+      this.triggerFinish(playerState.clientInGameId, playerState.playerName);
+    }
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {
@@ -267,6 +278,96 @@ export class Instance {
       this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
       this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
     }
+  }
+
+  private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] }  {
+    
+    const myArchivedCards: Card[] = [];
+    const bestPracticeAnswers = this.playerStates[clientInGameId].bestPracticeAnswers;
+    for (const answer of bestPracticeAnswers) {
+        if(answer.answer === BestPracticeAnswerType.APPLICABLE){
+            const card = this.cardDeck.find((card) => card.id === answer.cardId);
+            if(!card){
+                throw new ServerException(SocketExceptions.GameError, 'Card not found');
+            }
+            myArchivedCards.push(card);
+        }
+    }
+    
+    const badPracticeAnswers = this.playerStates[clientInGameId].badPracticeAnswers;
+    for (const answer of badPracticeAnswers) {
+        if(answer.answer === BadPracticeAnswerType.TO_BE_BANNED){
+            const card = this.cardDeck.find((card) => card.id === answer.cardId);
+            if(!card){
+                throw new ServerException(SocketExceptions.GameError, 'Card not found');
+            }
+            myArchivedCards.push(card);
+        }
+    }
+
+    const mostPopularCards: Card[] = [];
+    const popularBestPracticeCards = {};
+    const popularBadPracticeCards = {};
+
+    const nbPlayer = Object.keys(this.playerStates).length;
+    for (let init = 0; init < nbPlayer; init++) {
+        const historyBestPracticeByPlayer = this.playerStates[init].bestPracticeAnswers;
+        for (const answer of historyBestPracticeByPlayer) {
+            if(answer.answer === BestPracticeAnswerType.APPLICABLE){
+                const bestPracticeCard = this.cardDeck.find((bestPracticeCard) => bestPracticeCard.id === answer.cardId);
+                if(!bestPracticeCard){
+                    throw new ServerException(SocketExceptions.GameError, 'Card not found');
+                }
+                if (bestPracticeCard.id in popularBestPracticeCards){
+                    popularBestPracticeCards[bestPracticeCard.id] += 1;
+                } else {
+                    popularBestPracticeCards[bestPracticeCard.id] = 1;
+                }
+            }
+        }
+        const historyBadPracticeByPlayer = this.playerStates[init].badPracticeAnswers;
+        for (const answer of historyBadPracticeByPlayer) {
+            if(answer.answer === BadPracticeAnswerType.TO_BE_BANNED){
+                const badPracticeCard = this.cardDeck.find((badPracticeCard) => badPracticeCard.id === answer.cardId);
+                if(!badPracticeCard){
+                    throw new ServerException(SocketExceptions.GameError, 'Card not found');
+                }
+                if (badPracticeCard.id in popularBadPracticeCards){
+                    popularBadPracticeCards[badPracticeCard.id] += 1;
+                } else {
+                    popularBadPracticeCards[badPracticeCard.id] = 1;
+                }
+            }
+        }
+    }
+
+    // Convertir les objets en tableaux pour les trier plus facilement
+    const popularBestPracticeCardsArray = Object.entries(popularBestPracticeCards);
+    const popularBadPracticeCardsArray = Object.entries(popularBadPracticeCards);
+
+    // Trier les tableaux dans l'ordre décroissant en fonction du nombre d'occurrences
+    popularBestPracticeCardsArray.sort((a, b) => Number(b[1]) - Number(a[1]));
+    popularBadPracticeCardsArray.sort((a, b) => Number(b[1]) - Number(a[1]));
+
+    // Extraire les trois premiers éléments de chaque tableau
+    const top3BestPracticeCards = popularBestPracticeCardsArray.slice(0, 3);
+    const top3BadPracticeCards = popularBadPracticeCardsArray.slice(0, 3);
+
+    // Fusionner les tableaux obtenus en un seul tableau mostPopularCards
+    for (const [id] of [...top3BestPracticeCards, ...top3BadPracticeCards]) {
+        const card = this.cardDeck.find(card => card.id === id);
+        if (card) {
+            mostPopularCards.push(card);
+        } else {
+            throw new ServerException(SocketExceptions.GameError, 'Card not found');
+        }
+    }
+
+    return {myArchivedCards, mostPopularCards};
+  }
+
+  private saveToDatabase(winnerId: string): void {
+    this.gameService.createGame(Number(winnerId));
   }
 
 }

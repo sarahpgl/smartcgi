@@ -42,7 +42,7 @@ function GamePage() {
   const handleMPPersonSelected = (playerState: PlayerStateInterface) => {
     if (MP !== null) {
 
-      if (playerState.badPractice === null && !playerState.expertCards.includes(MP.actor)) {
+      if (playerState.badPractice === null && !(playerState.expertCards.includes(MP.actor))) {
         //window.alert("MPSelected for " + playerState.playerName);
         console.log("La mauvaise pratique est", MP);
         sm.emit({
@@ -117,7 +117,7 @@ function GamePage() {
             //console.log('playerSate', playerState.co2Saved);
             pos = (pos + 1) % 3;
             return (
-              <div key={index} className={`${positionClass} ${MP !== null ? (playerState.badPractice === null ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>
+              <div key={index} className={`${positionClass} ${MP !== null ? ((playerState.badPractice === null &&!(playerState.expertCards.includes(MP.actor) ))? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>
                 <div onClick={() => handleMPPersonSelected(playerState)}>
                   <OpponentBoard playerState={playerState} myTurn={gameState.currentPlayerId === playerState.clientInGameId} />
                 </div>

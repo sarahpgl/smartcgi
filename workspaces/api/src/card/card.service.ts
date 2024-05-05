@@ -202,6 +202,68 @@ export class CardService {
 
   }
 
+  async getAllCards(): Promise<Card[]> {
+    // Shuffling and formatting bad practice cards
+    const badPracticeCards = await this.bad_practice_cards_repository.find({ relations: ["contents", "actors"] });
+    const deckBadPracticeCards = this.shuffleArray(badPracticeCards).slice(0, 12);
+    const formattedBadPracticeCards: Bad_Practice_Card[] = deckBadPracticeCards.map((card: EntityBadPractice
+    ) => ({
+      id: card.id.toString(),
+      actor: this.getActorName(card.actors[0].title),
+      title: card.contents[0] ? card.contents[0].label : 'No label',
+      contents: card.contents[0] ? card.contents[0].description : 'No description',
+      cardType: 'BadPractice',
+      network_gain: card.network_gain,
+      memory_gain: card.memory_gain,
+      cpu_gain: card.cpu_gain,
+      storage_gain: card.storage_gain,
+      difficulty: card.difficulty,
+    }));
+
+    // Shuffling and formatting best practice cards
+    const bestPracticeCards = await this.best_practice_cards_repository.find({ relations: ["contents", "actors"] });
+    const deckBestPracticeCards = this.shuffleArray(bestPracticeCards).slice(0, 50);
+    const formattedBestPracticeCards: Best_Practice_Card[] = deckBestPracticeCards.map((card: EntityBestPractice) => ({
+      id: card.id.toString(),
+      actor: this.getActorName(card.actors[0].title),
+      title: card.contents[0] ? card.contents[0].label : 'No label',
+      contents: card.contents[0] ? card.contents[0].description : 'No description',
+      cardType: 'BestPractice',
+      network_gain: card.network_gain,
+      memory_gain: card.memory_gain,
+      cpu_gain: card.cpu_gain,
+      storage_gain: card.storage_gain,
+      difficulty: card.difficulty,
+      carbon_loss: card.carbon_loss,
+    }));
+
+    // Shuffling and formatting expert cards
+    const expertCards = await this.expert_cards_repository.find({ relations: ["contents", "actors"] });
+    const deckExpertCards = this.shuffleArray(expertCards).slice(0, 3);
+    const formattedExpertCards: Expert_Card[] = deckExpertCards.map((card: EntityExpert) => ({
+      id: card.id.toString(),
+      actor: this.getActorName(card.actors[0].title),
+      title: card.contents[0] ? card.contents[0].label : 'No label',
+      contents: card.contents[0] ? card.contents[0].description : 'No description',
+      cardType: 'Expert',
+    }));
+
+    // Shuffling and formatting training cards
+    const trainingCards = await this.training_cards_repository.find({ relations: ["contents", "actors"] });
+    const deckTrainingCards = this.shuffleArray(trainingCards).slice(0, 18);
+    const formattedTrainingCards: Formation_Card[] = deckTrainingCards.map((card: EntityTraining) => ({
+      id: card.id.toString(),
+      actor: this.getActorName(card.actors[0].title),
+      title: card.contents[0] ? card.contents[0].label : 'No label',
+      contents: card.contents[0] ? card.contents[0].description : 'No description',
+      cardType: 'Formation',
+      linkToFormation: card.link,
+    }));
+
+    const allCards = [...formattedBestPracticeCards, ...formattedBadPracticeCards, ...formattedTrainingCards, ...formattedExpertCards];
+    return allCards;
+  }
+
   private shuffleArray(array: any[]): any[] {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

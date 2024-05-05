@@ -57,6 +57,12 @@ export type ServerPayloads = {
   [ServerEvents.PlayerPassed]: {
     playerName: string; 
   };
+
+  [ServerEvents.GameReport] : {
+    winnerName: string,
+    mostPopularCards : Card[],
+    myArchivedCards : Card[],
+  };
 };
 
 

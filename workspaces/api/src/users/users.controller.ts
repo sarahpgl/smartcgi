@@ -12,6 +12,18 @@ export class UsersController {
         return this.usersService.getBooklet((parseInt( usersDto.user_id)));
     
     }
+
+    @Get('nbGames')
+    getNbGames(@Body() usersDto: UsersDto){
+        return this.usersService.getNbGames(parseInt(usersDto.user_id));
+    }
+
+    @Get('nbVictories')
+    getVictories(@Body() usersDto: UsersDto){
+        return this.usersService.getVictories(parseInt(usersDto.user_id));
+    }
 }
+
+
 
 
