@@ -6,6 +6,7 @@ import FormationCard from "@app/js/components/FormationCard/FormationCard";
 import ExpertCard from "@app/js/components/ExpertCard/ExpertCard";
 import QuestionnaireBP from "@app/js/components/QuestionnaireBP/QuestionnaireBP";
 import QuestionnaireMP from "@app/js/components/QuestionnaireMP/QuestionnaireMP";
+import PracticeQuestion from "@app/js/components/PracticeQuestion/PracticeQuestion";
 import next from '@app/icons/next.webp';
 import closeIcon from '@app/icons/close.webp';
 import styles from './viewCards.module.css';
@@ -58,7 +59,6 @@ function ViewCards() {
     const [selectedCard, setSelectedCard] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isQuestionnaireBPOpen, setIsQuestionnaireBPOpen] = useState(false);
-    const [isQuestionnaireMPOpen, setIsQuestionnaireMPOpen] = useState(false);
 
     const nextPage = () => {
         if (startCardIndex + 14 < cards.length) {
@@ -78,25 +78,17 @@ function ViewCards() {
     const openModal = (card) => {
         setSelectedCard(card);
         setIsModalOpen(true);
-        if (card.type === 'BestPractice') {
+        if (card.type === 'BestPractice'||'BadPractice') {
             setIsQuestionnaireBPOpen(true);
-            setIsQuestionnaireMPOpen(false);
-        } else if (card.type === 'BadPractice') {
-            setIsQuestionnaireMPOpen(true);
-            setIsQuestionnaireBPOpen(false);
         } else {
             setIsQuestionnaireBPOpen(false);
-            setIsQuestionnaireMPOpen(false);
         }
-        document.body.classList.add('openedQuestionnaire');
     };
 
     const closeModal = () => {
         setSelectedCard(null);
         setIsModalOpen(false);
         setIsQuestionnaireBPOpen(false);
-        setIsQuestionnaireMPOpen(false);
-        document.body.classList.remove('openedQuestionnaire');
     };
 
     return (
@@ -120,8 +112,7 @@ function ViewCards() {
             </div>
             {isModalOpen && (
                 <div className={styles.modalBackdrop}>
-                    <div className={`${styles.modalContent} ${isQuestionnaireBPOpen || isQuestionnaireMPOpen ? styles.openedQuestionnaire : ''}`}>
-                        {/* Ajout du bouton de fermeture */}
+                    <div className={`${styles.modalContent}`}> {}
                         <div className={styles.closeButton} onClick={closeModal}>
                             <img src={closeIcon} alt="Close" />
                         </div>
@@ -130,18 +121,18 @@ function ViewCards() {
                                 {selectedCard.type === 'BestPractice' && (
                                     <>
                                         {isQuestionnaireBPOpen && (
-                                                <QuestionnaireBP bestPracticeCard={selectedCard} />
+                                                <PracticeQuestion card={selectedCard} />
                                         )}
                                     </>
                                 )}
                                 {selectedCard.type === 'BadPractice' && (
                                     <>
-                                        {isQuestionnaireMPOpen && (
-                                            <QuestionnaireMP badPracticeCard={selectedCard} />
+                                        {isQuestionnaireBPOpen && (
+                                            <PracticeQuestion card={selectedCard} />
                                         )}
                                     </>
                                 )}
-                                {(selectedCard.type === 'Formation' || selectedCard.type === 'Expert') && ( // Condition ajoutée pour appliquer la classe .bigcard
+                                {(selectedCard.type === 'Formation' || selectedCard.type === 'Expert') && ( 
                                     <div className={`${styles.bigCard}`}>
                                         {selectedCard.type === 'Formation' && (
                                             <FormationCard title={selectedCard.title} contents={selectedCard.contents} actor={selectedCard.actor} />

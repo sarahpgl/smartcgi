@@ -37,9 +37,14 @@
 .logout{
     height: 60px;
     margin-right: 30px;
+    rotate: 180deg;
 }
 .logout:hover{
+    transition: 0.1s;
     cursor: pointer;
+    filter:brightness(0) invert(0.5);
+    transform: scale(0.9);
+
 }
 
 .center {

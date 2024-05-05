@@ -86,18 +86,6 @@
   position: relative;
 }
 
-.questionnaireContainer {
-  transform: scale(0.5);
-  position: absolute;
-  top: -40%;
-  right: -275px;
-  height:280px;
-  width: 300px;
-  background-color: #f0f0f0;
-  padding: 0px;
-  border-radius: 40px;
-}
-
 .bigCard {
   transform: scale(3);
 }

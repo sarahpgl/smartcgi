@@ -65,3 +65,27 @@ button:hover {
 .snackbarButton:hover {
     background-color: #ff0000;
 }
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid lightgray;
+    background-color: rgba(75, 149, 122, 0.5);
+    color: rgba(0, 0, 0, 0.96);
+    border-radius: 30px;
+    text-indent: 30px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .input:focus {
+    background-color: rgba(85, 169, 138, 0.5);
+    outline: 3px solid #376f37; /* Bordure verte sur le focus */
+  }
+  .input:-webkit-autofill,
+  .input:-webkit-autofill:hover, 
+  .input:-webkit-autofill:focus, 
+  .input:-webkit-autofill:active{
+      -webkit-box-shadow: 0 0 0 30px rgba(85, 169, 138, 0.47) inset !important;
+  }
