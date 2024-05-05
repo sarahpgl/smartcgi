@@ -67,7 +67,6 @@ export class Lobby {
     client.gameData.lobby = null;
 
     // If player leave then the game isn't worth to play anymore
-    this.instance.triggerFinish();
 
     // TODO: Notify other players that someone left
 
@@ -166,6 +165,15 @@ export class Lobby {
 
   public dispatchSensibilisationAnswered() {
     this.dispatchToLobby(ServerEvents.SensibilisationAnswered, {});
+  }
+
+  public emitGameReport(gameReport: { myArchivedCards: Card[], mostPopularCards: Card[] } , playerId: string, winnerName: string): void{
+    const payload: ServerPayloads[ServerEvents.GameReport] = {
+      mostPopularCards : gameReport.mostPopularCards,
+      myArchivedCards : gameReport.myArchivedCards,
+      winnerName : winnerName,
+    };
+    this.emitToClient(this.clients.get(playerId), ServerEvents.GameReport, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
