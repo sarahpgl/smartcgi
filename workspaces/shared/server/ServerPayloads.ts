@@ -35,6 +35,8 @@ export type ServerPayloads = {
     card: Card;
   };
 
+  [ServerEvents.PracticeAnswered]: {};
+
   [ServerEvents.CardPlayed]: {
     playerId: string;
     cardType: CardType;

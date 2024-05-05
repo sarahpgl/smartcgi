@@ -13,6 +13,10 @@ import Game from './js/pages/game/game'
 import Rules from './js/pages/rules/rules'
 import ViewCards from './js/pages/viewCards/viewCards'
 import GreenIt from './js/pages/greenIt/greenIt'
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/core/styles.css';
+
 
 import './CSS/App.css'
 import { SocketManagerProvider } from '@components/websocket/SocketManagerProvider'
@@ -23,6 +27,12 @@ function App() {
 
   return (
     <RecoilRoot>
+      <MantineProvider
+      >
+        <Notifications
+        position="bottom-right"
+        zIndex={1000000}
+        / >
       <SocketManagerProvider>
         <BrowserRouter>
           <Routes>
@@ -79,6 +89,8 @@ function App() {
 
         </BrowserRouter>
       </SocketManagerProvider>
+
+      </MantineProvider>
     </RecoilRoot>
   )
 }

@@ -167,6 +167,10 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.SensibilisationAnswered, {});
   }
 
+  public dispatchPracticeAnswered() {
+    this.dispatchToLobby(ServerEvents.PracticeAnswered, {});
+  }
+
   public emitGameReport(gameReport: { myArchivedCards: Card[], mostPopularCards: Card[] } , playerId: string, winnerName: string): void{
     const payload: ServerPayloads[ServerEvents.GameReport] = {
       mostPopularCards : gameReport.mostPopularCards,
