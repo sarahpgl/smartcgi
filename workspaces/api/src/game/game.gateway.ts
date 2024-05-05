@@ -104,7 +104,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage(ClientEvents.AnswerPracticeQuestion)
-  onPracticeQuestion(client: AuthenticatedSocket, data: PracticeAnswerDto): void {
+  onPracticeQuestion(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.AnswerPracticeQuestion]): void {
     if (!client.gameData.lobby) {
       throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
     }

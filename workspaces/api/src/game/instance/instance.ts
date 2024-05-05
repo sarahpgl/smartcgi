@@ -123,7 +123,6 @@ export class Instance {
 
       case 'Expert':
         this.playExpert(card, playerState);
-        this.transitionToNextTurn();
         break;
 
       case 'BadPractice':
@@ -132,37 +131,36 @@ export class Instance {
 
       case 'Formation':
         this.playFormation(card, playerState);
-        this.transitionToNextTurn();
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.transitionToNextTurn();
   }
 
-  public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
+  public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
     const playerState = this.playerStates[playerId];
-    if (answer.answer !== BestPracticeAnswerType.APPLICABLE && answer.answer !== BestPracticeAnswerType.ALREADY_APPLICABLE && answer.answer !== BestPracticeAnswerType.NOT_APPLICABLE) {
+    if (answer !== BestPracticeAnswerType.APPLICABLE && answer !== BestPracticeAnswerType.ALREADY_APPLICABLE && answer !== BestPracticeAnswerType.NOT_APPLICABLE) {
       throw new ServerException(SocketExceptions.GameError, 'Invalid best practice answer type');
     }
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
-    playerState.bestPracticeAnswers.push({ cardId, answer: answer.answer as BestPracticeAnswerType })
+    playerState.bestPracticeAnswers.push({ cardId, answer: answer as BestPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.transitionToNextTurn();
     }
   }
 
-  public answerBadPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
+  public answerBadPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswerType): void {
     const playerState = this.playerStates[playerId];
-    if (answer.answer !== BadPracticeAnswerType.TO_BE_BANNED && answer.answer !== BadPracticeAnswerType.ALREADY_BANNED && answer.answer !== BadPracticeAnswerType.TOO_COMPLEX) {
+    if (answer !== BadPracticeAnswerType.TO_BE_BANNED && answer !== BadPracticeAnswerType.ALREADY_BANNED && answer !== BadPracticeAnswerType.TOO_COMPLEX) {
       throw new ServerException(SocketExceptions.GameError, 'Invalid bad practice answer type');
     }
     if (!playerState) {
       throw new ServerException(SocketExceptions.GameError, 'Player not found');
     }
-    playerState.badPracticeAnswers.push({ cardId, answer: answer.answer as BadPracticeAnswerType })
+    playerState.badPracticeAnswers.push({ cardId, answer: answer as BadPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.transitionToNextTurn();
@@ -192,6 +190,7 @@ export class Instance {
         }
       }
       this.lobby.dispatchSensibilisationAnswered();
+      this.lobby.dispatchGameState();
     }
   }
 
@@ -267,17 +266,18 @@ export class Instance {
     this.lobby.dispatchGameState();
     const playerState = this.playerStates[this.currentPlayerId];
 
-    // 3: Check if player has already answered a practice question
+    // 3: If all players have played, ask a sensibilisation question
+    if (this.currentPlayerId === this.startingPlayerId) {
+      this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
+      this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
+    }
+
+    // 4: Check if player has already answered a practice question
     if( !playerState.canPlay){
       this.lobby.dispatchPlayerPassed(playerState.playerName);
       this.transitionToNextTurn();
     }
 
-    // 4: If all players have played, ask a sensibilisation question
-    if (this.currentPlayerId === this.startingPlayerId) {
-      this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
-      this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
-    }
   }
 
   private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] }  {
