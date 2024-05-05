@@ -13,14 +13,19 @@ import iconBin from '../../../icons/bin_icon.webp';
 
 import { Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
 import EmptyCard from '../EmptyCard/EmptyCard';
+import { PlayerStateInterface } from '@shared/common/Game';
 
-function PlayerHand({MPSelected , noMPSelected, Cards}) {
+function PlayerHand({MPSelected , noMPSelected, playerState,myTurn}) {
 
     
     const [typeSelected, setTypeSelected] = useState<string>("");
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
+    const [MPblocked, setMPblocked] = useState<string>("");
+
+
 
     const handleCardClick = (cardId: number,cardType:string) => {
+        if(myTurn===true){
         if (selectedCard === cardId) {
             setSelectedCard(null);
             noMPSelected();
@@ -32,6 +37,7 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
         if (cardType === "BadPractice") {
             MPSelected();
         }
+    }
     };
 
     const handleCardHover = (cardId: number) => {
@@ -52,7 +58,7 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
         { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
         { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 180 }
     ];
-    let cards=Cards;
+    let cards=playerState.cardsInHand;
 
     return (
         <div className={styles.hand}>
@@ -65,10 +71,10 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
                     onMouseLeave={() => handleCardLeave(card.cardType)}
                 >
                     {card.cardType === 'BestPractice' && (
-                        <BestPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} />
+                        <BestPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} difficulty={card.difficulty} />
                     )}
                     {card.cardType === 'BadPractice' && (
-                        <BadPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} targetedPlayer={card.targetedPlayer} />
+                        <BadPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} targetedPlayer={card.targetedPlayer} actor={card.actor} difficulty={card.difficulty}/>
                     )}
                     {card.cardType === 'Expert' && (
                         <ExpertCard cardType={card.cardType} id={card.id} actor={card.actor} title={card.title} contents={card.contents} />

@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import { CurrentGameState } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { Difficulty } from '@shared/common/Cards';
 
 function GamePage() {
 
@@ -61,12 +62,12 @@ function GamePage() {
         badPractice: "Developer",
         playerName: "Goat",
         cardsInHand: [
-            { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-            { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla', carbon_loss: 150 },
+            { cardType: 'BadPractice',actor :'ProductOwner', id: '32',difficulty:Difficulty.FOUR, title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
+            { cardType: 'BestPractice', id: '32', title: 'VIDE', difficulty:Difficulty.ONE,  contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla blabla blabla blablablabla blabla blabla blabla', carbon_loss: 150 },
             { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
             { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal blablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablablablablablabla blabla blabla blabla blablablabla blabla blabla blabla blablablabla' },
-            { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-            { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150 },
+            { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' , difficulty: Difficulty.TWO},
+            { cardType: 'BestPractice',id: '32',title: 'VIDEeeee',contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ',carbon_loss: 150,difficulty: Difficulty.TWO,actor: 'Architect', network_gain: true,memory_gain: false,cpu_gain: true,storage_gain: false},               
             { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
         ],
         practiceAnswers: [],
@@ -114,7 +115,7 @@ function GamePage() {
         cardsHistory: []
     };
 
-    let turn='Right';
+    let turn='Me';
     // fin données factices pour le débug
         
 

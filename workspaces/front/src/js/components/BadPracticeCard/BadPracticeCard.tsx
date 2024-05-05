@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 
 import styles from './BadPracticeCard.module.css';
-import iconBadPractice from '../../images/MP_lead_tech.webp';
+import iconMPDeveloper from '../../images/MP_dev.webp';
+import iconMPProductOwner from '../../images/MP_product_owner.webp';
+import iconMPLeadTech from '../../images/MP_lead_tech.webp';
 import actorIcon from '@app/icons/actor_icon.webp';
 
 
-import { Bad_Practice_Card } from '@shared/common/Cards';
+import { Bad_Practice_Card, Difficulty } from '@shared/common/Cards';
 
 function BadPracticeCard(card:Bad_Practice_Card) {
 
+    let dif=card.difficulty;
+
+    let imgSrc = iconMPDeveloper;
+    if(card.actor === "ProductOwner"){
+        imgSrc = iconMPProductOwner;
+    }
+    else if(card.actor === "Architect"){
+        imgSrc = iconMPLeadTech;
+    }
+    else {
+        imgSrc = iconMPDeveloper;
+    }
 
     return (
         <div className={styles.card}>
             <div className={styles.cardheader}>
                 <div className={styles.icon}>
-                    <img src={iconBadPractice} alt="iconBadPractice" />
+                    <img src={imgSrc} alt="iconBadPractice" />
                 </div>
                 <h2>Mauvaise pratique</h2>
             </div>
@@ -25,7 +39,7 @@ function BadPracticeCard(card:Bad_Practice_Card) {
                     <h3>{card.title ? card.title : "Sample title"}</h3>
                 </div>
                 <div className={styles.descriptionbody}>
-                    <p>{card.contents? card.contents : "blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla "}</p>
+                    <p>{card.contents? card.contents : "Sample blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla "}</p>
                 </div>
             </div>
 
@@ -51,10 +65,10 @@ function BadPracticeCard(card:Bad_Practice_Card) {
                 <div className={styles.difficulty}>
                     <p>Difficulté</p>
                     <div className={styles.stars}>
-                        <span>{card.difficulty>0? "★" : "☆"}</span>
-                        <span>{card.difficulty>1? "★" : "☆"}</span>
-                        <span>{card.difficulty>2? "★" : "☆"}</span>
-                        <span>{card.difficulty>3? "★" : "☆"}</span>
+                        <span>{dif===Difficulty.ONE? "★☆☆☆" : ""}</span>
+                        <span>{dif===Difficulty.TWO? "★★☆☆" : ""}</span>
+                        <span>{dif===Difficulty.THREE? "★★★☆" : ""}</span>
+                        <span>{dif===Difficulty.FOUR? "★★★★" : ""}</span>
                         </div>
                     </div>
 
