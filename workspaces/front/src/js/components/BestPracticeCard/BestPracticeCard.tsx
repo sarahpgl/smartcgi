@@ -3,10 +3,9 @@ import React, { useState } from 'react';
 import styles from './BestPracticeCard.module.css';
 import iconBestPractice from '@app/icons/icon_goodpractice.webp';
 import actorIcon from '@app/icons/actor_icon.webp';
-import { Best_Practice_Card } from '@shared/common/Cards';
+import { Best_Practice_Card, Difficulty } from '@shared/common/Cards';
 
 function BestPracticeCard(card:Best_Practice_Card) {
-
 
     return (
         <div className={styles.card}>
@@ -28,7 +27,7 @@ function BestPracticeCard(card:Best_Practice_Card) {
                     <h3>{card.title ? card.title : "Sample title"}</h3>
                 </div>
                 <div className={styles.descriptionbody}>
-                    <p>{card.contents? card.contents : "blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla "}</p>
+                    <p>{card.contents? card.contents : "sample desc blabla bla bla blabla "}</p>
                 </div>
             </div>
 
@@ -54,12 +53,12 @@ function BestPracticeCard(card:Best_Practice_Card) {
                 <div className={styles.difficulty}>
                     <p>Difficulté</p>
                     <div className={styles.stars}>
-                        <span>{card.difficulty>0? "★" : "☆"}</span>
-                        <span>{card.difficulty>1? "★" : "☆"}</span>
-                        <span>{card.difficulty>2? "★" : "☆"}</span>
-                        <span>{card.difficulty>3? "★" : "☆"}</span>
-                        </div>
+                        <span>{card.difficulty === Difficulty.ONE ? "★☆☆☆":""}</span>
+                        <span>{card.difficulty === Difficulty.TWO ? "★★☆☆" : ""}</span>
+                        <span>{card.difficulty === Difficulty.THREE ? "★★★☆" : ""}</span>
+                        <span>{card.difficulty === Difficulty.FOUR ? "★★★★" : ""}</span>
                     </div>
+                </div>
 
             </div>
 

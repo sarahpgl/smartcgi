@@ -18,26 +18,6 @@ import EmptyCard from '../EmptyCard/EmptyCard';
 function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterface , myTurn: boolean}) {
     //console.log('PlayerState dans oponnentBoard', playerState);
 
-    const data = {
-        name: "Jean",
-        kg: "900",
-        points: "3",
-        expert: ["Developer", "ProductOwner", "Architect"],
-        MP: "Developer"
-    };
-
-    let player: PlayerStateInterface = {
-        co2Saved: 900,
-        sensibilisationPoints: 3,
-        expertCards: ["Developer", "ProductOwner", "Architect"],
-        badPractice: "Developer",
-        playerName: "Zizi",
-        cardsInHand: [],
-        practiceAnswers: [],
-        playerId: '',
-        canPlay: false,
-        cardsHistory: []
-    };
 
     const lastThreeCards = playerState.cardsHistory.slice(-3);
 

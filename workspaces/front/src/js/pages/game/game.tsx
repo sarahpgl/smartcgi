@@ -15,6 +15,7 @@ import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
 import { Bad_Practice_Card } from '@shared/common/Cards';
+import { Difficulty } from '@shared/common/Cards';
 
 function GamePage() {
 

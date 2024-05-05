@@ -103,7 +103,7 @@ function PlayerBoard({ MPSelected, noMPSelected, playerState, myTurn }: {
                         <PlayerStatus playerstate={playerState} me={1} />
                     </div>
                     <div className={`${styles.hand} ${myTurn ? styles.handMyTurn : ''}`}>
-                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} cards={playerState.cardsInHand} myTurn={myTurn}/>
+                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} playerState={playerState} myTurn={myTurn} />
                     </div>
                     <div className={styles.history}>
                         <PlayerInGameHistory Cards={playerState.cardsHistory} />
