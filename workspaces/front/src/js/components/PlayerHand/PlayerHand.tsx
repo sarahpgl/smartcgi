@@ -29,8 +29,8 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
 
   const { sm } = useSocketManager();
 
-  const handleCardClick = (cardId: number, cardType: string) => {
-    if (myTurn) {
+  const handleCardClick = (cardId: number, card: Card) => {
+    if (myTurn){
       if (selectedCard === cardId) {
         setSelectedCard(null);
         noMPSelected();
@@ -38,8 +38,8 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
       }
       noMPSelected();
       setSelectedCard(cardId);
-      if (cardType === "BadPractice") {
-        MPSelected();
+      if (card.cardType === "BadPractice") {
+        MPSelected(card);  
       }
     }
   };
@@ -79,7 +79,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
                 <div
                     key={index}
                     className={`${styles.card} ${selectedCard === index ? styles.selected : ''}`}
-                    onClick={() => handleCardClick(index,card.cardType)}
+                    onClick={() => handleCardClick(index,card)}
                     onMouseEnter={() => handleCardHover(index)}
                     onMouseLeave={() => handleCardLeave(card.cardType)}
                 >
