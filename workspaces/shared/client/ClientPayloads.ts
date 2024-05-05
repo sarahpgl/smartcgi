@@ -32,7 +32,7 @@ export type ClientPayloads = {
 
   [ClientEvents.AnswerSensibilisationQuestion]: {
     questionId: number;
-    answer: SensibilisationQuestionAnswer;
+    answer: SensibilisationQuestionAnswer | null;
   }
 
 

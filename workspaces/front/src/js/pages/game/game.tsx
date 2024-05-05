@@ -10,7 +10,7 @@ import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP'
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 import { useRecoilState } from 'recoil';
-import { CurrentGameState } from '@app/js/components/Game/states';
+import { CurrentGameState, CurrentSensibilisationQuestion } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
@@ -20,11 +20,12 @@ import { Difficulty } from '@shared/common/Cards';
 function GamePage() {
 
   const [gameState] = useRecoilState(CurrentGameState);
+  const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
   const { sm } = useSocketManager();
   const playerAbleToMP = ["Top"];
 
   const [MP, setMP] = useState<Bad_Practice_Card | null>(null);
-    const [showQuizz, setShowQuizz] = useState(true);
+  const [showQuizz, setShowQuizz] = useState(true);
 
   const handleMPSelected = (card: Bad_Practice_Card) => {
     setMP(card);
@@ -69,9 +70,13 @@ function GamePage() {
   return (
     <div className={styles.page}>
       <Header />
-            <div className={`${styles.modalBackdrop} ${styles.container}`}>
-            {showQuizz && <SensibilisationQuizz />}
-            </div>
+      {sensibilisationQuestion ? (
+        <div className={styles.quizz}><SensibilisationQuizz/></div>
+      ) : (
+        <>
+        </>
+      )}
+      
       <div className={styles.container}>
         {gameState ? (
           gameState.playerStates.map((playerState, index) => {
@@ -79,7 +84,7 @@ function GamePage() {
               return (
                 <>
                   <div className={styles.playerBoard} key={index}>
-                    <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} myTurn={gameState.currentPlayerId===playerState.clientInGameId} />
+                    <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState} myTurn={gameState.currentPlayerId === playerState.clientInGameId} />
                   </div>
 
                 </>
@@ -107,7 +112,7 @@ function GamePage() {
             return (
               <div key={index} className={`${positionClass} ${MP !== null ? (playerState.badPractice === null ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>
                 <div onClick={() => handleMPPersonSelected(playerState)}>
-                  <OpponentBoard playerState={playerState} myTurn={gameState.currentPlayerId===playerState.clientInGameId} />
+                  <OpponentBoard playerState={playerState} myTurn={gameState.currentPlayerId === playerState.clientInGameId} />
                 </div>
               </div>
             );

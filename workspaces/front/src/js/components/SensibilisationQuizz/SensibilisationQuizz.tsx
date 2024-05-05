@@ -5,7 +5,6 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { useRecoilState } from 'recoil';
 import { CurrentSensibilisationQuestion } from '../Game/states';
 
-
 const Quizz: React.FC = () => {
   const { sm } = useSocketManager();
   const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
@@ -14,6 +13,9 @@ const Quizz: React.FC = () => {
   const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
   const [quizzPlay, setQuizzPlay] = useState(false);
   const [tempsRestant, setTempsRestant] = useState(15);
+  const [showComponent, setShowComponent] = useState(true);
+  const [timeIsUp, setTimeIsUp] = useState(false);
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -21,29 +23,48 @@ const Quizz: React.FC = () => {
       timer = setTimeout(() => {
         setTempsRestant(tempsRestant - 1);
       }, 1000);
-    } else if (!quizzPlay && tempsRestant === 0) {
-      setResultMessage("Temps écoulé !");
-      setQuizzPlay(true);
+    } else {
+      setTimeIsUp(true);
     }
 
     return () => clearTimeout(timer);
-  }, [quizzPlay, tempsRestant]);
+  }, [tempsRestant]);
 
+  useEffect(() => {
+    if (timeIsUp && !quizzPlay) {
+      sm.emit({
+        event: ClientEvents.AnswerSensibilisationQuestion,
+        data: {
+          questionId: sensibilisationQuestion.question_id,
+          answer: null,
+        }
+      })
+      if(sensibilisationQuestion?.answers.answer == 1){
+        setResultMessage(`La bonne réponse est : ${sensibilisationQuestion?.answers.response1}`);
+      } else if(sensibilisationQuestion?.answers.answer == 2){
+        setResultMessage(`La bonne réponse est : ${sensibilisationQuestion?.answers.response2}`);
+      } else if(sensibilisationQuestion?.answers.answer == 3){
+        setResultMessage(`La bonne réponse est : ${sensibilisationQuestion?.answers.response3}`);
+      }
+      setTimeout(() => {
+        setShowComponent(false);
+      }, 3000);
+    } else if (timeIsUp && quizzPlay) {
+      setTimeout(() => {
+        setShowComponent(false);
+      }, 3000);
+    }
+  }, [timeIsUp, quizzPlay, sensibilisationQuestion]);
 
-  // TODO: Pour meije
-  // Lorsque l'on ferme le quizz 
-  // setSensibilisationQuestion(null);
   const handleotherclick = () => {
     setSensibilisationQuestion(null);
   }
 
-  // au clic
   const handleResult = async (answerIndex: number) => {
-
     const answ = {
       answer: answerIndex,
     };
-    // envoie de la réponse du client au serveur
+
     sm.emit({
       event: ClientEvents.AnswerSensibilisationQuestion,
       data: {
@@ -62,10 +83,7 @@ const Quizz: React.FC = () => {
       setanswerChoisie(answerIndex);
       setQuizzPlay(true);
     }
-
   };
-
-
 
   const getButtonColor = (answerIndex: number) => {
     if (quizzPlay) {
@@ -79,7 +97,7 @@ const Quizz: React.FC = () => {
     return '';
   };
 
-  return sensibilisationQuestion !== null ? (
+  return showComponent && sensibilisationQuestion !== null ? (
     <div className={styles.container}>
       <label className={styles.titre}>Quizz de sensibilisation</label> <br />
       <label className={styles.label}>{sensibilisationQuestion?.question}</label> <br />
@@ -92,7 +110,6 @@ const Quizz: React.FC = () => {
           <p>Temps restant: {tempsRestant} secondes</p>
         </div>
       )}
-      <button className={styles.button} onClick={handleotherclick}>Fermer</button>
     </div>
   ) : null;
 };

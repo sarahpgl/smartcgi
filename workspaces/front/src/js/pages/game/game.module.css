@@ -85,4 +85,19 @@ body {
     z-index: 10000; /* Assure que le contenu est au-dessus du backdrop */
     pointer-events: auto; /* Autorise les événements de pointer sur le contenu */
   }
+
+  .quizz {
+        position: fixed; /* Positionnement fixe pour le placer par-dessus le contenu */
+        top: 50%; /* Le placer à 50% du haut de la fenêtre */
+        left: 50%; /* Le placer à 50% de la largeur de la fenêtre */
+        transform: translate(-50%, -50%); /* Centrer horizontalement et verticalement */
+        z-index: 9999; /* Pour afficher au premier plan */
+        width: 500px;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        font-size: small;
+        padding: 20px;
+        border-radius: 40px;
+  }
   
