@@ -35,8 +35,6 @@ export class Lobby {
     private readonly sensibilisationService : SensibilisationService,
     co2Quantity: number,
   ) {
-    //console.log(cardService);
-    // this.instance.cardService = cardService;
     this.instance.co2Quantity = co2Quantity;
   }
 
@@ -156,6 +154,13 @@ export class Lobby {
       },
     };
     this.dispatchToLobby(ServerEvents.CardPlayed, payload);
+  }
+
+  public dispatchPlayerPassed(playerName: string): void {
+    const payload: ServerPayloads[ServerEvents.PlayerPassed] = {
+      playerName
+    };
+    this.dispatchToLobby(ServerEvents.PlayerPassed, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {

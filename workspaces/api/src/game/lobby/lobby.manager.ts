@@ -22,7 +22,6 @@ export class LobbyManager {
 
   @Inject(SensibilisationService)
   private readonly sensibilisationService: SensibilisationService;
-  private readonly co2Quantity : number;
   public initializeSocket(client: AuthenticatedSocket): void {
     client.gameData.lobby = null;
   }
@@ -32,7 +31,7 @@ export class LobbyManager {
   }
 
   public createLobby(co2Quantity: CO2Quantity): Lobby {
-    const lobby = new Lobby(this.server, this.cardService,this.sensibilisationService , this.co2Quantity);
+    const lobby = new Lobby(this.server, this.cardService, this.sensibilisationService , co2Quantity);
     //console.log('Creating lobby', co2Quantity);
     this.lobbies.set(lobby.id, lobby);
 

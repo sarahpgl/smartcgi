@@ -32,17 +32,18 @@ export type ClientPayloads = {
 
   [ClientEvents.AnswerSensibilisationQuestion]: {
     questionId: number;
-    answer: SensibilisationQuestionAnswer;
+    answer: SensibilisationQuestionAnswer | null;
   }
 
 
   [ClientEvents.GetSensibilisationQuestion]: {
   }
 
-
-
-
   [ClientEvents.PlayCard]: {
+    card: Card;
+  }
+  
+  [ClientEvents.DiscardCard]: {
     card: Card;
   }
 
