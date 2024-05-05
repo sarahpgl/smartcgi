@@ -41,7 +41,7 @@ function GamePage() {
   const handleMPPersonSelected = (playerState: PlayerStateInterface) => {
     if (MP !== null) {
 
-      if (playerState.badPractice === null) {
+      if (playerState.badPractice === null && !playerState.expertCards.includes(MP.actor)) {
         //window.alert("MPSelected for " + playerState.playerName);
         console.log("La mauvaise pratique est", MP);
         sm.emit({

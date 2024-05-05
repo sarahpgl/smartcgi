@@ -58,7 +58,6 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
 
     const handlePlayCard = (card: Card) => {
         if(MPblocked === "" || MPblocked!=="" && card.cardType !== "BestPractice") {
-        alert("La carte ''" + card.title + "'' a été jouée");
         console.log("play card", card);
         sm.emit({
             event: ClientEvents.PlayCard,
@@ -93,7 +92,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
                     {card.cardType === 'Formation' && (
                         <FormationCard cardType={card.cardType} id={card.id} actor={card.actor} title={card.title} contents={card.contents} />
                     )}
-                    {(card.cardType !== "BadPractice" || (card.cardType!=="BestPractice" && MPblocked!=="")) && selectedCard === index &&
+                    {(card.cardType !== "BadPractice" && !(card.cardType==="BestPractice" && MPblocked!=="")) && selectedCard === index &&
                         <div className={styles.tooltip}>
                             <img onClick={() => handlePlayCard(card)} className={styles.iconOk} src={iconOk} alt="iconOk" />
                             <span className={styles.tooltiptext} style={{ backgroundColor: "rgba(0, 105, 0, 0.8)" }}>Valider la carte</span>

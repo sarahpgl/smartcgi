@@ -129,6 +129,7 @@ export class Instance {
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
+    this.transitionToNextTurn();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
