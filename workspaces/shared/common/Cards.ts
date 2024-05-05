@@ -1,4 +1,5 @@
 export interface BaseCard {
+  carbon_loss: number;
   id: string;
   actor: Actor;
   title: string;

@@ -69,15 +69,6 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
     }
     }
 
-    let cards2: BaseCard[] = [
-        { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150 },
-        { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blablabla blabal blabal' },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 180 }
-    ];
     let cards = playerState.cardsInHand;
 
     return (
@@ -102,7 +93,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
                     {card.cardType === 'Formation' && (
                         <FormationCard cardType={card.cardType} id={card.id} actor={card.actor} title={card.title} contents={card.contents} />
                     )}
-                    {(card.cardType !== "BadPractice" && (card.cardType!=="BestPractice"&& MPblocked!=="")) && selectedCard === index &&
+                    {(card.cardType !== "BadPractice" || (card.cardType!=="BestPractice" && MPblocked!=="")) && selectedCard === index &&
                         <div className={styles.tooltip}>
                             <img onClick={() => handlePlayCard(card)} className={styles.iconOk} src={iconOk} alt="iconOk" />
                             <span className={styles.tooltiptext} style={{ backgroundColor: "rgba(0, 105, 0, 0.8)" }}>Valider la carte</span>

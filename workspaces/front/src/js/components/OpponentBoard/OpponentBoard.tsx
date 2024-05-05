@@ -14,10 +14,13 @@ import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
 import EmptyCard from '../EmptyCard/EmptyCard';
+import OpponentHistory from '../CardsHistory/CardsHistory';
+import CardsHistory from '../CardsHistory/CardsHistory';
 
 function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterface , myTurn: boolean}) {
     //console.log('PlayerState dans oponnentBoard', playerState);
 
+    const [historyDisplay, setHistoryDisplay] = useState(false);
 
     const lastThreeCards = playerState.cardsHistory.slice(-3);
 
@@ -31,20 +34,25 @@ function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterf
 
     const cards = [...defaultCards.slice(0, 3 - lastThreeCards.length),...lastThreeCards];
 
+    const handleHistoryClick = () => {
+        setHistoryDisplay(true);
+    }
     
 
     return (
         <div className={styles.opponentBoard}>
             <div className={styles.nameContainer}> </div>
             <div className={`${styles.container} ${myTurn ? styles.containerMyTurn : ''}`}>
-                <img src={userIcon} alt="user icon" className={styles.userIcon} />
-                <label className={styles.labelname}>{playerState.playerName}</label>
+                <img src={userIcon} alt="user icon" className={`${styles.userIcon} ${myTurn ? styles.userIconMyTurn : ''}`} />
+                <label className={`${styles.labelname} ${myTurn ? styles.labelnameMyTurn : ''}`}>{playerState.playerName}</label>
 
                 <div className={styles.container2}>
                     <PlayerStatus playerstate={playerState} me={0} />
                 </div>
 
-                <div className={styles.opponentHistory}>
+                <div className={styles.opponentHistory}
+                onClick={() => handleHistoryClick()}>
+
                     {cards.slice(-3).map((card, index) => (
                         <div key={index} className={`${styles.card}`}>
                             {card.cardType === 'BestPractice' && (
@@ -88,6 +96,13 @@ function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterf
                     ))}
                 </div>
 
+                {historyDisplay && (
+                    <>
+                    <div className={styles.fond}></div>
+                        <CardsHistory cards={playerState.cardsHistory} />
+                        <div className={styles.closeButton} onClick={() => setHistoryDisplay(false)}>X</div>
+                    </>
+                )}
             </div>
 
         </div>

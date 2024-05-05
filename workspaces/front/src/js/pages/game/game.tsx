@@ -178,33 +178,6 @@ function GamePage() {
                     return null;
                 })}
 
-                {/*A supprimer c'est juste pour mon débug (greg le 4/5 à 18h)*/}
-
-                <div className={styles.playerBoard}>
-                    <PlayerBoard MPSelected={handleMPSelected} noMPSelected={handleNoMPSelected} playerState={playerState1} myTurn={turn === 'Me'} />
-                </div>
-
-                <div className={`${styles.opponentBoardLeft} ${MP !== null ? (playerAbleToMP.includes("Left") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardLeft}`}>
-                    <div onClick={() => handleMPPersonSelected(playerState2)}>
-                        <OpponentBoard playerState={playerState2} myTurn={turn === 'Left'} />
-                    </div>
-                </div>
-
-
-                <div className={`${styles.opponentBoardRight} ${MP !== null ? (playerAbleToMP.includes("Right") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardRight}`}>
-                    <div onClick={() => handleMPPersonSelected(playerState3)}>
-                        <OpponentBoard playerState={playerState3} myTurn={turn === 'Right'} />
-                    </div>
-                </div>
-
-                <div className={`${styles.opponentBoardTop} ${MP !== null ? (playerAbleToMP.includes("Top") ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : styles.opponentBoardTop}`}>
-                    <div onClick={() => handleMPPersonSelected(playerState4)}>
-                        <OpponentBoard playerState={playerState4} myTurn={turn === 'Top'} />
-                    </div>
-                </div>
-                {/*/////A supprimer c'est juste pour mon débug (greg le 4/5 à 18h)*/}
-
-
                 <div className={styles.deck}>
                     <CardDeck />
                 </div>

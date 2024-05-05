@@ -95,7 +95,8 @@
 
 .descriptionheader{
     background-color: rgba(53, 52, 52, 0.6);
-    font-size: 4px;
+    font-size: 3px;
+    line-height: 4px;
     color: white;
     width: auto;
     height: 14px;
@@ -112,6 +113,7 @@
 
 .descriptionbody{
     height: 89px;
+    line-height: 4px;
     align-items: start;
     display: flex;
     color: black;
