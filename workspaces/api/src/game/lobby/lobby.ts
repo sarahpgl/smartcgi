@@ -98,9 +98,10 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
   }
 
-  public dispatchPracticeQuestion(card: Card, playerId: string): void {
+  public dispatchPracticeQuestion(card: Card, playerId: string, playerName: string): void {
     const payload: ServerPayloads[ServerEvents.PracticeQuestion] = {
       playerId,
+      playerName,
       card: card,
     };
 

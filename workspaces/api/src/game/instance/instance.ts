@@ -80,7 +80,7 @@ export class Instance {
     // On best or bad practice discard, ask the question
     if (card.cardType === 'BestPractice' || card.cardType === 'BadPractice') {
       this.answerCount = 0;
-      this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
+      this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
     }
     
   }
@@ -128,7 +128,6 @@ export class Instance {
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
     }
     this.drawCard(playerState);
-    this.lobby.dispatchGameState();
   }
 
   public answerBestPracticeQuestion(playerId: string, cardId: string, answer: PracticeAnswer): void {
@@ -180,8 +179,7 @@ export class Instance {
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
-    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
-    this.lobby.dispatchGameState();
+    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
   }
 
   private playExpert(card: Expert_Card, playerState: PlayerState) {
@@ -193,7 +191,6 @@ export class Instance {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
-    this.lobby.dispatchGameState();
   }
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
@@ -209,8 +206,7 @@ export class Instance {
         targetPlayerState.badPractice = card.actor;
         // Ask the question
         this.answerCount = 0;
-        this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId);
-        this.lobby.dispatchGameState();
+        this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
       } else {
         throw new ServerException(SocketExceptions.GameError, 'Player has the expert card associated');
       }
@@ -227,7 +223,6 @@ export class Instance {
       playerState.badPractice = null;
     }
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
-    this.lobby.dispatchGameState();
   }
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
@@ -237,12 +232,20 @@ export class Instance {
   }
 
   private async transitionToNextTurn() {
+    // 1: Change the current player
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
+
+    // 2: Dispatch Game State
+    this.lobby.dispatchGameState();
     const playerState = this.playerStates[this.currentPlayerId];
+
+    // 3: Check if player has already answered a practice question
     if( !playerState.canPlay){
       this.lobby.dispatchPlayerPassed(playerState.playerName);
       this.transitionToNextTurn();
     }
+
+    // 4: If all players have played, ask a sensibilisation question
     if (this.currentPlayerId === this.startingPlayerId) {
       this.currentSensibilisationQuestion = await this.sensibilisationService.getSensibilisationQuizz();
       this.lobby.dispatchSensibilisationQuestion(this.currentSensibilisationQuestion);
