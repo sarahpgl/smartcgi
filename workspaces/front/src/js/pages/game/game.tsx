@@ -27,7 +27,7 @@ function GamePage() {
 
   const handleMPSelected = (card: Bad_Practice_Card) => {
     setMP(card);
-    console.log("MPSelected");
+    console.log("MPSelected : ", MP);
   };
 
   const handleNoMPSelected = () => {
@@ -39,7 +39,8 @@ function GamePage() {
     if (MP !== null) {
 
       if (playerState.badPractice === null) {
-        window.alert("MPSelected for " + playerState.playerName);
+        //window.alert("MPSelected for " + playerState.playerName);
+        console.log("La mauvaise pratique est", MP);
         sm.emit({
           event: ClientEvents.PlayCard,
           data: {
@@ -97,7 +98,7 @@ function GamePage() {
             } else if (pos === 2) {
               positionClass = styles.opponentBoardTop;
             }
-            console.log('playerSate', playerState.co2Saved);
+            //console.log('playerSate', playerState.co2Saved);
             pos = (pos + 1) % 3;
             return (
               <div key={index} className={`${positionClass} ${MP !== null ? (playerState.badPractice === null ? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>

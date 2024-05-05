@@ -18,7 +18,7 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
 
 function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
-  MPSelected: () => void,
+  MPSelected: (card: Bad_Practice_Card) => void,
   noMPSelected: () => void,
   playerState: PlayerStateInterface,
   myTurn: boolean,
@@ -39,14 +39,9 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
       }
       noMPSelected();
       setSelectedCard(cardId);
-<<<<<<< HEAD
-      setTypeSelected(cardType);
-      if (cardType === "BadPractice") {
-        MPSelected();
-=======
+      setTypeSelected(card.cardType);
       if (card.cardType === "BadPractice") {
-        MPSelected(card);  
->>>>>>> d4f48ffff90f7b9dd82a5f8478e1ce4f60f3dceb
+        MPSelected(card);
       }
     }
   };
