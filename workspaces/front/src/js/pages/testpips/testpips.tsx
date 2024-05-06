@@ -7,7 +7,7 @@ function PageTest(){
     return (
         <div>
             <Header />
-            <QuestionnairePick number={5} display3pointButton={true} />
+            <QuestionnairePick/>
         </div>
     )
 }

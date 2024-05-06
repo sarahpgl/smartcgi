@@ -93,7 +93,7 @@ function GamePage() {
         </>
       )}
       {useSensibilisationPoints ? (
-        <div className={styles.quizzPractice}><QuestionnairePick number={useSensibilisationPoints.sensibilisationPoints} isBlocked={useSensibilisationPoints.isBlocked} displayFormationChoices={useSensibilisationPoints.formationCardLeft} displayExpertChoice={useSensibilisationPoints.expertCardLeft} /></div>
+        <div className={styles.quizzPractice}><QuestionnairePick/></div>
       ) : (
         <>
         </>

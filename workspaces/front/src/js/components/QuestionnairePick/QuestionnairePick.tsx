@@ -7,7 +7,7 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { useRecoilState } from 'recoil';
 import { CurrentUseSensibilisationPoints } from '../Game/states';
 
-const QuestionnairePick = ({ number, isBlocked, displayFormationChoices, displayExpertChoice } : { number: number, isBlocked: boolean,  displayFormationChoices : boolean, displayExpertChoice : boolean}) => {
+const QuestionnairePick = () => {
     const [createMessage, setCreateMessage] = useState("");
     const [isVisible, setIsVisible] = useState(true);
     const [answered, setAnswered] = useState(false);
@@ -58,9 +58,9 @@ const QuestionnairePick = ({ number, isBlocked, displayFormationChoices, display
             </label> <br />
             <div className={styles.buttonContainer}>
                 <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('random')} disabled={answered}>Random</button>
-                {displayFormationChoices && number >= 1 && <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('randomFormation')} disabled={answered} title="Piocher une carte formation aléatoirement">1 point</button>}
-                {displayFormationChoices && isBlocked && number >= 3 && <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('goodFormation')} disabled={answered} title="Piocher la carte formation pour vous débloquer">3 points</button>}
-                {displayExpertChoice && number >= 5 && <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('expert')} disabled={answered} title="Piocher une carte experte aléatoirement">5 points</button>}
+                {useSensibilisationPoints?.formationCardLeft && useSensibilisationPoints.sensibilisationPoints >= 1 && <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('randomFormation')} disabled={answered} title="Piocher une carte formation aléatoirement">1 point</button>}
+                {useSensibilisationPoints?.formationCardLeft && useSensibilisationPoints.isBlocked && useSensibilisationPoints.sensibilisationPoints >= 3 && <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('goodFormation')} disabled={answered} title="Piocher la carte formation pour vous débloquer">3 points</button>}
+                {useSensibilisationPoints?.expertCardLeft && useSensibilisationPoints.sensibilisationPoints >= 5 && <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('expert')} disabled={answered} title="Piocher une carte experte aléatoirement">5 points</button>}
             </div>
             {createMessage && <p className={styles.message}>{createMessage}</p>}
         </div>
