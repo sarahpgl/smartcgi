@@ -23,9 +23,10 @@
 }
 
 .menuContainer {
-  height: 30%;
+  height:50%;
   width: 47%;
   position: relative;
+  top:60px;
   display: flex;
   flex-direction: column;
 

@@ -4,6 +4,8 @@
     background-color: transparent;
     color: black;
     width: 400px;
+    overflow-y: auto;
+    height: 100%;
 }
 .button{
     text-align: left;
