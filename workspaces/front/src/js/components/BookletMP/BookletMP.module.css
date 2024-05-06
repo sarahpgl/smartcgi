@@ -69,6 +69,10 @@
   background-color: #dddddd;
 }
 
+.table th:hover {
+  cursor: pointer;
+}
+
 .button {
   font-size: 12px;
   margin-left: 5px;
