@@ -282,6 +282,8 @@ export class Instance {
     }
 
   }
+}
+
 
   private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] } {
 
