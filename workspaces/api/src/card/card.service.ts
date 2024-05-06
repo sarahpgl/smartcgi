@@ -4,15 +4,13 @@ import { CsvCard } from "./card.type";
 import { Card as EntityCard } from "@app/entity/card";
 import { Expert_Card as EntityExpert } from "@app/entity/expert_card";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Entity, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { Best_Practice_Card as EntityBestPractice } from "@app/entity/best_practice_card";
 import { Bad_Practice_Card as EntityBadPractice } from "@app/entity/bad_practice_card";
 import { Training_Card as EntityTraining } from "@app/entity/training_card";
 import { Card_Content } from "@app/entity/card_content";
 import { Actor as EntityActor } from "@app/entity/actor";
-import { Practice_Card } from "@app/entity/practice_card";
 import { Card, Formation_Card, Best_Practice_Card, Bad_Practice_Card, Expert_Card } from "@shared/common/Cards";
-import { Best_Practices_Status } from "@app/entity/user_game";
 import { Actor } from "@shared/common/Cards";
 
 
@@ -39,7 +37,7 @@ export class CardService {
   async parseCsv(file: Express.Multer.File) {
     const csvData: CsvCard[] = [];
     // Parsing CSV file
-    const stream = parse(file.buffer.toString(), {
+    parse(file.buffer.toString(), {
       header: true,
       complete: results => {
         csvData.push(...results.data);

@@ -1,21 +1,14 @@
 import { Lobby } from '@app/game/lobby/lobby';
 import { ServerException } from '@app/game/server.exception';
 import { AuthenticatedSocket } from '@app/game/types';
-import { SECOND } from '@app/game/constants';
-import { Socket } from 'socket.io';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
-import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { ServerEvents } from '@shared/server/ServerEvents';
 import { Card, Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
 import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
-import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswer, PracticeAnswerType, SensibilisationQuestionAnswer, SensibilisationQuestion } from '@shared/common/Game';
+import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswerType, SensibilisationQuestionAnswer, SensibilisationQuestion } from '@shared/common/Game';
 import { DrawMode } from './types';
-import { Actor } from '@shared/common/Cards';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
-import { Question_Content } from '@app/entity/question_content';
 import { GameService } from '../game.service';
 
 export class Instance {
@@ -65,6 +58,7 @@ export class Instance {
   }
 
   public async triggerFinish(winnerId: string, winnerName: string): Promise<void> {
+    // TODO: Implement the save to Database
     // this.saveToDatabase(winnerId);
 
     this.cardDeck = await this.cardService.getDeck();
@@ -370,6 +364,9 @@ export class Instance {
   }
 
   private saveToDatabase(winnerId: string): void {
+    // NOTE: This isn't working yet;
+    // The idea is to save the game to the database and save the player's met
+    // to Green_IT_Booklet table 
     this.gameService.createGame(Number(winnerId));
   }
 

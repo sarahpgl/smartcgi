@@ -82,7 +82,12 @@ function App() {
 
 
             <Route path="/home" element={<Home />} />
-            <Route path="/game/report" element={<SummaryPage />} />
+            <Route path="/game/report" element={
+                <RequireAuth>
+                  <SummaryPage />
+                </RequireAuth>
+              }
+            />
             <Route path="/" element={<Navigate to="/register" />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/viewCards" element={<ViewCards />} />

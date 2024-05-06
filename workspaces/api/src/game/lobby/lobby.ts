@@ -7,7 +7,6 @@ import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { Card } from '@shared/common/Cards';
 import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
-import { CO2Quantity } from './types';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
 import { ServerException } from '../server.exception';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
