@@ -275,14 +275,12 @@ export class Instance {
     }
 
     // 4: Check if player has already answered a practice question
-    if (!playerState.canPlay && this.currentSensibilisationQuestion !== null) {
     if (!playerState.canPlay && this.currentSensibilisationQuestion === null) {
       this.lobby.dispatchPlayerPassed(playerState.playerName);
       this.transitionToNextTurn();
     }
 
   }
-}
 
 
   private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] } {
