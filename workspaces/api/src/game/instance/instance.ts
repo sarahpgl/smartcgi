@@ -186,7 +186,6 @@ export class Instance {
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.currentSensibilisationQuestion = null;
-      this.transitionToNextTurn();
       this.lobby.dispatchSensibilisationAnswered();
       this.lobby.dispatchGameState();
       if (!this.playerStates[this.currentPlayerId].canPlay) {
