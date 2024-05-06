@@ -65,7 +65,7 @@ export class Instance {
   }
 
   public triggerFinish(winnerId: string, winnerName: string): void {
-    this.saveToDatabase(winnerId);
+    // this.saveToDatabase(winnerId);
 
     Object.keys(this.playerStates).forEach((playerId) => {
       const gameReport = this.generateGameReport(playerId);

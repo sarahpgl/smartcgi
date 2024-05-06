@@ -66,10 +66,6 @@ export class Lobby {
     client.leave(this.id);
     client.gameData.lobby = null;
 
-    // If player leave then the game isn't worth to play anymore
-
-    // TODO: Notify other players that someone left
-
     this.dispatchLobbyState();
   }
 

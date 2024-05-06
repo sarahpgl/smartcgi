@@ -89,8 +89,6 @@ export class LobbyManager {
       if (lobbyLifetime > LOBBY_MAX_LIFETIME) {
         //TODO: Notify clients that lobby is closing
 
-        lobby.instance.triggerFinish(null, null);
-
         this.lobbies.delete(lobby.id);
       }
     }

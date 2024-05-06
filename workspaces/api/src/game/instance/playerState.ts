@@ -4,7 +4,6 @@ import { PlayerStateInterface, BestPracticeAnswer, BadPracticeAnswer, PracticeAn
 export class PlayerState implements PlayerStateInterface {
 
   public badPractice: Actor | null = null;
-  // TODO: Once sensibilisation module is implemented, set to false
   public canPlay: boolean = false;
   public cardsHistory: Card[] = [];
   public cardsInHand: Card[] = [];
