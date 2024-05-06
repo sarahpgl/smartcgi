@@ -64,19 +64,19 @@ const BookletStats: React.FC = () => {
             <label className={styles.label}><strong>Statistiques du jeu</strong></label><br />
             <p>
                 Nombre de parties jouées : <span className={styles.value}>
-                    {nb_played !== null && nb_played !== undefined ? nb_played : <i>0 (Erreur)</i>}
+                    {nb_played !== null && nb_played !== undefined ? nb_played : <i> (Erreur)</i>}
                 </span><br /><br />
                 Nombre de victoires : <span className={styles.value}>
-                    {nb_win !== null && nb_win !== undefined ? `${nb_win} (${percent_win.toFixed(2)}%)` : <i>0 (Erreur)</i>}
+                    {nb_win !== null && nb_win !== undefined ? `${nb_win} (${percent_win.toFixed(2)}%)` : <i> (Erreur)</i>}
                 </span><br /><br />
                 Total de CO2 économisé : <span className={styles.value}>
-                    {total_CO2 !== null && total_CO2 !== undefined ? `${total_CO2} T` : <i>0 (A implémenter)</i>}
+                    {total_CO2 !== null && total_CO2 !== undefined ? `${total_CO2} T` : <i> (A implémenter)</i>}
                 </span><br /><br />
                 Nombre de bonnes pratiques archivées dans le carnet : <span className={styles.value}>
-                    {nb_BP !== null && nb_BP !== undefined ? nb_BP : <i>0 (A implémenter)</i>}
+                    {nb_BP !== null && nb_BP !== undefined ? nb_BP : <i> (A implémenter)</i>}
                 </span><br /><br />
                 Nombre de mauvaises pratiques archivées dans le carnet : <span className={styles.value}>
-                    {nb_MP !== null && nb_MP !== undefined ? nb_MP : <i>0 (A implémenter)</i>}
+                    {nb_MP !== null && nb_MP !== undefined ? nb_MP : <i> (A implémenter)</i>}
                 </span><br /><br />
             </p>
         </div>
