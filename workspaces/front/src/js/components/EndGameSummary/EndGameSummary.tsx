@@ -3,16 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import styles from './EndGameSummary.module.css';
 import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCard";
 import BadPracticeCard from "@app/js/components/BadPracticeCard/BadPracticeCard";
+import { Card } from '@shared/common/Cards';
 
-const EndGameSummary: React.FC = () => {
-    const data = [
-        { type: 'BestPractice', id: '32', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50 },
-        { type: 'BestPractice', id: '32', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 25 },
-        { type: 'BestPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100 },
-        { type: 'BadPractice', id: '32', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { type: 'BadPractice', id: '32', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { type: 'BadPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-    ];
+const EndGameSummary: React.FC <{cards : Card[]}> = ({ cards }) =>  {
+    const data = cards;
 
     const [isVisible, setIsVisible] = useState(true);
     const navigate = useNavigate();

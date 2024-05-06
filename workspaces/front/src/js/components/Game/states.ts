@@ -21,3 +21,8 @@ export const CurrentPracticeQuestion = atom<ServerPayloads[ServerEvents.Practice
   key: 'CurrentPracticeQuestion',
   default: null,
 });
+
+export const CurrentGameReport = atom<ServerPayloads[ServerEvents.GameReport] | null>({
+  key: 'CurrentGameReport',
+  default: null,
+});

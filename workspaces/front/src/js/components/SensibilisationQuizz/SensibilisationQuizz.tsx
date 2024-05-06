@@ -22,7 +22,7 @@ const Quizz: React.FC = () => {
     if (tempsRestant > 0) {
       timer = setTimeout(() => {
         setTempsRestant(tempsRestant - 1);
-        console.log(tempsRestant);
+        //console.log(tempsRestant);
       }, 1000);
     } else {
       setTimeIsUp(true);
