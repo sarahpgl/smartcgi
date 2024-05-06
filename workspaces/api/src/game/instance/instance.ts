@@ -224,7 +224,7 @@ export class Instance {
         if(ExpertCards.length === 0){
           expertCardLeft = false;
         }
-        this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, playerState.clientInGameId, isBlocked, formationCardLeft, expertCardLeft);
+        this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
       }else{
         this.transitionToNextTurn('random');
       }
