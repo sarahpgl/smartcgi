@@ -71,6 +71,7 @@
 
 .table th:hover {
   cursor: pointer;
+  background-color: #e8e8e8;
 }
 
 .button {
