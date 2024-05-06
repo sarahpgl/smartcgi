@@ -9,6 +9,7 @@ import { ServerPayloads } from '@shared/server/ServerPayloads';
 import LobbyComponent from '../LobbyComponent/LobbyComponent';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { notifications } from '@mantine/notifications';
+import { Bad_Practice_Card } from '@shared/common/Cards';
 
 export default function GameManager() {
   const { sm, socket } = useSocketManager();
@@ -50,9 +51,36 @@ export default function GameManager() {
       naviguate('/game/');
     };
 
-    const onPracticeQuestion: Listener<ServerPayloads[ServerEvents.PracticeQuestion]> = (data) => {
-      console.log('Reception de la question de pratique', data);
-      setPracticeQuestion(data);
+    const onCardPlayed: Listener<ServerPayloads[ServerEvents.CardPlayed]> = (data) => {
+      let message = '';
+      if(data.discarded) {
+        message = `${data.playerName} discarded a ${data.card.cardType} card`;
+      }
+      else {
+        switch(data.card.cardType) {
+          case 'BadPractice':
+            message = `${data.playerName} played a Bad Practice card to ${gameState?.playerStates.find(p => p.clientInGameId === (data.card as Bad_Practice_Card).targetedPlayerId)?.playerName}`;
+            break;
+          case 'BestPractice':
+            message = `${data.playerName} played a Best Practice card`;
+            break;
+          case 'Expert':
+            message = `${data.playerName} played an Expert card and is now immuned to ${data.card.actor} bad pratices`;
+            break;
+          case 'Formation':
+            message = `${data.playerName} played a Formation card and has cured the ${data.card.actor} bad pratice`;
+            break;
+        }
+      }
+      
+      notifications.show({
+        title: 'Card played',
+        message,
+      })
+      if(data.card.cardType === 'BadPractice' || data.card.cardType === 'BestPractice') {
+        console.log('Reception de la question de pratique', data);
+        setPracticeQuestion(data);
+      }
     }
 
     const onGetSensibilisationQuestion: Listener<ServerPayloads[ServerEvents.SensibilisationQuestion]> = (data) => {
@@ -84,11 +112,6 @@ export default function GameManager() {
       naviguate('/game/report/');
     }
 
-    const onPlayCard: Listener<ServerPayloads[ServerEvents.CardPlayed]> = (data) => {
-      console.log('Reception  PlayCard', data);
-      //Notification a envoyé à ce moment 
-    }
-
 
     if (!socket.connected) {
       sm.connect();
@@ -97,7 +120,7 @@ export default function GameManager() {
     if (!sm.socket.hasListeners(ServerEvents.LobbyJoined)) sm.registerListener(ServerEvents.LobbyJoined, onLobbyJoined);
     if (!sm.socket.hasListeners(ServerEvents.GameState)) sm.registerListener(ServerEvents.GameState, onGameState);
     if (!sm.socket.hasListeners(ServerEvents.GameStart)) sm.registerListener(ServerEvents.GameStart, onGameStart);
-    if (!sm.socket.hasListeners(ServerEvents.PracticeQuestion)) sm.registerListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
+    if (!sm.socket.hasListeners(ServerEvents.CardPlayed)) sm.registerListener(ServerEvents.CardPlayed, onCardPlayed);
     if (!sm.socket.hasListeners(ServerEvents.PracticeAnswered)) sm.registerListener(ServerEvents.PracticeAnswered, onPracticeAnswered);
     if (!sm.socket.hasListeners(ServerEvents.SensibilisationQuestion)) sm.registerListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
     if (!sm.socket.hasListeners(ServerEvents.SensibilisationAnswered)) sm.registerListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
@@ -109,7 +132,7 @@ export default function GameManager() {
       sm.removeListener(ServerEvents.LobbyJoined, onLobbyJoined);
       sm.removeListener(ServerEvents.GameState, onGameState);
       sm.removeListener(ServerEvents.GameStart, onGameStart);
-      sm.removeListener(ServerEvents.PracticeQuestion, onPracticeQuestion);
+      sm.removeListener(ServerEvents.CardPlayed, onCardPlayed);
       sm.removeListener(ServerEvents.SensibilisationQuestion, onGetSensibilisationQuestion);
       sm.removeListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
       sm.removeListener(ServerEvents.PlayerPassed, onPlayerPast);

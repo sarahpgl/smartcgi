@@ -22,6 +22,8 @@ import { BestPracticeAnswerType } from '@shared/common/Game';
 import { Question_Content } from '@app/entity/question_content';
 import { SensibilisationQuestion } from '@shared/common/Game';
 
+
+
 @UsePipes(new WsValidationPipe())
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -34,7 +36,6 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(client: Socket, ...args: any[]): Promise<void> {
-    // TODO: Handle reconnection
     this.logger.log('Client connected', client.id);
     const authenticatedClient: AuthenticatedSocket = client as AuthenticatedSocket;
     authenticatedClient.gameData = {

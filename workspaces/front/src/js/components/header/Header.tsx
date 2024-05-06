@@ -5,6 +5,7 @@ import tonne_de_bonnes_pratiques from '../../images/1_tonne_de_bonnes_pratiques.
 import drapeau_fr from '@app/icons/drapeau_fr.webp';
 import drapeau_en from '@app/icons/drapeau_en.webp';
 import logout from '@app/icons/logout_icon.webp';
+import { notifications } from '@mantine/notifications';
 
 function Header() {
     const [langue, setLangue] = useState('fr');

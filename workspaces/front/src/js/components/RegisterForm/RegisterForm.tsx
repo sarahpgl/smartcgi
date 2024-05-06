@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../../CSS/App.css';
 //import styles from './RegisterForm.module.css';
 import styles from './RegisterForm.module.css';
+import { notifications } from '@mantine/notifications';
 
 
 const RegisterForm = ({ onSuccessfulRegistration }) => {
@@ -54,8 +55,14 @@ const RegisterForm = ({ onSuccessfulRegistration }) => {
         setOpenSnackbar(true);
       }
     } else {
+      notifications.show({
+        title: 'Inscription échouée',
+        message: 'Les mots de passe ne correspondent pas.',
+        color: 'transparent',
+        icon: '🚨',
+      });
       setErrorMessage("Les mots de passe ne correspondent pas.");
-      setOpenSnackbar(true);
+      setOpenSnackbar(false);
     }
   };
 

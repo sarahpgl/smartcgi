@@ -65,7 +65,7 @@ export class Instance {
   }
 
   public triggerFinish(winnerId: string, winnerName: string): void {
-    this.saveToDatabase(winnerId);
+    // this.saveToDatabase(winnerId);
 
     Object.keys(this.playerStates).forEach((playerId) => {
       const gameReport = this.generateGameReport(playerId);
@@ -85,12 +85,12 @@ export class Instance {
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c.id !== card.id);
     this.discardPile.push(card);
 
-    // On best or bad practice discard, ask the question
-    if (card.cardType === 'BestPractice' || card.cardType === 'BadPractice') {
-      this.answerCount = 0;
-      this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
+    // Dispatch a card has been discarded
+    this.answerCount = 0;
+    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId, playerState.playerName, true);
+    if (card.cardType === 'Expert' || card.cardType === 'Formation') {
+      this.transitionToNextTurn();
     }
-
   }
 
   public playCard(card: Card, client: AuthenticatedSocket): void {
@@ -114,6 +114,7 @@ export class Instance {
     playerState.cardsHistory.push(card);
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c.id !== card.id);
     this.answerCount = 0;
+    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId, playerState.playerName, false);
     switch (card.cardType) {
       case 'BestPractice':
         this.playBestPractice(card, playerState);
@@ -198,7 +199,6 @@ export class Instance {
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
-    this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
     this.lobby.dispatchGameState();
     if (playerState.co2Saved <= 0) {
       this.triggerFinish(playerState.clientInGameId, playerState.playerName);
@@ -213,7 +213,6 @@ export class Instance {
     if (playerState.badPractice == actor) {
       playerState.badPractice = null;
     }
-    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
   }
 
   private playBadPractice(card: Bad_Practice_Card, playerState: PlayerState) {
@@ -229,7 +228,6 @@ export class Instance {
         targetPlayerState.badPractice = card.actor;
         // Ask the question
         this.answerCount = 0;
-        this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
       } else {
         throw new ServerException(SocketExceptions.GameError, 'Player has the expert card associated');
       }
@@ -245,7 +243,6 @@ export class Instance {
     if (playerState.badPractice == actor) {
       playerState.badPractice = null;
     }
-    this.lobby.dispatchCardPlayed(card, playerState.clientInGameId);
   }
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
