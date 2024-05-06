@@ -27,7 +27,6 @@ export default function GameManager() {
   useEffect(() => {
     const onLobbyState: Listener<ServerPayloads[ServerEvents.LobbyState]> = async (data) => {
       if (!location.pathname.includes('/game')) {
-        //console.log('Reception du lobbyState', data);
         setLobbyState(data);
         if (!location.pathname.includes('/lobby')) {
           naviguate(`/lobby/${data.lobbyId}`);
@@ -36,17 +35,14 @@ export default function GameManager() {
     };
 
     const onGameState: Listener<ServerPayloads[ServerEvents.GameState]> = (data) => {
-      console.log('Reception du gameState', data);
       setGameState(data);
     };
 
     const onLobbyJoined: Listener<ServerPayloads[ServerEvents.LobbyJoined]> = (data) => {
-      console.log('Reception du lobbyJoined', data);
       localStorage.setItem('clientInGameId', data.clientInGameId);
     };
 
     const onGameStart: Listener<ServerPayloads[ServerEvents.GameStart]> = (data) => {
-      console.log('Reception du gameStart', data);
       setGameState(data.gameState);
       setSensibilisationQuestion(data.sensibilisationQuestion);
       naviguate('/game/');
@@ -79,18 +75,15 @@ export default function GameManager() {
         message,
       })
       if(data.card.cardType === 'BadPractice' || data.card.cardType === 'BestPractice') {
-        console.log('Reception de la question de pratique', data);
         setPracticeQuestion(data);
       }
     }
 
     const onGetSensibilisationQuestion: Listener<ServerPayloads[ServerEvents.SensibilisationQuestion]> = (data) => {
-      console.log('Reception de la question de sensibilisation', data);
       setSensibilisationQuestion(data);
     };
 
     const onSensibilisationAnswered: Listener<ServerPayloads[ServerEvents.SensibilisationAnswered]> = () => {
-      console.log('Reception SensibilisationAnswered');
       setSensibilisationQuestion(null);
     }
 
@@ -103,18 +96,15 @@ export default function GameManager() {
     }
 
     const onPracticeAnswered: Listener<ServerPayloads[ServerEvents.PracticeAnswered]> = () => {
-      console.log('Reception PracticeAnswered');
       setPracticeQuestion(null);
     }
 
     const onGameReport: Listener<ServerPayloads[ServerEvents.GameReport]> = (data) => {
-      console.log('Reception  GameReport', data);
       setGameReport(data);
       naviguate('/game/report/');
     }
 
     const onUseSensibilisationPoints : Listener<ServerPayloads[ServerEvents.UseSensibilisationPoints]> = (data) => {
-      console.log('Reception UseSensibilisationPoints', data);
       setUseSensibilisationPoints(data);
     }
 
