@@ -14,8 +14,8 @@ export class UsersController {
     }
 
     @Get('nbGames')
-    getNbGames(@Body() usersDto: UsersDto){
-        return this.usersService.getNbGames(usersDto.user_id);
+    getNbGames(@Body() usersTokenDto: UsersTokenDto){
+        return this.usersService.getNbGames(usersTokenDto.token);
     }
 
     @Get('nbVictories')
