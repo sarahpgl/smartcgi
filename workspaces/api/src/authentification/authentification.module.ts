@@ -9,16 +9,15 @@ import { BookletService } from '../booklet/booklet.service';
 import { Green_IT_Booklet } from '@app/entity/green_it_booklet';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@app/entity/user';
+import { forwardRef } from '@nestjs/common';
 
 @Module({
   imports: [
-    UsersModule,
+    forwardRef(() => UsersModule),
     BookletModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-    
-    
     }),
     TypeOrmModule.forFeature([Green_IT_Booklet, User]),
   ],

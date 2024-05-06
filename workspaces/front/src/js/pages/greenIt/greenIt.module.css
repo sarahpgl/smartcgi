@@ -5,10 +5,10 @@
 
 .cover{
   width: 90%;
-  height: 50%;
+  height: 60%;
   position: absolute;
   top: 25%;
-  left: 2%;
+  left: 5%;
   padding:40px;
   background-color: #9C968C;
   border-radius: 20px;
@@ -17,7 +17,7 @@
 
 .pageLeft {
   width: 45%;
-  height: 80%;
+  height: 98%;
   padding: 20px;
   position: absolute;
   top: 1%;
@@ -26,7 +26,7 @@
 
 .pageRight {
   width: 45%;
-  height: 80%;
+  height: 98%;
   padding: 20px;
   position: absolute;
   top: 1%;
@@ -57,7 +57,7 @@
 
 .label {
   position: fixed;
-  top: 125px;
+  top: 130px;
   left:0;
   right:0;
   text-align: center;

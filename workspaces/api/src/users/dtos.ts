@@ -4,3 +4,9 @@ export class UsersDto
     @IsString()
     user_id: string ;
 }
+
+export class UsersTokenDto
+{
+    @IsString()
+    token: string ;
+}

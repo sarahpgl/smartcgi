@@ -123,6 +123,7 @@
 }
 
 .opponentHistory {
+  transform: scale(0.85) translateX(-10px);
   cursor: pointer;
   position: absolute;
   left:125px;

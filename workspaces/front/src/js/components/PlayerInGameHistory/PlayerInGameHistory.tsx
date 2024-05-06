@@ -13,7 +13,7 @@ import { BaseCard } from '@shared/common/Cards';
 
 function PlayerInGameHistory({Cards} : {Cards: Card[]}) {
 
-    const defaultCards: BaseCard[] = [
+    const defaultCards: Card[] = [
         { cardType: 'EmpyCard','id': '1', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
         { cardType: 'EmpyCard','id': '2', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
         { cardType: 'EmpyCard','id': '3', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' }
@@ -35,6 +35,12 @@ function PlayerInGameHistory({Cards} : {Cards: Card[]}) {
                             title={card.title}
                             contents={card.contents}
                             carbon_loss={card.carbon_loss}
+                            network_gain={card.network_gain}
+                            memory_gain={card.memory_gain}
+                            cpu_gain={card.cpu_gain}
+                            storage_gain={card.storage_gain}
+                            actor={card.actor}
+                            difficulty={card.difficulty}
                         />
                     )}
                     {card.cardType === 'BadPractice' && (
@@ -43,7 +49,13 @@ function PlayerInGameHistory({Cards} : {Cards: Card[]}) {
                             id={card.id}
                             title={card.title}
                             contents={card.contents}
-                            targetedPlayer={card.targetedPlayer}
+                            targetedPlayerId={card.targetedPlayerId}
+                            actor={card.actor}
+                            network_gain={card.network_gain}
+                            memory_gain={card.memory_gain}
+                            cpu_gain={card.cpu_gain}
+                            storage_gain={card.storage_gain}
+                            difficulty={card.difficulty}
                         />
                     )}
                     {card.cardType === 'Expert' && (
@@ -62,10 +74,13 @@ function PlayerInGameHistory({Cards} : {Cards: Card[]}) {
                             actor={card.actor}
                             title={card.title}
                             contents={card.contents}
+                            linkToFormation={card.linkToFormation}
                         />
                     )}
-                    {card.cardType === 'EmpyCard' && (
+                    {card.cardType !== 'BestPractice' && card.cardType !== 'BadPractice' && card.cardType !== 'Expert' && card.cardType !== 'Formation' && (
+                        <>
                         <EmptyCard/>
+                        </>
                     )}
                 </div>
             ))}

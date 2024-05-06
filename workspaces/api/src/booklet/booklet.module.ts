@@ -10,14 +10,15 @@ import { UsersService } from '@app/users/users.service';
 import { User_Game } from '@app/entity/user_game';
 import { User } from '@app/entity/user';
 import { Game } from '@app/entity/game';
+import { forwardRef } from '@nestjs/common';
 
 @Module({
   imports : [
     
     TypeOrmModule.forFeature([Green_IT_Booklet, User, User_Game, Game]),
-    
+    forwardRef(() => UsersModule),
   ],
-  providers: [BookletService, UsersService],
+  providers: [BookletService],
   controllers: [BookletController]
 })
 export class BookletModule {}

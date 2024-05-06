@@ -4,11 +4,13 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { BookletService } from '../booklet/booklet.service';
+import { Inject, forwardRef } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
   private validTokens: Map<string, string> = new Map();
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private bookletService : BookletService,
     private jwtService: JwtService
@@ -89,6 +91,12 @@ export class AuthService {
       return { success: true };
     }
 
+  }
+
+  async getUserByToken (access_token: string): Promise<number>{
+    const mail = this.validTokens.get(access_token);
+    const user = await this.usersService.findOne(mail);
+    return user.id;
   }
 
 }
