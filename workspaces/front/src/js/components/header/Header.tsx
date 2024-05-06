@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './Header.css';
 import initiative_CGI from '../../images/initiative-CGI.png';
 import tonne_de_bonnes_pratiques from '../../images/1_tonne_de_bonnes_pratiques.png';
+
+import logoinsa from '@app/icons/insalyon.webp';
+
 import drapeau_fr from '@app/icons/drapeau_fr.webp';
 import drapeau_en from '@app/icons/drapeau_en.webp';
 import logout from '@app/icons/logout_icon.webp';
@@ -55,6 +58,7 @@ function Header() {
                 <img src={tonne_de_bonnes_pratiques} alt="1T_Bonnes_Pratiques" style={{ height: 150 }} />
             </div>
             <div className="right">
+                <img className="imginsa" src={logoinsa} alt="Logo_INSA" />
                 <img src={initiative_CGI} alt="Initiative_CGI" />
             </div>
         </header>

@@ -60,12 +60,24 @@
     vertical-align: middle;
 }
 
+.right {
+    display: flex;
+    flex-direction: column;
+}
 .right img {
     width: 250px;
     height: auto;
     margin-right: 30px;
     vertical-align: middle;
 }
+.right .imginsa{
+    width: 250px;
+    height: auto;
+    margin-right: 30px;
+    vertical-align: middle;
+    filter: grayscale(20%);
+}
+
 
 .language-container {
     display: flex;

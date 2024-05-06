@@ -62,7 +62,7 @@ function BadPracticeCard(card:Bad_Practice_Card) {
                 <div className={styles.actor}>
                     <p>Acteur</p>
                     <div className={styles.footericon}>
-                        <img src={actorIcon} alt="actorIcon" />
+                        <img src={memoryGain} alt="actorIcon" />
                         </div>
                 </div>
                 <div className={styles.component}>

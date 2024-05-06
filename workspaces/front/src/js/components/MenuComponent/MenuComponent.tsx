@@ -19,6 +19,9 @@ const MenuComponent = () => {
             <button className={styles.button} onClick={() => redirectToPage('/greenIt')}>Carnet Green IT</button>
             <button className={styles.button} onClick={() => redirectToPage('/rules')}>Règles du jeu</button>
             <button className={styles.button} onClick={() => redirectToPage('/viewCards')}>Visualiser les cartes</button>
+            <br/>
+            <br/>
+            <label className={styles.label} onClick={() => redirectToPage('/credits')}>Crédits</label>
         </div>
     );
 };
