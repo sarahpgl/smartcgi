@@ -4,6 +4,7 @@ import useSocketManager from '@app/js/hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { useRecoilState } from 'recoil';
 import { CurrentSensibilisationQuestion } from '../Game/states';
+import {notifications} from '@mantine/notifications';
 
 const Quizz: React.FC = () => {
   const { sm } = useSocketManager();
@@ -64,6 +65,11 @@ const Quizz: React.FC = () => {
     if (!quizzPlay) {
       if (sensibilisationQuestion?.answers.answer == answerIndex) {
         setResultMessage(`Bien joué, vous avez gagné un point de sensibilisation !`);
+        notifications.show({
+          message: 'Bien joué, vous avez gagné un point de sensibilisation !',
+          color: 'green',
+          autoClose: 4000,
+        })
       } else {
         setResultMessage(`Dommage, ce n’est pas la bonne réponse !`);
       }

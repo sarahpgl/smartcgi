@@ -15,6 +15,7 @@ import GreenIt from './js/pages/greenIt/greenIt'
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import PageTest from './js/pages/test/test'
 
 
@@ -31,7 +32,7 @@ function App() {
       <MantineProvider
       >
         <Notifications
-        position="bottom-right"
+        position="bottom-center"
         zIndex={1000000}
         / >
       <SocketManagerProvider>
