@@ -1,65 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from "@app/js/components/header/Header";
 import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCard";
 import BadPracticeCard from "@app/js/components/BadPracticeCard/BadPracticeCard";
 import FormationCard from "@app/js/components/FormationCard/FormationCard";
 import ExpertCard from "@app/js/components/ExpertCard/ExpertCard";
-import QuestionnaireBP from "@app/js/components/QuestionnaireBP/QuestionnaireBP";
-import QuestionnaireMP from "@app/js/components/QuestionnaireMP/QuestionnaireMP";
 import PracticeQuestion from "@app/js/components/PracticeQuestion/PracticeQuestion";
 import next from '@app/icons/next.webp';
 import closeIcon from '@app/icons/close.webp';
 import styles from './viewCards.module.css';
-import { Bad_Practice_Card, Best_Practice_Card, Difficulty, BaseCard } from '@shared/common/Cards';
 
 function ViewCards() {
-
-    const cards:BaseCard[] = [
-        { cardType: 'BestPractice', id: '32', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 4', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 200, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 5', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 6', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 25, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 7', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 8', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 9', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 10', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 11', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 12', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 13', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 25, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 14', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 15', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 16', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 17', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 25, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 18', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 19', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 20', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 21', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 25, actor: 'Architect' },
-        { cardType: 'BestPractice', id: '32', title: 'Carte 22', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 4', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 5', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 6', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 7', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 8', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 9', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 10', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'BadPractice', id: '35', title: 'Carte 11', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'Formation', id: '35', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'Formation', id: '35', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Developer' },
-        { cardType: 'Formation', id: '35', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'ProductOwner' },
-        { cardType: 'Expert', id: '35', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Architect' },
-        { cardType: 'Expert', id: '35', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'Developer' },
-        { cardType: 'Expert', id: '35', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50, actor: 'ProductOwner' },
-    ];
-
+    const [cards, setCards] = useState([]);
     const [startCardIndex, setStartCardIndex] = useState(0);
     const [selectedCard, setSelectedCard] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isQuestionnaireBPOpen, setIsQuestionnaireBPOpen] = useState(false);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/card/all-cards`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch card info');
+                }
+                const allCards = await response.json();
+                setCards(allCards);
+            } catch (error) {
+                console.error('Error fetching card info:', error.message);
+                throw error;
+            }
+        }
+        fetchData();
+    }, []);
 
     const nextPage = () => {
         if (startCardIndex + 14 < cards.length) {
