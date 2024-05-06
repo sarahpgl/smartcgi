@@ -14,10 +14,8 @@ import Tooltip from '../Tooltip/Tooltip';
 
 function PlayerStatus({ playerstate, me }) {
 
-    let name = "Pierre";
     let expert = playerstate.expertCards;
     let bp = playerstate.badPractice;
-    let co2 = playerstate.co2Saved;
     let sensibilisation = playerstate.sensibilisationPoints;
 
     let bpImageSrc = null;
