@@ -3,12 +3,11 @@ import { User } from '@app/entity/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-import { BookletService } from '@app/booklet/booklet.service';
-import { getConnection } from 'typeorm';
 import { error } from 'console';
 import { Game } from '@app/entity/game';
 import { User_Game } from '@app/entity/user_game';
+import { AuthService } from '@app/authentification/authentification.service';
+import { forwardRef, Inject } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +21,8 @@ export class UsersService {
         private user_game_repository: Repository<User_Game>,
         @InjectRepository(Game)
         private game_repository: Repository<Game>,
+        @Inject(forwardRef(() => AuthService))
+        private authService: AuthService
 
     ){}
 
@@ -62,9 +63,14 @@ export class UsersService {
 
   }
 
-  async getNbGames(user_id: number): Promise<{ nb_games: number }> {
+  async getNbGames(access_token: string): Promise<{ nb_games: number }> {
+    const user_id = await this.authService.getUserByToken(access_token);
     try {
-      const nb_games = await this.user_game_repository.count({ where: { user_id } });
+      const nb_games = await this.user_game_repository.count({
+        where: { 
+          user_id: user_id
+        } 
+    });
       return { nb_games };
     } catch (error) {
       throw new Error("Error while getting the number of games");
@@ -72,19 +78,22 @@ export class UsersService {
   }
 
   
-  async getVictories(user_id: number): Promise<{ nb_victories: number }> {
+  async getVictories(access_token: string): Promise<{ nb_victories: number }> {
+    const user_id = await this.authService.getUserByToken(access_token);
     try {
-        const nb_victories = await this.game_repository.count({
-            where: {
-                winner_id: user_id
-            }
-        });
-
-        return { nb_victories };
+      console.log(user_id);
+      const nb_victories = await this.game_repository.count({
+          where: {
+              winner_id: user_id,
+          }
+      });
+      console.log(nb_victories);
+      return { nb_victories };
     } catch (error) {
         throw new Error("Error while getting the number of victories");
     }
-}
+  }
+
 
 }
 

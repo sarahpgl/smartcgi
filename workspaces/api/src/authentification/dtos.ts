@@ -38,3 +38,9 @@ export class isConnectedDto
   @IsString()
   mail: string ;
 }
+
+export class getUserIdByTokenDto
+{
+  @IsString()
+  token: string ;
+}
