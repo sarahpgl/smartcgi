@@ -28,7 +28,7 @@ export class Instance {
 
   public gameStarted: boolean = false;
   private answerCount: number = 0;
-  private currentSensibilisationQuestion: SensibilisationQuestion
+  private currentSensibilisationQuestion: SensibilisationQuestion | null = null;
   private startingPlayerId: string;
 
   public cardService: CardService;
@@ -64,8 +64,7 @@ export class Instance {
     this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
-  public triggerFinish(winnerId : string, winnerName: string): void {
-    const nbPlayer = Object.keys(this.playerStates).length;
+  public triggerFinish(winnerId: string, winnerName: string): void {
     this.saveToDatabase(winnerId);
 
     Object.keys(this.playerStates).forEach((playerId) => {
@@ -91,7 +90,7 @@ export class Instance {
       this.answerCount = 0;
       this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
     }
-    
+
   }
 
   public playCard(card: Card, client: AuthenticatedSocket): void {
@@ -185,14 +184,9 @@ export class Instance {
       }
     }
     this.answerCount++;
-    if(this.answerCount === this.lobby.clients.size){
-      const currentPlayerId = this.currentPlayerId;
-      while (this.playerStates[this.currentPlayerId].canPlay === false){
-        this.transitionToNextTurn();
-        if(currentPlayerId === this.currentPlayerId){
-          break;
-        }
-      }
+    if (this.answerCount === this.lobby.clients.size) {
+      this.currentSensibilisationQuestion = null;
+      this.transitionToNextTurn();
       this.lobby.dispatchSensibilisationAnswered();
       this.lobby.dispatchGameState();
     }
@@ -204,7 +198,7 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchPracticeQuestion(card, playerState.clientInGameId, playerState.playerName);
     this.lobby.dispatchGameState();
-    if(playerState.co2Saved <= 0){
+    if (playerState.co2Saved <= 0) {
       this.triggerFinish(playerState.clientInGameId, playerState.playerName);
     }
   }
@@ -260,7 +254,7 @@ export class Instance {
 
   private async transitionToNextTurn() {
     // 0: Draw a card for the current player
-    if(this.playerStates[this.currentPlayerId].cardsInHand.length <= 6) {
+    if (this.playerStates[this.currentPlayerId].cardsInHand.length <= 6) {
       this.drawCard(this.playerStates[this.currentPlayerId]);
     }
     // 1: Change the current player
@@ -278,36 +272,36 @@ export class Instance {
     }
 
     // 4: Check if player has already answered a practice question
-    if( !playerState.canPlay){
+    if (!playerState.canPlay && this.currentSensibilisationQuestion !== null) {
       this.lobby.dispatchPlayerPassed(playerState.playerName);
       this.transitionToNextTurn();
     }
 
   }
 
-  private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] }  {
-    
+  private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] } {
+
     const myArchivedCards: Card[] = [];
     const bestPracticeAnswers = this.playerStates[clientInGameId].bestPracticeAnswers;
     for (const answer of bestPracticeAnswers) {
-        if(answer.answer === BestPracticeAnswerType.APPLICABLE){
-            const card = this.cardDeck.find((card) => card.id === answer.cardId);
-            if(!card){
-                throw new ServerException(SocketExceptions.GameError, 'Card not found');
-            }
-            myArchivedCards.push(card);
+      if (answer.answer === BestPracticeAnswerType.APPLICABLE) {
+        const card = this.cardDeck.find((card) => card.id === answer.cardId);
+        if (!card) {
+          throw new ServerException(SocketExceptions.GameError, 'Card not found');
         }
+        myArchivedCards.push(card);
+      }
     }
-    
+
     const badPracticeAnswers = this.playerStates[clientInGameId].badPracticeAnswers;
     for (const answer of badPracticeAnswers) {
-        if(answer.answer === BadPracticeAnswerType.TO_BE_BANNED){
-            const card = this.cardDeck.find((card) => card.id === answer.cardId);
-            if(!card){
-                throw new ServerException(SocketExceptions.GameError, 'Card not found');
-            }
-            myArchivedCards.push(card);
+      if (answer.answer === BadPracticeAnswerType.TO_BE_BANNED) {
+        const card = this.cardDeck.find((card) => card.id === answer.cardId);
+        if (!card) {
+          throw new ServerException(SocketExceptions.GameError, 'Card not found');
         }
+        myArchivedCards.push(card);
+      }
     }
 
     const mostPopularCards: Card[] = [];
@@ -316,34 +310,34 @@ export class Instance {
 
     const nbPlayer = Object.keys(this.playerStates).length;
     for (let init = 0; init < nbPlayer; init++) {
-        const historyBestPracticeByPlayer = this.playerStates[init].bestPracticeAnswers;
-        for (const answer of historyBestPracticeByPlayer) {
-            if(answer.answer === BestPracticeAnswerType.APPLICABLE){
-                const bestPracticeCard = this.cardDeck.find((bestPracticeCard) => bestPracticeCard.id === answer.cardId);
-                if(!bestPracticeCard){
-                    throw new ServerException(SocketExceptions.GameError, 'Card not found');
-                }
-                if (bestPracticeCard.id in popularBestPracticeCards){
-                    popularBestPracticeCards[bestPracticeCard.id] += 1;
-                } else {
-                    popularBestPracticeCards[bestPracticeCard.id] = 1;
-                }
-            }
+      const historyBestPracticeByPlayer = this.playerStates[init].bestPracticeAnswers;
+      for (const answer of historyBestPracticeByPlayer) {
+        if (answer.answer === BestPracticeAnswerType.APPLICABLE) {
+          const bestPracticeCard = this.cardDeck.find((bestPracticeCard) => bestPracticeCard.id === answer.cardId);
+          if (!bestPracticeCard) {
+            throw new ServerException(SocketExceptions.GameError, 'Card not found');
+          }
+          if (bestPracticeCard.id in popularBestPracticeCards) {
+            popularBestPracticeCards[bestPracticeCard.id] += 1;
+          } else {
+            popularBestPracticeCards[bestPracticeCard.id] = 1;
+          }
         }
-        const historyBadPracticeByPlayer = this.playerStates[init].badPracticeAnswers;
-        for (const answer of historyBadPracticeByPlayer) {
-            if(answer.answer === BadPracticeAnswerType.TO_BE_BANNED){
-                const badPracticeCard = this.cardDeck.find((badPracticeCard) => badPracticeCard.id === answer.cardId);
-                if(!badPracticeCard){
-                    throw new ServerException(SocketExceptions.GameError, 'Card not found');
-                }
-                if (badPracticeCard.id in popularBadPracticeCards){
-                    popularBadPracticeCards[badPracticeCard.id] += 1;
-                } else {
-                    popularBadPracticeCards[badPracticeCard.id] = 1;
-                }
-            }
+      }
+      const historyBadPracticeByPlayer = this.playerStates[init].badPracticeAnswers;
+      for (const answer of historyBadPracticeByPlayer) {
+        if (answer.answer === BadPracticeAnswerType.TO_BE_BANNED) {
+          const badPracticeCard = this.cardDeck.find((badPracticeCard) => badPracticeCard.id === answer.cardId);
+          if (!badPracticeCard) {
+            throw new ServerException(SocketExceptions.GameError, 'Card not found');
+          }
+          if (badPracticeCard.id in popularBadPracticeCards) {
+            popularBadPracticeCards[badPracticeCard.id] += 1;
+          } else {
+            popularBadPracticeCards[badPracticeCard.id] = 1;
+          }
         }
+      }
     }
 
     // Convertir les objets en tableaux pour les trier plus facilement
@@ -360,15 +354,15 @@ export class Instance {
 
     // Fusionner les tableaux obtenus en un seul tableau mostPopularCards
     for (const [id] of [...top3BestPracticeCards, ...top3BadPracticeCards]) {
-        const card = this.cardDeck.find(card => card.id === id);
-        if (card) {
-            mostPopularCards.push(card);
-        } else {
-            throw new ServerException(SocketExceptions.GameError, 'Card not found');
-        }
+      const card = this.cardDeck.find(card => card.id === id);
+      if (card) {
+        mostPopularCards.push(card);
+      } else {
+        throw new ServerException(SocketExceptions.GameError, 'Card not found');
+      }
     }
 
-    return {myArchivedCards, mostPopularCards};
+    return { myArchivedCards, mostPopularCards };
   }
 
   private saveToDatabase(winnerId: string): void {
