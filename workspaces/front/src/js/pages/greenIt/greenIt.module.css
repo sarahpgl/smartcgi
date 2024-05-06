@@ -16,7 +16,7 @@
 }
 
 .pageLeft {
-  width: 45%;
+  width: 50%;
   height: 98%;
   padding: 20px;
   position: absolute;
@@ -25,34 +25,34 @@
 }
 
 .pageRight {
-  width: 45%;
+  width: 50%;
   height: 98%;
   padding: 20px;
   position: absolute;
   top: 1%;
   left: 49%;
-  transition: transform 0.5s; /* Ajoute une transition pour l'animation */
-  transform-style: preserve-3d; /* Indique que les transformations s'appliquent à l'élément et à ses enfants en 3D */
-  transform-origin: left center; /* Point d'origine pour la rotation */
+  transition: transform 0.5s; 
+  transform-style: preserve-3d; 
+  transform-origin: left center;
 }
 
 .pageAnimation {
-  width: 45%;
+  width: 50%;
   height: 80%;
   padding: 20px;
   position: absolute;
   top: 1%;
   left: 49%;
-  transition: transform 0.5s, opacity 0.5s; /* Ajoute une transition pour l'animation */
-  transform-style: preserve-3d; /* Indique que les transformations s'appliquent à l'élément et à ses enfants en 3D */
-  transform-origin: left center; /* Point d'origine pour la rotation */
-  transform: rotateY(90deg); /* Initialisation de la rotation de 90 degrés */
-  opacity: 0; /* Initialisation de l'opacité à 0 */
+  transition: transform 0.5s, opacity 0.5s; 
+  transform-style: preserve-3d; 
+  transform-origin: left center; 
+  transform: rotateY(90deg); 
+  opacity: 0; 
 }
 
 .pageAnimation.visible {
-  transform: rotateY(0deg); /* Réinitialise la rotation à 0 degrés */
-  opacity: 1; /* Définit l'opacité à 1 */
+  transform: rotateY(0deg); 
+  opacity: 1; 
 }
 
 .label {
