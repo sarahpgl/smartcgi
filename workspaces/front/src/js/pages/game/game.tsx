@@ -10,19 +10,21 @@ import QuestionnaireBP from '@app/js/components/QuestionnaireBP/QuestionnaireBP'
 import QuestionnaireMP from '@app/js/components/QuestionnaireMP/QuestionnaireMP';
 import SensibilisationQuizz from '@app/js/components/SensibilisationQuizz/SensibilisationQuizz';
 import { useRecoilState } from 'recoil';
-import { CurrentSensibilisationQuestion, CurrentPracticeQuestion, CurrentGameState } from '@app/js/components/Game/states';
+import { CurrentSensibilisationQuestion, CurrentPracticeQuestion, CurrentGameState, CurrentUseSensibilisationPoints } from '@app/js/components/Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
 import { PlayerStateInterface } from '@shared/common/Game';
 import { Bad_Practice_Card } from '@shared/common/Cards';
 import { Difficulty } from '@shared/common/Cards';
 import PracticeQuestion from '@app/js/components/PracticeQuestion/PracticeQuestion';
+import QuestionnairePick from '@app/js/components/QuestionnairePick/QuestionnairePick';
 
 function GamePage() {
 
   const [gameState] = useRecoilState(CurrentGameState);
   const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
   const [practiceQuestion] = useRecoilState(CurrentPracticeQuestion);
+  const [useSensibilisationPoints] = useRecoilState(CurrentUseSensibilisationPoints);
   const { sm } = useSocketManager();
   const playerAbleToMP = ["Top"];
 
@@ -86,6 +88,12 @@ function GamePage() {
         <div className={styles.darkBg}/>
         <div className={styles.quizzPractice}><PracticeQuestion card={practiceQuestion.card} /></div>
         </>
+      ) : (
+        <>
+        </>
+      )}
+      {useSensibilisationPoints ? (
+        <div className={styles.quizzPractice}><QuestionnairePick number={useSensibilisationPoints.sensibilisationPoints} isBlocked={useSensibilisationPoints.isBlocked} displayFormationChoices={useSensibilisationPoints.formationCardLeft} displayExpertChoice={useSensibilisationPoints.expertCardLeft} /></div>
       ) : (
         <>
         </>

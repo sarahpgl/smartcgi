@@ -9,6 +9,8 @@ import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 import { CO2Quantity } from './types';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { SocketExceptions } from '@shared/server/SocketExceptions';
+import { ServerException } from '../server.exception';
 
 export class Lobby {
   public readonly id: string = v4();
@@ -161,6 +163,26 @@ export class Lobby {
       winnerName : winnerName,
     };
     this.emitToClient(this.clients.get(playerId), ServerEvents.GameReport, payload);
+  }
+
+  public emitUseSensibilisationPoints(sensibilisationPoints: number, clientInGameId: string, isBlocked: boolean, formationCardLeft: boolean, expertCardLeft: boolean): void{
+    const payload: ServerPayloads[ServerEvents.UseSensibilisationPoints] = {
+      sensibilisationPoints: sensibilisationPoints,
+      isBlocked: isBlocked,
+      formationCardLeft: formationCardLeft,
+      expertCardLeft: expertCardLeft
+    };
+    let emittedClient: AuthenticatedSocket | null = null;
+    this.clients.forEach((client) => {
+      if(client.gameData.clientInGameId === clientInGameId){
+        emittedClient = client;
+      } 
+    });
+    if (emittedClient === null) {
+      throw new ServerException(SocketExceptions.GameError, 'Client not found');
+    }
+    console.log('call emitToClient in the lobby function'); 
+    this.emitToClient(emittedClient, ServerEvents.UseSensibilisationPoints, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {

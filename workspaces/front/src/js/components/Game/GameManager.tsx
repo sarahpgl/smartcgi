@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Listener } from '@components/websocket/types';
 import { useRecoilState } from 'recoil';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { CurrentLobbyState, CurrentGameState, CurrentSensibilisationQuestion, CurrentPracticeQuestion, CurrentGameReport } from './states';
+import { CurrentLobbyState, CurrentGameState, CurrentSensibilisationQuestion, CurrentPracticeQuestion, CurrentUseSensibilisationPoints, CurrentGameReport } from './states';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import LobbyComponent from '../LobbyComponent/LobbyComponent';
@@ -22,6 +22,7 @@ export default function GameManager() {
   const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion)
   const [practiceQuestion, setPracticeQuestion] = useRecoilState(CurrentPracticeQuestion);
   const [gameReport, setGameReport] = useRecoilState(CurrentGameReport);
+  const [useSensibilisationPoints, setUseSensibilisationPoints] = useRecoilState(CurrentUseSensibilisationPoints);
 
   useEffect(() => {
     const onLobbyState: Listener<ServerPayloads[ServerEvents.LobbyState]> = async (data) => {
@@ -112,6 +113,12 @@ export default function GameManager() {
       naviguate('/game/report/');
     }
 
+    const onUseSensibilisationPoints : Listener<ServerPayloads[ServerEvents.UseSensibilisationPoints]> = (data) => {
+      console.log('Reception UseSensibilisationPoints', data);
+      setUseSensibilisationPoints(data);
+    }
+
+
 
     if (!socket.connected) {
       sm.connect();
@@ -126,6 +133,7 @@ export default function GameManager() {
     if (!sm.socket.hasListeners(ServerEvents.SensibilisationAnswered)) sm.registerListener(ServerEvents.SensibilisationAnswered, onSensibilisationAnswered);
     if (!sm.socket.hasListeners(ServerEvents.PlayerPassed)) sm.registerListener(ServerEvents.PlayerPassed, onPlayerPast);
     if (!sm.socket.hasListeners(ServerEvents.GameReport)) sm.registerListener(ServerEvents.GameReport, onGameReport);
+    if (!sm.socket.hasListeners(ServerEvents.UseSensibilisationPoints)) sm.registerListener(ServerEvents.UseSensibilisationPoints, onUseSensibilisationPoints);
 
     return () => {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);
@@ -138,6 +146,7 @@ export default function GameManager() {
       sm.removeListener(ServerEvents.PlayerPassed, onPlayerPast);
       sm.removeListener(ServerEvents.PracticeAnswered, onPracticeAnswered);
       sm.removeListener(ServerEvents.GameReport, onGameReport);
+      sm.removeListener(ServerEvents.UseSensibilisationPoints, onUseSensibilisationPoints);
     };
   }, []);
 
