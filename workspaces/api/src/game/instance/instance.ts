@@ -258,6 +258,7 @@ export class Instance {
   }
 
   public ReceptDrawModeChoice(drawMode: DrawMode) {
+    console.log('ReceptDrawModeChoice');
     this.transitionToNextTurn(drawMode);
   }
 
