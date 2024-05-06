@@ -91,6 +91,7 @@
 
 .navigationButtons img:hover:not(.disabled) {
   opacity: 0.5; 
+  cursor: pointer;
 }
 
 .navigationButtons img.disabled {
@@ -109,9 +110,5 @@
   position: fixed;
   top: 90%;
   left: 95%;
-}
-
-.navigationButtons img:hover{
-  cursor: pointer;
 }
 
