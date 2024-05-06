@@ -96,17 +96,7 @@ export class Lobby {
 
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
   }
-
-  public dispatchPracticeQuestion(card: Card, playerId: string, playerName: string): void {
-    const payload: ServerPayloads[ServerEvents.PracticeQuestion] = {
-      playerId,
-      playerName,
-      card: card,
-    };
-
-    this.dispatchToLobby(ServerEvents.PracticeQuestion, payload);
-  }
-
+  
   public dispatchSensibilisationQuestion(question: SensibilisationQuestion): void {
     const payload: ServerPayloads[ServerEvents.SensibilisationQuestion] = {
       question_id : question.question_id,
@@ -143,16 +133,13 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.GameStart, payload);
   }
 
-  public dispatchCardPlayed(card: Card, playerId: string): void {
+  public dispatchCardPlayed(card: Card, playerId: string, playerName: string, discarded: boolean = false): void {
     const payload: ServerPayloads[ServerEvents.CardPlayed] = {
       playerId,
-      cardType: card.cardType,
-      gameState: {
-        currentPlayerId: this.instance.currentPlayerId,
-        playerStates: Object.values(this.instance.playerStates),
-        discardPile: this.instance.discardPile,
-      },
-    };
+      playerName,
+      card,
+      discarded
+   };
     this.dispatchToLobby(ServerEvents.CardPlayed, payload);
   }
 

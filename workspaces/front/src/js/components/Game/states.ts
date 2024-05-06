@@ -17,7 +17,7 @@ export const CurrentSensibilisationQuestion = atom<ServerPayloads[ServerEvents.S
   default: null,
 });
 
-export const CurrentPracticeQuestion = atom<ServerPayloads[ServerEvents.PracticeQuestion] | null>({
+export const CurrentPracticeQuestion = atom<ServerPayloads[ServerEvents.CardPlayed] | null>({
   key: 'CurrentPracticeQuestion',
   default: null,
 });

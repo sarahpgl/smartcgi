@@ -27,20 +27,13 @@ export type ServerPayloads = {
 
   [ServerEvents.GameState]: GameState;
 
-
-
-  [ServerEvents.PracticeQuestion]: {
-    playerId: string;
-    playerName: string;
-    card: Card;
-  };
-
   [ServerEvents.PracticeAnswered]: {};
 
   [ServerEvents.CardPlayed]: {
     playerId: string;
-    cardType: CardType;
-    gameState: GameState;
+    playerName: string;
+    card: Card;
+    discarded: boolean;
   };
   
   [ServerEvents.SensibilisationQuestion] : {
