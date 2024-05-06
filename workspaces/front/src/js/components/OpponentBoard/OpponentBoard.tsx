@@ -8,6 +8,7 @@ import MPLT from '../../images/MP_lead_tech.webp';
 import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCard";
 import styles from './OpponentBoard.module.css';
 import userIcon from '../../../icons/user_icon.webp';
+import lockerIcon from '../../../icons/locked.webp';
 import PlayerStatus from '../PlayerStatus/PlayerStatus';
 import { PlayerStateInterface } from '@shared/common/Game';
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
@@ -44,8 +45,11 @@ function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterf
             <div className={styles.nameContainer}> </div>
             <div className={`${styles.container} ${myTurn ? styles.containerMyTurn : ''}`}>
                 <img src={userIcon} alt="user icon" className={`${styles.userIcon} ${myTurn ? styles.userIconMyTurn : ''}`} />
+                {playerState.canPlay===false &&
+                    <img src={lockerIcon} alt="locker icon" className={`${styles.lockerIcon} ${myTurn ? styles.lockerIconMyTurn : ''}`} />
+                }       
                 <label className={`${styles.labelname} ${myTurn ? styles.labelnameMyTurn : ''}`}>{playerState.playerName}</label>
-
+                
                 <div className={styles.container2}>
                     <PlayerStatus playerstate={playerState} me={0} />
                 </div>

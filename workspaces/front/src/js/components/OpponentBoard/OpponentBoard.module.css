@@ -60,14 +60,14 @@
 
 .labelname {
   position: absolute;
-  left:60px;
+  left:70px;
   white-space: nowrap; /* Prevent text from wrapping to the next line */
   text-align: left;
   color: #1f1f1f;
   margin: 0px;
-  font-family: "Inria Sans", sans-serif;
+  font-family: 'Inria';
   font-size: 20px;
-  margin-top: -37px;
+  margin-top: -42px;
   align-self: flex-start;
 }
 .labelnameMyTurn {
@@ -109,6 +109,34 @@
   position: relative;
   align-self: flex-start;
   filter: drop-shadow(0 0 5px rgba(19, 9, 90, 0.8));
+}
+
+.lockerIcon{
+  height: 20px;
+  text-align: left;
+  color: #1f1f1f;
+  margin: 0px;
+  font-size: 15px;
+  margin-top: -32px;
+  margin-left: 10px;
+  margin-right: -10px;
+  position: relative;
+  align-self: flex-start;
+  right:290px;
+}
+
+.lockerIconMyTurn{
+  height: 25px;
+  text-align: left;
+  color: #1f1f1f;
+  margin: 0px;
+  font-size: 15px;
+  margin-top: -48px;
+  margin-left: 10px;
+  margin-right: -10px;
+  position: relative;
+  align-self: flex-start;
+  right:290px;
 }
 
 

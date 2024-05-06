@@ -5,8 +5,9 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { useRecoilState } from 'recoil';
 import { CurrentSensibilisationQuestion } from '../Game/states';
 import {notifications} from '@mantine/notifications';
+import { PlayerStateInterface } from '@shared/common/Game';
 
-const Quizz: React.FC = () => {
+function Quizz({ playerState }: { playerState: PlayerStateInterface }) {
   const { sm } = useSocketManager();
   const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
   const [resultMessage, setResultMessage] = useState("");
@@ -14,6 +15,8 @@ const Quizz: React.FC = () => {
   const [quizzPlay, setQuizzPlay] = useState(false);
   const [tempsRestant, setTempsRestant] = useState(15);
   const [timeIsUp, setTimeIsUp] = useState(false);
+
+  let canPlay=playerState.canPlay;
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -64,12 +67,22 @@ const Quizz: React.FC = () => {
 
     if (!quizzPlay) {
       if (sensibilisationQuestion?.answers.answer == answerIndex) {
+        if(canPlay) {
         setResultMessage(`Bien joué, vous avez gagné un point de sensibilisation !`);
         notifications.show({
-          message: 'Bien joué, vous avez gagné un point de sensibilisation !',
+          message: 'Bien joué vous avez gagné un point de sensibilisation!',
           color: 'green',
           autoClose: 4000,
         })
+        } else {
+          setResultMessage(`Bien joué, vous pouvez maintenant jouer !`);
+          notifications.show({
+            message: 'Bien joué, vous pouvez maintenant jouer !',
+            color: 'green',
+            autoClose: 4000,
+          })
+        }
+        
       } else {
         setResultMessage(`Dommage, ce n’est pas la bonne réponse !`);
       }

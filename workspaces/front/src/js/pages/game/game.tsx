@@ -73,13 +73,19 @@ function GamePage() {
     <div className={styles.page}>
       <Header />
       {sensibilisationQuestion ? (
-        <div className={styles.quizzSensibilisation}><SensibilisationQuizz/></div>
+        <>
+        <div className={styles.darkBg}/>
+        <div className={styles.quizzSensibilisation}><SensibilisationQuizz playerState={gameState?.playerStates.find((playerState)=>playerState.clientInGameId === localStorage.getItem('clientInGameId'))!} /></div>
+        </>
       ) : (
         <>
         </>
       )}
       {practiceQuestion ? (
+        <>
+        <div className={styles.darkBg}/>
         <div className={styles.quizzPractice}><PracticeQuestion card={practiceQuestion.card} /></div>
+        </>
       ) : (
         <>
         </>

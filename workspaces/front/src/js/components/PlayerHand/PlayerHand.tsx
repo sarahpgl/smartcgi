@@ -51,9 +51,7 @@ function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
     };
 
     const handleCardLeave = (cardType: string) => {
-        if (typeSelected !== "BadPractice") {
             setSelectedCard(null);
-        }
     };
 
     const handlePlayCard = (card: Card) => {
