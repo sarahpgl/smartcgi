@@ -89,7 +89,7 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId, playerState.playerName, true);
     if (card.cardType === 'Expert' || card.cardType === 'Formation') {
-      this.transitionToNextTurn();
+      this.transitionToNextTurn('random');
     }
   }
 
@@ -193,8 +193,7 @@ export class Instance {
         if(ExpertCards.length === 0){
           expertCardLeft = false;
         }
-        console.log('call emitUseSensibilisationPoints after best practice answer');
-        this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, playerState.clientInGameId, isBlocked, formationCardLeft, expertCardLeft);
+        this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
       }else{
         this.transitionToNextTurn('random');
       }
@@ -258,7 +257,6 @@ export class Instance {
   }
 
   public ReceptDrawModeChoice(drawMode: DrawMode) {
-    console.log('ReceptDrawModeChoice');
     this.transitionToNextTurn(drawMode);
   }
 
@@ -481,5 +479,6 @@ export class Instance {
   private saveToDatabase(winnerId: string): void {
     this.gameService.createGame(Number(winnerId));
   }
+
 
 }

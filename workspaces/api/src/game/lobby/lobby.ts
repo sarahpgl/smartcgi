@@ -181,7 +181,7 @@ export class Lobby {
     if (emittedClient === null) {
       throw new ServerException(SocketExceptions.GameError, 'Client not found');
     }
-    console.log('call emitToClient in the lobby function'); 
+
     this.emitToClient(emittedClient, ServerEvents.UseSensibilisationPoints, payload);
   }
 
