@@ -80,3 +80,20 @@
     margin: 0;
     z-index: 10;
   }
+
+  .buttonMenu{
+    width: 190px;
+    position: fixed;
+    bottom:50px;
+    right:45%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: #1f1f1f;
+    margin: 4px;
+    font-size: 20px;
+    margin-top: 0px;
+    font-family: 'Inria';  
+    margin: 0;
+    z-index: 10;
+  }

@@ -21,6 +21,7 @@ function SummaryPage() {
                 <div className={styles.container}>
                     <EndGameSummary cards={gameReport.mostPopularCards} />
                     <MyEndGameSummary cards={gameReport.myArchivedCards} />
+                    <button className={styles.buttonMenu} onClick={() => window.location.href = "/menu"}>Retour au menu</button>
                 </div>
             ) : (
                 <></>
