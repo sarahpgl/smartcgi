@@ -9,6 +9,8 @@ import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 import { CO2Quantity } from './types';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
+import { ServerException } from '../server.exception';
+import { SocketExceptions } from '@shared/server/SocketExceptions';
 
 export class Lobby {
   public readonly id: string = v4();
@@ -154,13 +156,22 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.PracticeAnswered, {});
   }
 
-  public emitGameReport(gameReport: { myArchivedCards: Card[], mostPopularCards: Card[] } , playerId: string, winnerName: string): void{
+  public emitGameReport(gameReport: { myArchivedCards: Card[], mostPopularCards: Card[] } , clientInGameId: string, winnerName: string): void{
     const payload: ServerPayloads[ServerEvents.GameReport] = {
       mostPopularCards : gameReport.mostPopularCards,
       myArchivedCards : gameReport.myArchivedCards,
       winnerName : winnerName,
     };
-    this.emitToClient(this.clients.get(playerId), ServerEvents.GameReport, payload);
+    let emittedClient: AuthenticatedSocket | null = null;
+    this.clients.forEach((client) => {
+      if(client.gameData.clientInGameId === clientInGameId){
+        emittedClient = client;
+      } 
+    });
+    if (emittedClient === null) {
+      throw new ServerException(SocketExceptions.GameError, 'Client not found');
+    }
+    this.emitToClient(emittedClient, ServerEvents.GameReport, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {

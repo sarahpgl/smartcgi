@@ -64,12 +64,14 @@ export class Instance {
     this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
-  public triggerFinish(winnerId: string, winnerName: string): void {
+  public async triggerFinish(winnerId: string, winnerName: string): Promise<void> {
     // this.saveToDatabase(winnerId);
 
+    this.cardDeck = await this.cardService.getDeck();
+    const mostPopularCards: Card[] = this.generateGeneralGameReport();
     Object.keys(this.playerStates).forEach((playerId) => {
-      const gameReport = this.generateGameReport(playerId);
-      this.lobby.emitGameReport(gameReport, playerId, winnerName);
+      const myArchivedCards = this.generatePersonalGameReport(playerId);
+      this.lobby.emitGameReport({ myArchivedCards, mostPopularCards }, playerId, winnerName);
     });
 
   }
@@ -278,9 +280,7 @@ export class Instance {
 
   }
 
-
-  private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] } {
-
+  private generatePersonalGameReport(clientInGameId: string): Card[] {
     const myArchivedCards: Card[] = [];
     const bestPracticeAnswers = this.playerStates[clientInGameId].bestPracticeAnswers;
     for (const answer of bestPracticeAnswers) {
@@ -303,14 +303,18 @@ export class Instance {
         myArchivedCards.push(card);
       }
     }
+    return myArchivedCards;
+  }
+
+  private generateGeneralGameReport(): Card[] {
 
     const mostPopularCards: Card[] = [];
-    const popularBestPracticeCards = {};
-    const popularBadPracticeCards = {};
+    const popularBestPracticeCards: { [key: string]: number } = {};
+    const popularBadPracticeCards: { [key: string]: number } = {};
 
-    const nbPlayer = Object.keys(this.playerStates).length;
-    for (let init = 0; init < nbPlayer; init++) {
-      const historyBestPracticeByPlayer = this.playerStates[init].bestPracticeAnswers;
+    const playerIds = Object.keys(this.playerStates);
+    for (let init = 0; init < playerIds.length; init++) {
+      const historyBestPracticeByPlayer = this.playerStates[playerIds[init]].bestPracticeAnswers;
       for (const answer of historyBestPracticeByPlayer) {
         if (answer.answer === BestPracticeAnswerType.APPLICABLE) {
           const bestPracticeCard = this.cardDeck.find((bestPracticeCard) => bestPracticeCard.id === answer.cardId);
@@ -324,7 +328,7 @@ export class Instance {
           }
         }
       }
-      const historyBadPracticeByPlayer = this.playerStates[init].badPracticeAnswers;
+      const historyBadPracticeByPlayer = this.playerStates[playerIds[init]].badPracticeAnswers;
       for (const answer of historyBadPracticeByPlayer) {
         if (answer.answer === BadPracticeAnswerType.TO_BE_BANNED) {
           const badPracticeCard = this.cardDeck.find((badPracticeCard) => badPracticeCard.id === answer.cardId);
@@ -362,7 +366,7 @@ export class Instance {
       }
     }
 
-    return { myArchivedCards, mostPopularCards };
+    return mostPopularCards;
   }
 
   private saveToDatabase(winnerId: string): void {
