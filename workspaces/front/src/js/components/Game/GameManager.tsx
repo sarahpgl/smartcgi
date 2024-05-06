@@ -84,6 +84,11 @@ export default function GameManager() {
       naviguate('/game/report/');
     }
 
+    const onPlayCard: Listener<ServerPayloads[ServerEvents.CardPlayed]> = (data) => {
+      console.log('Reception  PlayCard', data);
+      //Notification a envoyé à ce moment 
+    }
+
 
     if (!socket.connected) {
       sm.connect();

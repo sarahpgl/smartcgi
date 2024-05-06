@@ -26,3 +26,8 @@ export const CurrentGameReport = atom<ServerPayloads[ServerEvents.GameReport] | 
   key: 'CurrentGameReport',
   default: null,
 });
+
+export const CurrentPlayCard = atom<ServerPayloads[ServerEvents.CardPlayed] | null>({
+  key: 'CurrentPlayCard',
+  default: null,
+});
