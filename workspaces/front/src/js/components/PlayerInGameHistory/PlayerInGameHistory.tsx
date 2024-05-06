@@ -6,22 +6,22 @@ import BestPracticeCard from '@app/js/components/BestPracticeCard/BestPracticeCa
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
+import EmptyCard from '../EmptyCard/EmptyCard';
+import { Card } from '@shared/common/Cards';
 
 import { BaseCard } from '@shared/common/Cards';
 
-function PlayerInGameHistory(Cards) {
+function PlayerInGameHistory({Cards} : {Cards: Card[]}) {
 
-    let cards2: BaseCard[] = [
-        { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss : 150 },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
-    ];   
+    const defaultCards: Card[] = [
+        { cardType: 'EmpyCard','id': '1', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '2', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '3', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' }
+    ];
     
-    let cards = cards2;
-    if(Cards.length > 0){
-        cards = Cards;
-    }
+    const lastThreeCards = Cards.slice(-3);
+
+    const cards = [...defaultCards.slice(0, 3 - lastThreeCards.length),...lastThreeCards];
 
 
     return (
@@ -35,6 +35,12 @@ function PlayerInGameHistory(Cards) {
                             title={card.title}
                             contents={card.contents}
                             carbon_loss={card.carbon_loss}
+                            network_gain={card.network_gain}
+                            memory_gain={card.memory_gain}
+                            cpu_gain={card.cpu_gain}
+                            storage_gain={card.storage_gain}
+                            actor={card.actor}
+                            difficulty={card.difficulty}
                         />
                     )}
                     {card.cardType === 'BadPractice' && (
@@ -43,7 +49,13 @@ function PlayerInGameHistory(Cards) {
                             id={card.id}
                             title={card.title}
                             contents={card.contents}
-                            targetedPlayer={card.targetedPlayer}
+                            targetedPlayerId={card.targetedPlayerId}
+                            actor={card.actor}
+                            network_gain={card.network_gain}
+                            memory_gain={card.memory_gain}
+                            cpu_gain={card.cpu_gain}
+                            storage_gain={card.storage_gain}
+                            difficulty={card.difficulty}
                         />
                     )}
                     {card.cardType === 'Expert' && (
@@ -62,7 +74,13 @@ function PlayerInGameHistory(Cards) {
                             actor={card.actor}
                             title={card.title}
                             contents={card.contents}
+                            linkToFormation={card.linkToFormation}
                         />
+                    )}
+                    {card.cardType !== 'BestPractice' && card.cardType !== 'BadPractice' && card.cardType !== 'Expert' && card.cardType !== 'Formation' && (
+                        <>
+                        <EmptyCard/>
+                        </>
                     )}
                 </div>
             ))}

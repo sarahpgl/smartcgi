@@ -22,7 +22,7 @@ function ExpertCard(card:Expert_Card) {
                 <div className={styles.icon}>
                     <img src={card.actor === 'Developer' ? iconExpertDev : card.actor === 'Architect' ? iconExpertLeadTech : card.actor === 'ProductOwner' ? iconExpertProductOwner : iconExpertDev} alt="iconFormation" />
                 </div>
-                <div>
+                <div style={{marginBottom: "15px"}}>
                 <h2>Expert {card.actor==="Developer" ? "Développeur" : card.actor==="Architect" ? "Architecte" : card.actor==="ProductOwner" ? "Product Owner" : " inconnu"}</h2>
                 <h3>{card.actor==="Developer" ? "artisan écoresponsable" : card.actor==="Architect" ? "logiciel écoresponsable" : card.actor==="ProductOwner" ? "écoresponsable" : "inconnu écoresponsable"}</h3>
                 </div>

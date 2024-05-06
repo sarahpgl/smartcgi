@@ -1,4 +1,5 @@
-import { PracticeAnswerType, SensibilisationQuestionAnswer } from '@shared/common/Game';
+import { PracticeAnswer, SensibilisationQuestionAnswer } from '@shared/common/Game';
+import { CardType } from '@shared/common/Cards';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 export class LobbyCreateDto {
   @IsString()
@@ -30,7 +31,9 @@ export class PracticeAnswerDto {
   cardId: string;
 
   @IsString()
-  answer: PracticeAnswerType;
+  answer: PracticeAnswer;
+
+  cardType: CardType;
 }
 
 
@@ -38,8 +41,7 @@ export class SensibilisationAnswerDto {
   @IsNumber()
   questionId: number;
 
-  @IsString()
-  answer: SensibilisationQuestionAnswer;
+  answer: SensibilisationQuestionAnswer | null;
 }
 
 export class ClientReconnectDto {
@@ -53,3 +55,11 @@ export class ClientReconnectDto {
   @IsNumber()
   lastMessageReceived: number;
 }
+
+export class CreateGameDto{
+  @IsNumber()
+  winnerId: number;
+
+}
+
+

@@ -14,7 +14,8 @@ import { Question_Content } from '@app/entity/question_content';
     TypeOrmModule.forFeature([Question_Content])
   ],
   controllers: [SensibilisationController, SensibilisationController],
-  providers: [SensibilisationService]
+  providers: [SensibilisationService],
+  exports: [SensibilisationService],
   
 })
 export class SensibilisationModule {}

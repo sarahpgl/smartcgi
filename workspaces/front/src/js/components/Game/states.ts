@@ -11,3 +11,23 @@ export const CurrentGameState = atom<ServerPayloads[ServerEvents.GameState] | nu
   key: 'CurrentGameState',
   default: null,
 });
+
+export const CurrentSensibilisationQuestion = atom<ServerPayloads[ServerEvents.SensibilisationQuestion] | null>({
+  key: 'CurrentSensibilisationQuestion',
+  default: null,
+});
+
+export const CurrentPracticeQuestion = atom<ServerPayloads[ServerEvents.PracticeQuestion] | null>({
+  key: 'CurrentPracticeQuestion',
+  default: null,
+});
+
+export const CurrentGameReport = atom<ServerPayloads[ServerEvents.GameReport] | null>({
+  key: 'CurrentGameReport',
+  default: null,
+});
+
+export const CurrentPlayCard = atom<ServerPayloads[ServerEvents.CardPlayed] | null>({
+  key: 'CurrentPlayCard',
+  default: null,
+});

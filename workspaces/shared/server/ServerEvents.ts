@@ -9,8 +9,11 @@ export enum ServerEvents {
   // Game
   GameStart = 'server.game.start',
   GameState = 'server.game.state',
-  SensibilisationQuestion = 'server.game.sensibilisation_question',
   PracticeQuestion = 'server.game.practice_question',
+  PracticeAnswered = 'server.game.practice_answered',
   CardPlayed = 'server.game.card_played',
-  GetSensibilisationQuestion ='server.game.get_sensibilisation_question',
+  SensibilisationQuestion = 'server.game.sensibilisation_question',
+  SensibilisationAnswered = 'server.game.sensibilisation_answered',
+  PlayerPassed = 'server.game.player_passed',
+  GameReport = 'server.game.game_report',
 }

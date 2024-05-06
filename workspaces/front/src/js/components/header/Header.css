@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 80px;
+    height: 120px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,7 +19,7 @@
     align-items: center;
 }
 .left{
-    margin-top: 15px;
+    margin-top: -15px;
     display: flex;
     justify-content: center;
 }
@@ -37,9 +37,14 @@
 .logout{
     height: 60px;
     margin-right: 30px;
+    rotate: 180deg;
 }
 .logout:hover{
+    transition: 0.1s;
     cursor: pointer;
+    filter:brightness(0) invert(0.5);
+    transform: scale(0.9);
+
 }
 
 .center {

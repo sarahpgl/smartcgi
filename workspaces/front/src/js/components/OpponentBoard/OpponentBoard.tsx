@@ -8,66 +8,55 @@ import MPLT from '../../images/MP_lead_tech.webp';
 import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCard";
 import styles from './OpponentBoard.module.css';
 import userIcon from '../../../icons/user_icon.webp';
+import lockerIcon from '../../../icons/locked.webp';
 import PlayerStatus from '../PlayerStatus/PlayerStatus';
 import { PlayerStateInterface } from '@shared/common/Game';
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import ExpertCard from '../ExpertCard/ExpertCard';
 import FormationCard from '../FormationCard/FormationCard';
+import EmptyCard from '../EmptyCard/EmptyCard';
+import OpponentHistory from '../CardsHistory/CardsHistory';
+import CardsHistory from '../CardsHistory/CardsHistory';
 
-function OpponentBoard({ playerState }: { playerState: PlayerStateInterface }) {
+function OpponentBoard({ playerState, myTurn }: { playerState: PlayerStateInterface , myTurn: boolean}) {
     //console.log('PlayerState dans oponnentBoard', playerState);
 
-    const data = {
-        name: "Jean",
-        kg: "900",
-        points: "3",
-        expert: ["Developer", "ProductOwner", "Architect"],
-        MP: "Developer"
-    };
+    const [historyDisplay, setHistoryDisplay] = useState(false);
 
-    let player: PlayerStateInterface = {
-        co2Saved: 900,
-        sensibilisationPoints: 3,
-        expertCards: ["Developer", "ProductOwner", "Architect"],
-        badPractice: "Developer",
-        playerName: "Zizi",
-        cardsInHand: [],
-        practiceAnswers: [],
-        playerId: '',
-        canPlay: false,
-        cardsHistory: []
-    };
-
-    //const lastThreeCards = playerState.cardsHistory.slice(-3);
-    const lastThreeCards: BaseCard[] = [
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
-    ];
+    const lastThreeCards = playerState.cardsHistory.slice(-3);
 
 
     // Cartes par défaut
     const defaultCards: BaseCard[] = [
-        { cardType: 'BadPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'BestPractice', id: '32', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 150 },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'VIDE', contents: 'blablabla blabal blabal' }
+        { cardType: 'EmpyCard','id': '1', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '2', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
+        { cardType: 'EmpyCard','id': '3', title: 'VIDE', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' }
     ];
 
     const cards = [...defaultCards.slice(0, 3 - lastThreeCards.length),...lastThreeCards];
 
+    const handleHistoryClick = () => {
+        setHistoryDisplay(true);
+    }
     
 
     return (
         <div className={styles.opponentBoard}>
             <div className={styles.nameContainer}> </div>
-            <div className={styles.container}>
-                <img src={userIcon} alt="user icon" className={styles.userIcon} />
-                <label className={styles.labelname}>{playerState.playerName}</label>
-
+            <div className={`${styles.container} ${myTurn ? styles.containerMyTurn : ''}`}>
+                <img src={userIcon} alt="user icon" className={`${styles.userIcon} ${myTurn ? styles.userIconMyTurn : ''}`} />
+                {playerState.canPlay===false &&
+                    <img src={lockerIcon} alt="locker icon" className={`${styles.lockerIcon} ${myTurn ? styles.lockerIconMyTurn : ''}`} />
+                }       
+                <label className={`${styles.labelname} ${myTurn ? styles.labelnameMyTurn : ''}`}>{playerState.playerName}</label>
+                
                 <div className={styles.container2}>
                     <PlayerStatus playerstate={playerState} me={0} />
                 </div>
 
-                <div className={styles.opponentHistory}>
+                <div className={styles.opponentHistory}
+                onClick={() => handleHistoryClick()}>
+
                     {cards.slice(-3).map((card, index) => (
                         <div key={index} className={`${styles.card}`}>
                             {card.cardType === 'BestPractice' && (
@@ -104,10 +93,20 @@ function OpponentBoard({ playerState }: { playerState: PlayerStateInterface }) {
                                     title={card.title}
                                     contents={card.contents} linkToFormation={''} />
                             )}
+                            {card.cardType === 'EmpyCard' && (
+                                <EmptyCard/>
+                            )}
                         </div>
                     ))}
                 </div>
 
+                {historyDisplay && (
+                    <>
+                    <div className={styles.fond}></div>
+                        <CardsHistory cards={playerState.cardsHistory} />
+                        <div className={styles.closeButton} onClick={() => setHistoryDisplay(false)}>X</div>
+                    </>
+                )}
             </div>
 
         </div>

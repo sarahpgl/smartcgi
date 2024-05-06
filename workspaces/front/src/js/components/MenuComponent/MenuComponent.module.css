@@ -1,9 +1,11 @@
 .container{
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
+    position: relative;
+    align-self: center;
+    background-color: transparent;
     color: black;
     width: 400px;
+    overflow-y: auto;
+    height: 100%;
 }
 .button{
     text-align: left;

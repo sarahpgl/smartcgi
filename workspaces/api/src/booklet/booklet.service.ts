@@ -31,4 +31,12 @@ export class BookletService {
         await this.booklet_repository.save(booklet);
         return {booklet: booklet};
     }
+
+    async getBooklet(user_id : number) : Promise <{booklet : Green_IT_Booklet}>{
+        const existingBooklet = await this.booklet_repository.findOne({where : {user_id : user_id}});
+        if (!existingBooklet) {
+            throw new Error(`Booklet for user with id ${user_id} not found`);
+        }
+        return {booklet : existingBooklet};
+    }
 }

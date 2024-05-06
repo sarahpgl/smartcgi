@@ -4,21 +4,10 @@ import styles from './MyEndGameSummary.module.css';
 import BestPracticeCard from "@app/js/components/BestPracticeCard/BestPracticeCard";
 import BadPracticeCard from "@app/js/components/BadPracticeCard/BadPracticeCard";
 import next from '@app/icons/next.webp';
+import { Card } from '@shared/common/Cards';
 
-const MyEndGameSummary: React.FC = () => {
-    const data = [
-        { type: 'BestPractice', id: '32', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50 },
-        { type: 'BestPractice', id: '32', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50 },
-        { type: 'BestPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50 },
-        { type: 'BestPractice', id: '32', title: 'Carte 4', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50 },
-        { type: 'BestPractice', id: '32', title: 'Carte 5', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 50 },
-        { type: 'BestPractice', id: '32', title: 'Carte 6', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 25 },
-        { type: 'BestPractice', id: '32', title: 'Carte 7', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 100 },
-        { type: 'BadPractice', id: '32', title: 'Carte 1', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { type: 'BadPractice', id: '32', title: 'Carte 2', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { type: 'BadPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { type: 'BadPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' }
-    ];
+const MyEndGameSummary: React.FC <{cards : Card[]}> = ({ cards }) => {
+        const data = cards;
 
     const [isVisible, setIsVisible] = useState(true);
     const [startBPIndex, setStartBPIndex] = useState(0); 
@@ -54,12 +43,11 @@ const MyEndGameSummary: React.FC = () => {
         }
     };
 
-    // Fonction pour gérer le clic sur une carte et afficher en grand
+
     const handleCardClick = (card) => {
         setSelectedCard(card);
     };
 
-    // Fonction pour fermer la carte agrandie
     const handleCloseCard = () => {
         setSelectedCard(null);
     };
@@ -106,27 +94,27 @@ const MyEndGameSummary: React.FC = () => {
                 {startMPIndex + 3 < data.filter(card => card.type === 'BadPractice').length && <img src={next} alt="Next" className={styles.nextButton} onClick={nextMP} />}
             </div>
             {selectedCard && (
-    <div className={styles.modalBackdrop} onClick={handleCloseCard}>
-        <div className={`${styles.modalContent} ${styles.bigCard}`}>
-            {selectedCard.type === 'BestPractice' ? (
-                <BestPracticeCard
-                    cardType={selectedCard.type}
-                    id={selectedCard.id}
-                    title={selectedCard.title}
-                    contents={selectedCard.contents}
-                    carbon_loss={selectedCard.carbon_loss}
-                />
-            ) : (
-                <BadPracticeCard
-                    cardType={selectedCard.type}
-                    id={selectedCard.id}
-                    title={selectedCard.title}
-                    contents={selectedCard.contents}
-                    targetedPlayer={selectedCard.targetedPlayer}
-                />
-            )}
-        </div>
-    </div>
+            <div className={styles.modalBackdrop} onClick={handleCloseCard}>
+                <div className={`${styles.modalContent} ${styles.bigCard}`}>
+                    {selectedCard.type === 'BestPractice' ? (
+                        <BestPracticeCard
+                            cardType={selectedCard.type}
+                            id={selectedCard.id}
+                            title={selectedCard.title}
+                            contents={selectedCard.contents}
+                            carbon_loss={selectedCard.carbon_loss}
+                        />
+                    ) : (
+                        <BadPracticeCard
+                            cardType={selectedCard.type}
+                            id={selectedCard.id}
+                            title={selectedCard.title}
+                            contents={selectedCard.contents}
+                            targetedPlayer={selectedCard.targetedPlayer}
+                        />
+                    )}
+                </div>
+            </div>
 )}
         </div>
     );

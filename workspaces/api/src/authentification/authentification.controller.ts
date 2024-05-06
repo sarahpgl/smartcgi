@@ -1,10 +1,11 @@
 
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus, Get } from '@nestjs/common';
 import { AuthService } from './authentification.service';
 import { SignInDto } from './dtos';
 import { SignUpDto } from './dtos';
 import { SignOutDto } from './dtos';
 import { isConnectedDto } from './dtos';
+import { getUserIdByTokenDto } from './dtos';
  
 @Controller('auth')
 export class AuthController {
@@ -35,5 +36,10 @@ export class AuthController {
   @Post('isConnected')
   testAccess(@Body() isConnectedDto: isConnectedDto) {
     return this.authService.isConnected(isConnectedDto.mail);
+  }
+
+  @Get('userIdByToken')
+  getUserIdByToken(@Body() getUserIdByTokenDto: getUserIdByTokenDto) {
+    return this.authService.getUserByToken(getUserIdByTokenDto.token);
   }
 }

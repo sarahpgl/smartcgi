@@ -6,47 +6,77 @@ import ExpertCard from '../ExpertCard/ExpertCard';
 import BadPracticeCard from '../BadPracticeCard/BadPracticeCard';
 import FormationCard from '../FormationCard/FormationCard';
 
-import {BaseCard} from '@shared/common/Cards';
+import { BaseCard, Card } from '@shared/common/Cards';
 
 import iconOk from '../../../icons/ok_icon.webp';
 import iconBin from '../../../icons/bin_icon.webp';
 
 import { Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
+import EmptyCard from '../EmptyCard/EmptyCard';
+import useSocketManager from '@app/js/hooks/useSocketManager';
+import { ClientEvents } from '@shared/client/ClientEvents';
+import { PlayerStateInterface } from '@shared/common/Game';
 
-function PlayerHand({MPSelected , noMPSelected, Cards}) {
-    
+function PlayerHand({ MPSelected, noMPSelected, playerState, myTurn }: {
+  MPSelected: (card: Bad_Practice_Card) => void,
+    noMPSelected: () => void,
+    playerState: PlayerStateInterface,
+    myTurn: boolean,
+}) {
+
     const [selectedCard, setSelectedCard] = useState<number | null>(null);
+    const [typeSelected, setTypeSelected] = useState<string>("");
+    const [MPblocked, setMPBlocked] = useState<string>(playerState.badPractice ? playerState.badPractice : "");
 
-    const handleCardClick = (cardId: number,cardType:string) => {
-        if (selectedCard === cardId) {
-            setSelectedCard(null);
-            noMPSelected();
-            return;
+    const { sm } = useSocketManager();
+
+    const handleCardClick = (cardId: number, card: Card) => {
+        if (myTurn) {
+                if (selectedCard === cardId) {
+                    setSelectedCard(null);
+                    noMPSelected();
+                    return;
+                }
+                noMPSelected();
+                setSelectedCard(cardId);
+                setTypeSelected(card.cardType);
+                if (card.cardType === "BadPractice") {
+                    MPSelected(card);
+                }
         }
-        noMPSelected();
-        setSelectedCard(cardId);
-        if (cardType === "BadPractice") {
-            MPSelected();
-        }
+        setMPBlocked(playerState.badPractice ? playerState.badPractice : "");
     };
 
     const handleCardHover = (cardId: number) => {
     };
 
-    const handleCardLeave = (cardType:string) => {
-        setSelectedCard(null);
+    const handleCardLeave = (cardType: string) => {
+            setSelectedCard(null);
     };
 
-    let cards2 : BaseCard[] = [
-        { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss : 150 },
-        { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'Formation', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blablabla blabal blabal' },
-        { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ' },
-        { cardType: 'BadPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
-        { cardType: 'BestPractice', id: '32', title: 'titre de la carte', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', carbon_loss: 180 }
-    ];
-    let cards=Cards;
+    const handlePlayCard = (card: Card) => {
+        if(MPblocked === "" || MPblocked!=="" && card.cardType !== "BestPractice") {
+        console.log("play card", card);
+        sm.emit({
+            event: ClientEvents.PlayCard,
+            data: {
+                card
+            }
+        })
+    }
+    }
+    
+    const handleDiscardCard = (card: Card) => {
+        console.log("discard card", card);
+        sm.emit({
+            event: ClientEvents.DiscardCard,
+            data: {
+                card
+            }
+        })
+    }
+
+    let cards = playerState.cardsInHand;
 
     return (
         <div className={styles.hand}>
@@ -54,15 +84,15 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
                 <div
                     key={index}
                     className={`${styles.card} ${selectedCard === index ? styles.selected : ''}`}
-                    onClick={() => handleCardClick(index,card.cardType)}
+                    onClick={() => handleCardClick(index,card)}
                     onMouseEnter={() => handleCardHover(index)}
                     onMouseLeave={() => handleCardLeave(card.cardType)}
                 >
                     {card.cardType === 'BestPractice' && (
-                        <BestPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} />
+                        <BestPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} carbon_loss={card.carbon_loss} difficulty={card.difficulty} actor={card.actor} network_gain={card.network_gain} memory_gain={card.memory_gain} cpu_gain={card.cpu_gain} storage_gain={card.storage_gain} />
                     )}
                     {card.cardType === 'BadPractice' && (
-                        <BadPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} targetedPlayer={card.targetedPlayer} />
+                        <BadPracticeCard cardType={card.cardType} id={card.id} title={card.title} contents={card.contents} targetedPlayer={card.targetedPlayer} actor={card.actor} difficulty={card.difficulty} network_gain={card.network_gain} memory_gain={card.memory_gain} cpu_gain={card.cpu_gain} storage_gain={card.storage_gain} />
                     )}
                     {card.cardType === 'Expert' && (
                         <ExpertCard cardType={card.cardType} id={card.id} actor={card.actor} title={card.title} contents={card.contents} />
@@ -70,16 +100,16 @@ function PlayerHand({MPSelected , noMPSelected, Cards}) {
                     {card.cardType === 'Formation' && (
                         <FormationCard cardType={card.cardType} id={card.id} actor={card.actor} title={card.title} contents={card.contents} />
                     )}
-                    {(card.cardType !== "BadPractice") && selectedCard === index && 
+                    {(card.cardType !== "BadPractice" && !(card.cardType==="BestPractice" && MPblocked!=="")) && selectedCard === index &&
                         <div className={styles.tooltip}>
-                            <img onClick={()=>window.alert("La carte ''"+ card.title+"'' " + index + " a été validée")} className={styles.iconOk} src={iconOk} alt="iconOk" />
-                            <span className={styles.tooltiptext}>Valider</span>
+                            <img onClick={() => handlePlayCard(card)} className={styles.iconOk} src={iconOk} alt="iconOk" />
+                            <span className={styles.tooltiptext} style={{ backgroundColor: "rgba(0, 105, 0, 0.8)" }}>Valider la carte</span>
                         </div>
                     }
                     {selectedCard === index && (
                         <div className={styles.tooltip}>
-                            <img onClick={()=>window.alert("La carte ''"+ card.title+"'' " + index + " a été défaussée")} className={styles.iconBin} src={iconBin} alt="iconBin" />
-                            <span className={styles.tooltiptext}>Défausser la carte</span>
+                            <img onClick={() => handleDiscardCard(card)} className={styles.iconBin} src={iconBin} alt="iconBin" />
+                            <span className={styles.tooltiptext} style={{ backgroundColor: "rgba(165, 0, 0, 0.8)" }}>Défausser la carte</span>
                         </div>
                     )}
                 </div>

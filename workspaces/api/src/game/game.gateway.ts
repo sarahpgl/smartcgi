@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { ClientPayloads } from '@shared/client/ClientPayloads';
 import { ServerEvents } from '@shared/server/ServerEvents';
 import { LobbyManager } from '@app/game/lobby/lobby.manager';
 import { Logger, UsePipes } from '@nestjs/common';
@@ -17,9 +18,11 @@ import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { ClientReconnectDto, ClientStartGameDto, LobbyCreateDto, LobbyJoinDto, PracticeAnswerDto, SensibilisationAnswerDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
+import { BestPracticeAnswerType } from '@shared/common/Game';
 import { Question_Content } from '@app/entity/question_content';
 import { SensibilisationQuestion } from '@shared/common/Game';
 
+@UsePipes(new WsValidationPipe())
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger: Logger = new Logger(GameGateway.name);
@@ -79,40 +82,61 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.lobbyManager.startGame(client, data.clientInGameId);
   }
 
-  @SubscribeMessage(ClientEvents.AnswerPracticeQuestion)
-  onPracticeQuestion(client: AuthenticatedSocket, data: PracticeAnswerDto): void {
-    if (!client.gameData.lobby) {
-      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
-    }
-    client.gameData.lobby.instance.answerPracticeQuestion(client.id, data.cardId, data.answer);
-  }
-
-  // TODO: Deal with client reconnect
   @SubscribeMessage(ClientEvents.ClientReconnect)
   onClientReconnect(client: AuthenticatedSocket, data: ClientReconnectDto): void {
     this.logger.log('Client reconnecting', data.clientInGameId);
     this.lobbyManager.reconnectClient(client, data.clientInGameId);
   }
-// TODO: Handler for practice question
 
-@SubscribeMessage(ClientEvents.AnswerSensibilisationQuestion)
-onSensibilisationQuestion(client : AuthenticatedSocket, data : SensibilisationAnswerDto) : void {
-  if (!client.gameData.lobby) {
-    throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+  @SubscribeMessage(ClientEvents.PlayCard)
+  onPlayCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.PlayCard]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.playCard(data.card, client);
   }
-  client.gameData.lobby.instance.answerSensibilisationQuestion(client.id, data.questionId, data.answer);
-}
 
-@SubscribeMessage(ServerEvents.GetSensibilisationQuestion)
-async onSensibilisationQuestionGet(client : AuthenticatedSocket) : Promise<{ content : SensibilisationQuestion}>
- {
-  if (!client.gameData.lobby) {
-    throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+  @SubscribeMessage(ClientEvents.DiscardCard)
+  onDiscardCard(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.DiscardCard]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.discardCard(data.card, client);
   }
-  
-  const content = await client.gameData.lobby.instance.getSensibilisationQuizz();
 
-  // Retourner le contenu dans un objet littéral
-  return { content : content.content };
-}
+  @SubscribeMessage(ClientEvents.AnswerPracticeQuestion)
+  onPracticeQuestion(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.AnswerPracticeQuestion]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    const cardType = data.cardType;
+    switch (cardType) {
+      case 'BestPractice':
+        client.gameData.lobby.instance.answerBestPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
+        break;
+      case 'BadPractice':
+        client.gameData.lobby.instance.answerBadPracticeQuestion(client.gameData.clientInGameId, data.cardId, data.answer);
+        break;
+      default:
+        throw new ServerException(SocketExceptions.GameError, 'Answer question invalid card type');
+    }
+  }
+
+  @SubscribeMessage(ClientEvents.AnswerSensibilisationQuestion)
+  onSensibilisationQuestion(client: AuthenticatedSocket, data: SensibilisationAnswerDto): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    this.logger.log(`Client ${client.gameData.playerName} answered sensibilisation question with answer index: ${data.answer.answer}`);
+    client.gameData.lobby.instance.answerSensibilisationQuestion(client.gameData.clientInGameId, data.answer);
+  }
+
+  @SubscribeMessage(ClientEvents.GetSensibilisationQuestion)
+  onSensibilisationQuestionGet(client: AuthenticatedSocket): void {
+    /*if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }*/
+    // Retourner le contenu dans un objet littéral
+
+  }
 }

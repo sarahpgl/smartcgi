@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UsersDto } from './dtos';
+import { UsersDto, UsersTokenDto } from './dtos';
 
 
 @Controller('users')
@@ -12,6 +12,18 @@ export class UsersController {
         return this.usersService.getBooklet((parseInt( usersDto.user_id)));
     
     }
+
+    @Get('nbGames')
+    getNbGames(@Body() usersDto: UsersDto){
+        return this.usersService.getNbGames(usersDto.user_id);
+    }
+
+    @Get('nbVictories')
+    getVictories(@Body() UsersTokenDto: UsersTokenDto){
+        return this.usersService.getVictories(UsersTokenDto.token);
+    }
 }
+
+
 
 

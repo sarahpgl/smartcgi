@@ -71,7 +71,7 @@ function PlayerBoard({ MPSelected, noMPSelected }) {
 export default PlayerBoard;
 */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './PlayerBoard.module.css';
 import PlayerHand from '../PlayerHand/PlayerHand';
 import PlayerStatus from '../PlayerStatus/PlayerStatus';
@@ -80,13 +80,27 @@ import { useRecoilState } from 'recoil';
 import { CurrentGameState } from '../Game/states';
 import useSocketManager from '@hooks/useSocketManager';
 import { ClientEvents } from '@shared/client/ClientEvents';
+import { Bad_Practice_Card } from '@shared/common/Cards';
+import { PlayerStateInterface } from '@shared/common/Game';
+import CardsHistory from '../CardsHistory/CardsHistory';
 
-function PlayerBoard({ MPSelected, noMPSelected, playerState}) {
-    const [gameState] = useRecoilState(CurrentGameState);
+function PlayerBoard({ MPSelected, noMPSelected, playerState, myTurn }: {
+  MPSelected: (card: Bad_Practice_Card) => void,
+  noMPSelected: () => void,
+  playerState: PlayerStateInterface,
+  myTurn: boolean,
+}) {
+  const [gameState] = useRecoilState(CurrentGameState);
+  const [historyDisplay, setHistoryDisplay] = useState(false);
 
-    useEffect(() => {
-        //console.log('gameState dans playerBoard ', gameState);
-    });
+
+  useEffect(() => {
+    //console.log('gameState dans playerBoard ', gameState);
+  });
+
+  const handleHistoryClick = () => {
+    setHistoryDisplay(true);
+}
 
     return (
         <div className={styles.board}>
@@ -95,15 +109,23 @@ function PlayerBoard({ MPSelected, noMPSelected, playerState}) {
                     <div className={styles.status}>
                         <PlayerStatus playerstate={playerState} me={1} />
                     </div>
-                    <div className={styles.hand}>
-                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} Cards={playerState.cardsInHand} />
+                    <div className={`${styles.hand} ${myTurn ? styles.handMyTurn : ''}`}>
+                        <PlayerHand MPSelected={MPSelected} noMPSelected={noMPSelected} playerState={playerState} myTurn={myTurn} />
                     </div>
-                    <div className={styles.history}>
+                    <div className={styles.history} onClick={() => handleHistoryClick()}>
                         <PlayerInGameHistory Cards={playerState.cardsHistory} />
                     </div>
                 </>
             )}
+                {historyDisplay && (
+                    <>
+                    <div className={styles.fond}></div>
+                        <CardsHistory cards={playerState.cardsHistory} />
+                        <div className={styles.closeButton} onClick={() => setHistoryDisplay(false)}>X</div>
+                    </>
+                )}
         </div>
+        
     );
 }
 

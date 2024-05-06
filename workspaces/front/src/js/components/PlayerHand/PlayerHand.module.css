@@ -21,15 +21,19 @@
     margin-bottom: 0px;
     transition: transform 0.2s;
     user-select: none; 
+    cursor: pointer;
 }
 .card:hover{
-    transform: translateY(-50px) scale(2.3) translateX(-20px); 
+    transform: translateY(-70px) scale(2.3) translateX(-20px); 
     z-index: 1;
 }
+
 .selected {
     width: 120px;
     background-color: rgb(230, 230, 230);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    z-index: 999999;
+    transform: scale(1.1) translateY(-10px);
 }
 
 .selectedContainer{

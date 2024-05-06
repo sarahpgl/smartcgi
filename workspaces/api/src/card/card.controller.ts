@@ -22,13 +22,19 @@ export class CardController {
     }
   }
 
-    @Get('deck')
-    async getDeck(): Promise<Card[]> {
-        return this.cardService.getDeck();
-    }
+  @Get('deck')
+  async getDeck(): Promise<Card[]> {
+    return this.cardService.getDeck();
+  }
 
     @Get('bad-practice')
     async getBadPractice(){
         return this.cardService.getBadPracticeCard();
     }
+
+    @Get('all-cards')
+    async getAllCards(){
+        return this.cardService.getAllCards();
+    }
+
   }

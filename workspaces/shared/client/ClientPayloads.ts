@@ -1,4 +1,4 @@
-import { PracticeAnswerType, SensibilisationQuestion, SensibilisationQuestionAnswer } from '@shared/common/Game';
+import { PracticeAnswer, PracticeAnswerType, SensibilisationQuestion, SensibilisationQuestionAnswer } from '@shared/common/Game';
 import { ClientEvents } from './ClientEvents';
 import { Card } from '../common/Cards';
 
@@ -28,17 +28,23 @@ export type ClientPayloads = {
   [ClientEvents.AnswerPracticeQuestion]: {
     cardId: string;
     answer: PracticeAnswerType;
+    cardType: 'BestPractice' | 'BadPractice';
   }
 
   [ClientEvents.AnswerSensibilisationQuestion]: {
     questionId: number;
-    answer: SensibilisationQuestionAnswer;
+    answer: SensibilisationQuestionAnswer | null;
   }
 
 
-
+  [ClientEvents.GetSensibilisationQuestion]: {
+  }
 
   [ClientEvents.PlayCard]: {
+    card: Card;
+  }
+  
+  [ClientEvents.DiscardCard]: {
     card: Card;
   }
 

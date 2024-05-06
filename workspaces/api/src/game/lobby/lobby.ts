@@ -4,11 +4,11 @@ import { ServerEvents } from '@shared/server/ServerEvents';
 import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
 import { ServerPayloads } from '@shared/server/ServerPayloads';
-
-import { Card, Practice_Card } from '@shared/common/Cards';
+import { Card } from '@shared/common/Cards';
 import { SensibilisationQuestion } from '@shared/common/Game';
 import { CardService } from '@app/card/card.service';
 import { CO2Quantity } from './types';
+import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
 
 export class Lobby {
   public readonly id: string = v4();
@@ -26,16 +26,16 @@ export class Lobby {
   // Keep in memory the clients that disconnected Map<clientInGameId, playerName>
   public readonly disconnectedClients: Map<string, string> = new Map<string, string>();
 
-  public readonly instance: Instance = new Instance(this);
+  public readonly instance: Instance = new Instance(this, this.cardService, this.sensibilisationService);
+  
 
   constructor(
     private readonly server: Server,
     private readonly cardService: CardService,
+    private readonly sensibilisationService : SensibilisationService,
     co2Quantity: number,
   ) {
-    //console.log(cardService);
-    this.instance.cardService = cardService;
-    this.instance.co2Quantity = co2Quantity; 
+    this.instance.co2Quantity = co2Quantity;
   }
 
   public addClient(client: AuthenticatedSocket, playerName: string, clientInGameId: string | null = null, isOwner: boolean = false): void {
@@ -67,7 +67,6 @@ export class Lobby {
     client.gameData.lobby = null;
 
     // If player leave then the game isn't worth to play anymore
-    this.instance.triggerFinish();
 
     // TODO: Notify other players that someone left
 
@@ -77,7 +76,8 @@ export class Lobby {
   public reconnectClient(client: AuthenticatedSocket, clientInGameId: string): void {
     console.log(`[Lobby] Client`, client.id, 'reconnected as', clientInGameId);
     const playerName = this.disconnectedClients.get(clientInGameId);
-    this.addClient(client, playerName, clientInGameId);
+    const isOwner = clientInGameId === this.lobbyOwnerId;
+    this.addClient(client, playerName, clientInGameId, isOwner);
     this.disconnectedClients.delete(clientInGameId);
   }
 
@@ -97,13 +97,28 @@ export class Lobby {
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
   }
 
-  public dispatchPracticeQuestion(card: Practice_Card, playerId: string): void {
+  public dispatchPracticeQuestion(card: Card, playerId: string, playerName: string): void {
     const payload: ServerPayloads[ServerEvents.PracticeQuestion] = {
       playerId,
-      cardType: card.cardType,
+      playerName,
+      card: card,
     };
 
     this.dispatchToLobby(ServerEvents.PracticeQuestion, payload);
+  }
+
+  public dispatchSensibilisationQuestion(question: SensibilisationQuestion): void {
+    const payload: ServerPayloads[ServerEvents.SensibilisationQuestion] = {
+      question_id : question.question_id,
+      question: question.question,
+      answers: {
+        response1 : question.answers.response1,
+        response2 : question.answers.response2,
+        response3 : question.answers.response3,
+        answer : question.answers.answer
+      }
+    };
+    this.dispatchToLobby(ServerEvents.SensibilisationQuestion, payload);
   }
 
   public dispatchGameState(): void {
@@ -139,6 +154,30 @@ export class Lobby {
       },
     };
     this.dispatchToLobby(ServerEvents.CardPlayed, payload);
+  }
+
+  public dispatchPlayerPassed(playerName: string): void {
+    const payload: ServerPayloads[ServerEvents.PlayerPassed] = {
+      playerName
+    };
+    this.dispatchToLobby(ServerEvents.PlayerPassed, payload);
+  }
+
+  public dispatchSensibilisationAnswered() {
+    this.dispatchToLobby(ServerEvents.SensibilisationAnswered, {});
+  }
+
+  public dispatchPracticeAnswered() {
+    this.dispatchToLobby(ServerEvents.PracticeAnswered, {});
+  }
+
+  public emitGameReport(gameReport: { myArchivedCards: Card[], mostPopularCards: Card[] } , playerId: string, winnerName: string): void{
+    const payload: ServerPayloads[ServerEvents.GameReport] = {
+      mostPopularCards : gameReport.mostPopularCards,
+      myArchivedCards : gameReport.myArchivedCards,
+      winnerName : winnerName,
+    };
+    this.emitToClient(this.clients.get(playerId), ServerEvents.GameReport, payload);
   }
 
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
