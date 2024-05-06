@@ -45,7 +45,7 @@ export class Instance {
     this.lobby.clients.forEach((client) => {
       this.playerStates[client.gameData.clientInGameId] = new PlayerState(client.gameData.playerName, client.gameData.clientInGameId, this.co2Quantity);
       while (this.playerStates[client.gameData.clientInGameId].cardsInHand.length <= 6) {
-        this.drawCard(this.playerStates[client.gameData.clientInGameId]);
+        this.drawCard(this.playerStates[client.gameData.clientInGameId], 'random');
       }
     });
 
@@ -85,7 +85,20 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId, playerState.playerName, true);
     if (card.cardType === 'Expert' || card.cardType === 'Formation') {
-      this.transitionToNextTurn();
+      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
+        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
+        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+        let formationCardLeft: boolean = true;
+        if(formationCards.length === 0){
+          formationCardLeft = false;
+        }
+        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+        let expertCardLeft: boolean = true;
+        if(ExpertCards.length === 0){
+          expertCardLeft = false;
+        }
+        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+      }
     }
   }
 
@@ -118,7 +131,22 @@ export class Instance {
 
       case 'Expert':
         this.playExpert(card, playerState);
-        this.transitionToNextTurn();
+        if(playerState.sensibilisationPoints > 0){
+          const isBlocked: boolean = (playerState.badPractice == null) ? false : true;
+          const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+          let formationCardLeft: boolean = true;
+          if(formationCards.length === 0){
+            formationCardLeft = false;
+          }
+          const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+          let expertCardLeft: boolean = true;
+          if(ExpertCards.length === 0){
+            expertCardLeft = false;
+          }
+          this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, playerState.clientInGameId, isBlocked, formationCardLeft, expertCardLeft);
+        }else{
+          this.transitionToNextTurn('random');
+        }
         break;
 
       case 'BadPractice':
@@ -127,7 +155,22 @@ export class Instance {
 
       case 'Formation':
         this.playFormation(card, playerState);
-        this.transitionToNextTurn();
+        if(playerState.sensibilisationPoints > 0){
+          const isBlocked: boolean = (playerState.badPractice == null) ? false : true;
+          const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+          let formationCardLeft: boolean = true;
+          if(formationCards.length === 0){
+            formationCardLeft = false;
+          }
+          const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+          let expertCardLeft: boolean = true;
+          if(ExpertCards.length === 0){
+            expertCardLeft = false;
+          }
+          this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, playerState.clientInGameId, isBlocked, formationCardLeft, expertCardLeft);
+        }else{
+          this.transitionToNextTurn('random');
+        }
         break;
       default:
         throw new ServerException(SocketExceptions.GameError, 'Invalid card type');
@@ -147,7 +190,22 @@ export class Instance {
     if (this.answerCount === this.lobby.clients.size) {
       this.currentSensibilisationQuestion = null;
       this.lobby.dispatchPracticeAnswered();
-      this.transitionToNextTurn();
+      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
+        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
+        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+        let formationCardLeft: boolean = true;
+        if(formationCards.length === 0){
+          formationCardLeft = false;
+        }
+        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+        let expertCardLeft: boolean = true;
+        if(ExpertCards.length === 0){
+          expertCardLeft = false;
+        }
+        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+      }else{
+        this.transitionToNextTurn('random');
+      }
     }
   }
 
@@ -163,7 +221,23 @@ export class Instance {
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.lobby.dispatchPracticeAnswered();
-      this.transitionToNextTurn();
+      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
+        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
+        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+        let formationCardLeft: boolean = true;
+        if(formationCards.length === 0){
+          formationCardLeft = false;
+        }
+        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+        let expertCardLeft: boolean = true;
+        if(ExpertCards.length === 0){
+          expertCardLeft = false;
+        }
+        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+      }else{
+        this.transitionToNextTurn('random');
+      }
+      
     }
   }
 
@@ -186,9 +260,20 @@ export class Instance {
       this.lobby.dispatchSensibilisationAnswered();
       this.lobby.dispatchGameState();
       if (!this.playerStates[this.currentPlayerId].canPlay) {
-        this.transitionToNextTurn();
+        this.transitionToNextTurn('random');
       }
     }
+  }
+
+  public ReceptDrawModeChoice(drawMode: DrawMode) {
+    this.transitionToNextTurn(drawMode);
+  }
+
+  // public J'AiRecuUneReponseDePioche
+  //   this.transitionToNextTurn(drawMode)
+
+  public ReceptDrawModeChoise(drawMode: DrawMode) {
+    this.transitionToNextTurn(drawMode);
   }
 
 
@@ -241,16 +326,55 @@ export class Instance {
     }
   }
 
-  private drawCard(playerState: PlayerState, drawMode: DrawMode = 'random') {
+  private drawCard(playerState: PlayerState, drawMode: DrawMode) {
     if (this.cardDeck.length !== 0) {
-      playerState.cardsInHand.push(this.cardDeck.pop());
-    }
+      if(drawMode === 'random'){
+        playerState.cardsInHand.push(this.cardDeck.pop());
+      }else if(drawMode === 'randomFormation'){
+        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+        if (formationCards.length > 0) {
+          const randomIndex = Math.floor(Math.random() * formationCards.length);
+          const card = formationCards[randomIndex];
+          playerState.cardsInHand.push(card);
+          this.cardDeck.splice(this.cardDeck.indexOf(card), 1); 
+          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 1; 
+        } else {
+          playerState.cardsInHand.push(this.cardDeck.pop());
+          throw new ServerException(SocketExceptions.GameError, 'No formation card left in the deck');
+        }
+      }else if(drawMode === 'goodFormation'){
+        const badActor = playerState.badPractice; 
+        const formationCard = this.cardDeck.filter(card => card.cardType === 'Formation' && card.actor == badActor);
+        if (formationCard.length > 0) {
+          const card = formationCard[0];
+          playerState.cardsInHand.push(card);
+          this.cardDeck.splice(this.cardDeck.indexOf(card), 1); 
+          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 3; 
+        } else {
+          playerState.cardsInHand.push(this.cardDeck.pop());
+          throw new ServerException(SocketExceptions.GameError, 'Not this formation card left in the deck');
+        }
+      }else if(drawMode === 'expert'){
+        const expertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+        if (expertCards.length > 0) {
+          const randomIndex = Math.floor(Math.random() * expertCards.length);
+          const card = expertCards[randomIndex];
+          playerState.cardsInHand.push(card);
+          this.cardDeck.splice(this.cardDeck.indexOf(card), 1); 
+          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 5;
+        } else {
+          playerState.cardsInHand.push(this.cardDeck.pop());
+          throw new ServerException(SocketExceptions.GameError, 'No expert card left in the deck');
+        }
+      }
+
+    } 
   }
 
-  private async transitionToNextTurn() {
+  private async transitionToNextTurn(draw_mode: DrawMode) {
     // 0: Draw a card for the current player
     if (this.playerStates[this.currentPlayerId].cardsInHand.length <= 6) {
-      this.drawCard(this.playerStates[this.currentPlayerId]);
+      this.drawCard(this.playerStates[this.currentPlayerId], draw_mode);
     }
     // 1: Change the current player
     this.currentPlayerId = Object.keys(this.playerStates)[(Object.keys(this.playerStates).indexOf(this.currentPlayerId) + 1) % Object.keys(this.playerStates).length];
@@ -269,8 +393,8 @@ export class Instance {
     // 4: Check if player has already answered a practice question
     if (!playerState.canPlay && this.currentSensibilisationQuestion === null) {
       this.lobby.dispatchPlayerPassed(playerState.playerName);
-      this.transitionToNextTurn();
-    }
+      this.transitionToNextTurn('random');
+    } 
 
   }
 
@@ -369,5 +493,6 @@ export class Instance {
     // to Green_IT_Booklet table 
     this.gameService.createGame(Number(winnerId));
   }
+
 
 }

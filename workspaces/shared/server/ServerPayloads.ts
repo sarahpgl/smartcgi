@@ -58,6 +58,13 @@ export type ServerPayloads = {
     mostPopularCards : Card[],
     myArchivedCards : Card[],
   };
+
+  [ServerEvents.UseSensibilisationPoints] : {
+    sensibilisationPoints: number;
+    isBlocked: boolean;
+    formationCardLeft: boolean;
+    expertCardLeft: boolean;
+  };
 };
 
 

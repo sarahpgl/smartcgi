@@ -173,6 +173,26 @@ export class Lobby {
     this.emitToClient(emittedClient, ServerEvents.GameReport, payload);
   }
 
+  public emitUseSensibilisationPoints(sensibilisationPoints: number, clientInGameId: string, isBlocked: boolean, formationCardLeft: boolean, expertCardLeft: boolean): void{
+    const payload: ServerPayloads[ServerEvents.UseSensibilisationPoints] = {
+      sensibilisationPoints: sensibilisationPoints,
+      isBlocked: isBlocked,
+      formationCardLeft: formationCardLeft,
+      expertCardLeft: expertCardLeft
+    };
+    let emittedClient: AuthenticatedSocket | null = null;
+    this.clients.forEach((client) => {
+      if(client.gameData.clientInGameId === clientInGameId){
+        emittedClient = client;
+      } 
+    });
+    if (emittedClient === null) {
+      throw new ServerException(SocketExceptions.GameError, 'Client not found');
+    }
+
+    this.emitToClient(emittedClient, ServerEvents.UseSensibilisationPoints, payload);
+  }
+
   public dispatchToLobby<T extends ServerEvents>(event: T, payload: ServerPayloads[T]): void {
     this.server.to(this.id).emit(event, payload);
   }

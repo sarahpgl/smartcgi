@@ -21,6 +21,7 @@ import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
 import { BestPracticeAnswerType } from '@shared/common/Game';
 import { Question_Content } from '@app/entity/question_content';
 import { SensibilisationQuestion } from '@shared/common/Game';
+import { DrawMode } from './instance/types';
 
 
 
@@ -140,4 +141,13 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     // Retourner le contenu dans un objet littéral
 
   }
+
+  @SubscribeMessage(ClientEvents.DrawModeChoice)
+  onDrawModeChoice(client: AuthenticatedSocket, data: ClientPayloads[ClientEvents.DrawModeChoice]): void {
+    if (!client.gameData.lobby) {
+      throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
+    }
+    client.gameData.lobby.instance.ReceptDrawModeChoice(data.drawMode);
+  }
+
 }

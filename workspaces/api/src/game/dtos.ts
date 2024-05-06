@@ -1,6 +1,7 @@
 import { PracticeAnswer, SensibilisationQuestionAnswer } from '@shared/common/Game';
 import { CardType } from '@shared/common/Cards';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { DrawMode } from './instance/types';
 export class LobbyCreateDto {
   @IsString()
   playerName: string;
@@ -61,5 +62,6 @@ export class CreateGameDto{
   winnerId: number;
 
 }
+
 
 

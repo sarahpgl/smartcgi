@@ -14,6 +14,7 @@ export enum ClientEvents {
   PlayCard = 'client.game.play_card',
   DiscardCard = 'client.game.discard_card',
   GetSensibilisationQuestion = " client.game.get_sensibilisation_question",
+  DrawModeChoice = 'client.game.draw_mode',
 
 
 

@@ -31,3 +31,8 @@ export const CurrentPlayCard = atom<ServerPayloads[ServerEvents.CardPlayed] | nu
   key: 'CurrentPlayCard',
   default: null,
 });
+
+export const CurrentUseSensibilisationPoints = atom<ServerPayloads[ServerEvents.UseSensibilisationPoints] | null>({
+  key: 'CurrentUseSensibilisationPoints',
+  default: null,
+});
