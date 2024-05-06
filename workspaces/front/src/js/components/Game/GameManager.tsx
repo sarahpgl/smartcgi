@@ -83,6 +83,7 @@ export default function GameManager() {
     const onGameReport: Listener<ServerPayloads[ServerEvents.GameReport]> = (data) => {
       console.log('Reception  GameReport', data);
       setGameReport(data);
+      naviguate('/game/report/');
     }
 
 

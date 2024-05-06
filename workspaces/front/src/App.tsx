@@ -81,7 +81,7 @@ function App() {
 
 
             <Route path="/home" element={<Home />} />
-            <Route path="/test" element={<SummaryPage />} />
+            <Route path="/game/report" element={<SummaryPage />} />
             <Route path="/" element={<Navigate to="/register" />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/viewCards" element={<ViewCards />} />
