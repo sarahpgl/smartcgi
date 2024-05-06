@@ -16,17 +16,19 @@ export class Instance {
   public playerStates: Record<string, PlayerState> = {};
   public cardDeck: Card[] = [];
   public discardPile: Card[] = [];
-  public currentPlayerId: string;
 
+  public currentPlayerId: string;
+  private startingPlayerId: string;
 
   public gameStarted: boolean = false;
+  private gameFinished: boolean = false;
   private answerCount: number = 0;
   private currentSensibilisationQuestion: SensibilisationQuestion | null = null;
-  private startingPlayerId: string;
 
   public cardService: CardService;
   public sensibilisationService: SensibilisationService;
   public gameService: GameService;
+
 
   constructor(
     private readonly lobby: Lobby,
@@ -85,19 +87,11 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId, playerState.playerName, true);
     if (card.cardType === 'Expert' || card.cardType === 'Formation') {
-      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
-        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
-        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
-        let formationCardLeft: boolean = true;
-        if(formationCards.length === 0){
-          formationCardLeft = false;
-        }
-        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
-        let expertCardLeft: boolean = true;
-        if(ExpertCards.length === 0){
-          expertCardLeft = false;
-        }
-        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+      if (this.playerStates[this.currentPlayerId].sensibilisationPoints > 0) {
+        this.askDrawModeChoice();
+      }
+      else {
+        this.transitionToNextTurn('random');
       }
     }
   }
@@ -131,20 +125,9 @@ export class Instance {
 
       case 'Expert':
         this.playExpert(card, playerState);
-        if(playerState.sensibilisationPoints > 0){
-          const isBlocked: boolean = (playerState.badPractice == null) ? false : true;
-          const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
-          let formationCardLeft: boolean = true;
-          if(formationCards.length === 0){
-            formationCardLeft = false;
-          }
-          const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
-          let expertCardLeft: boolean = true;
-          if(ExpertCards.length === 0){
-            expertCardLeft = false;
-          }
-          this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, playerState.clientInGameId, isBlocked, formationCardLeft, expertCardLeft);
-        }else{
+        if (playerState.sensibilisationPoints > 0) {
+          this.askDrawModeChoice();
+        } else {
           this.transitionToNextTurn('random');
         }
         break;
@@ -155,20 +138,9 @@ export class Instance {
 
       case 'Formation':
         this.playFormation(card, playerState);
-        if(playerState.sensibilisationPoints > 0){
-          const isBlocked: boolean = (playerState.badPractice == null) ? false : true;
-          const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
-          let formationCardLeft: boolean = true;
-          if(formationCards.length === 0){
-            formationCardLeft = false;
-          }
-          const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
-          let expertCardLeft: boolean = true;
-          if(ExpertCards.length === 0){
-            expertCardLeft = false;
-          }
-          this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, playerState.clientInGameId, isBlocked, formationCardLeft, expertCardLeft);
-        }else{
+        if (playerState.sensibilisationPoints > 0) {
+          this.askDrawModeChoice();
+        } else {
           this.transitionToNextTurn('random');
         }
         break;
@@ -188,22 +160,14 @@ export class Instance {
     playerState.bestPracticeAnswers.push({ cardId, answer: answer as BestPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
+      if (this.gameFinished) {
+        this.triggerFinish(playerState.clientInGameId, playerState.playerName);
+      }
       this.currentSensibilisationQuestion = null;
       this.lobby.dispatchPracticeAnswered();
-      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
-        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
-        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
-        let formationCardLeft: boolean = true;
-        if(formationCards.length === 0){
-          formationCardLeft = false;
-        }
-        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
-        let expertCardLeft: boolean = true;
-        if(ExpertCards.length === 0){
-          expertCardLeft = false;
-        }
-        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
-      }else{
+      if (this.playerStates[this.currentPlayerId].sensibilisationPoints > 0) {
+        this.askDrawModeChoice();
+      } else {
         this.transitionToNextTurn('random');
       }
     }
@@ -221,23 +185,12 @@ export class Instance {
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.lobby.dispatchPracticeAnswered();
-      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
-        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
-        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
-        let formationCardLeft: boolean = true;
-        if(formationCards.length === 0){
-          formationCardLeft = false;
-        }
-        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
-        let expertCardLeft: boolean = true;
-        if(ExpertCards.length === 0){
-          expertCardLeft = false;
-        }
-        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
-      }else{
+      if (this.playerStates[this.currentPlayerId].sensibilisationPoints > 0) {
+        this.askDrawModeChoice();
+      } else {
         this.transitionToNextTurn('random');
       }
-      
+
     }
   }
 
@@ -269,20 +222,12 @@ export class Instance {
     this.transitionToNextTurn(drawMode);
   }
 
-  // public J'AiRecuUneReponseDePioche
-  //   this.transitionToNextTurn(drawMode)
-
-  public ReceptDrawModeChoise(drawMode: DrawMode) {
-    this.transitionToNextTurn(drawMode);
-  }
-
-
   private playBestPractice(card: Best_Practice_Card, playerState: PlayerState) {
     playerState.co2Saved -= card.carbon_loss;
     this.answerCount = 0;
     this.lobby.dispatchGameState();
     if (playerState.co2Saved <= 0) {
-      this.triggerFinish(playerState.clientInGameId, playerState.playerName);
+      this.gameFinished = true;
     }
   }
 
@@ -328,39 +273,39 @@ export class Instance {
 
   private drawCard(playerState: PlayerState, drawMode: DrawMode) {
     if (this.cardDeck.length !== 0) {
-      if(drawMode === 'random'){
+      if (drawMode === 'random') {
         playerState.cardsInHand.push(this.cardDeck.pop());
-      }else if(drawMode === 'randomFormation'){
+      } else if (drawMode === 'randomFormation') {
         const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
         if (formationCards.length > 0) {
           const randomIndex = Math.floor(Math.random() * formationCards.length);
           const card = formationCards[randomIndex];
           playerState.cardsInHand.push(card);
-          this.cardDeck.splice(this.cardDeck.indexOf(card), 1); 
-          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 1; 
+          this.cardDeck.splice(this.cardDeck.indexOf(card), 1);
+          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 1;
         } else {
           playerState.cardsInHand.push(this.cardDeck.pop());
           throw new ServerException(SocketExceptions.GameError, 'No formation card left in the deck');
         }
-      }else if(drawMode === 'goodFormation'){
-        const badActor = playerState.badPractice; 
+      } else if (drawMode === 'goodFormation') {
+        const badActor = playerState.badPractice;
         const formationCard = this.cardDeck.filter(card => card.cardType === 'Formation' && card.actor == badActor);
         if (formationCard.length > 0) {
           const card = formationCard[0];
           playerState.cardsInHand.push(card);
-          this.cardDeck.splice(this.cardDeck.indexOf(card), 1); 
-          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 3; 
+          this.cardDeck.splice(this.cardDeck.indexOf(card), 1);
+          playerState.sensibilisationPoints = playerState.sensibilisationPoints - 3;
         } else {
           playerState.cardsInHand.push(this.cardDeck.pop());
           throw new ServerException(SocketExceptions.GameError, 'Not this formation card left in the deck');
         }
-      }else if(drawMode === 'expert'){
+      } else if (drawMode === 'expert') {
         const expertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
         if (expertCards.length > 0) {
           const randomIndex = Math.floor(Math.random() * expertCards.length);
           const card = expertCards[randomIndex];
           playerState.cardsInHand.push(card);
-          this.cardDeck.splice(this.cardDeck.indexOf(card), 1); 
+          this.cardDeck.splice(this.cardDeck.indexOf(card), 1);
           playerState.sensibilisationPoints = playerState.sensibilisationPoints - 5;
         } else {
           playerState.cardsInHand.push(this.cardDeck.pop());
@@ -368,9 +313,24 @@ export class Instance {
         }
       }
 
-    } 
+    }
   }
 
+  private askDrawModeChoice() {
+    const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
+    const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+    let formationCardLeft: boolean = true;
+    if (formationCards.length === 0) {
+      formationCardLeft = false;
+    }
+    const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+    let expertCardLeft: boolean = true;
+    if (ExpertCards.length === 0) {
+      expertCardLeft = false;
+    }
+    this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+
+  }
   private async transitionToNextTurn(draw_mode: DrawMode) {
     // 0: Draw a card for the current player
     if (this.playerStates[this.currentPlayerId].cardsInHand.length <= 6) {
@@ -394,7 +354,7 @@ export class Instance {
     if (!playerState.canPlay && this.currentSensibilisationQuestion === null) {
       this.lobby.dispatchPlayerPassed(playerState.playerName);
       this.transitionToNextTurn('random');
-    } 
+    }
 
   }
 
