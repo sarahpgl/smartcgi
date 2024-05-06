@@ -112,7 +112,6 @@ export class Instance {
     }
 
     playerState.cardsHistory.push(card);
-    // TODO: Not working remove card from hand later
     playerState.cardsInHand = playerState.cardsInHand.filter((c) => c.id !== card.id);
     this.answerCount = 0;
     switch (card.cardType) {
@@ -149,6 +148,7 @@ export class Instance {
     playerState.bestPracticeAnswers.push({ cardId, answer: answer as BestPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
+      this.currentSensibilisationQuestion = null;
       this.lobby.dispatchPracticeAnswered();
       this.transitionToNextTurn();
     }
@@ -189,6 +189,9 @@ export class Instance {
       this.transitionToNextTurn();
       this.lobby.dispatchSensibilisationAnswered();
       this.lobby.dispatchGameState();
+      if (!this.playerStates[this.currentPlayerId].canPlay) {
+        this.transitionToNextTurn();
+      }
     }
   }
 
@@ -273,6 +276,7 @@ export class Instance {
 
     // 4: Check if player has already answered a practice question
     if (!playerState.canPlay && this.currentSensibilisationQuestion !== null) {
+    if (!playerState.canPlay && this.currentSensibilisationQuestion === null) {
       this.lobby.dispatchPlayerPassed(playerState.playerName);
       this.transitionToNextTurn();
     }

@@ -7,13 +7,11 @@ import { CurrentSensibilisationQuestion } from '../Game/states';
 
 const Quizz: React.FC = () => {
   const { sm } = useSocketManager();
-  const [sensibilisationQuestion, setSensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
-  const [answerCorrect, setanswerCorrect] = useState(false);
+  const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
   const [resultMessage, setResultMessage] = useState("");
   const [answerChoisie, setanswerChoisie] = useState<number | null>(null);
   const [quizzPlay, setQuizzPlay] = useState(false);
   const [tempsRestant, setTempsRestant] = useState(15);
-  const [showComponent, setShowComponent] = useState(true);
   const [timeIsUp, setTimeIsUp] = useState(false);
 
   useEffect(() => {
@@ -36,32 +34,21 @@ const Quizz: React.FC = () => {
       sm.emit({
         event: ClientEvents.AnswerSensibilisationQuestion,
         data: {
-          questionId: sensibilisationQuestion.question_id,
-          answer: null,
+          questionId: sensibilisationQuestion!.question_id,
+          answer: { answer: 10 }, // 10 = pas de réponse
         }
       })
-      if(sensibilisationQuestion?.answers.answer == 1){
+      if (sensibilisationQuestion?.answers.answer == 1) {
         setResultMessage(`La bonne réponse est : ${sensibilisationQuestion?.answers.response1}`);
-      } else if(sensibilisationQuestion?.answers.answer == 2){
+      } else if (sensibilisationQuestion?.answers.answer == 2) {
         setResultMessage(`La bonne réponse est : ${sensibilisationQuestion?.answers.response2}`);
-      } else if(sensibilisationQuestion?.answers.answer == 3){
+      } else if (sensibilisationQuestion?.answers.answer == 3) {
         setResultMessage(`La bonne réponse est : ${sensibilisationQuestion?.answers.response3}`);
       }
-      setTimeout(() => {
-        setShowComponent(false);
-      }, 3000);
-    } else if (timeIsUp && quizzPlay) {
-      setTimeout(() => {
-        setShowComponent(false);
-      }, 3000);
-    }
+    } 
   }, [timeIsUp, quizzPlay, sensibilisationQuestion]);
 
-  const handleotherclick = () => {
-    setSensibilisationQuestion(null);
-  }
-
-  const handleResult = async (answerIndex: number) => {
+  const handleResult = (answerIndex: number) => {
     const answ = {
       answer: answerIndex,
     };
@@ -69,7 +56,7 @@ const Quizz: React.FC = () => {
     sm.emit({
       event: ClientEvents.AnswerSensibilisationQuestion,
       data: {
-        questionId: sensibilisationQuestion.question_id,
+        questionId: sensibilisationQuestion!.question_id,
         answer: answ,
       }
     })
@@ -77,7 +64,6 @@ const Quizz: React.FC = () => {
     if (!quizzPlay) {
       if (sensibilisationQuestion?.answers.answer == answerIndex) {
         setResultMessage(`Bien joué, vous avez gagné un point de sensibilisation !`);
-        setanswerCorrect(true);
       } else {
         setResultMessage(`Dommage, ce n’est pas la bonne réponse !`);
       }
@@ -98,7 +84,7 @@ const Quizz: React.FC = () => {
     return '';
   };
 
-  return showComponent && sensibilisationQuestion !== null ? (
+  return (
     <div className={styles.container}>
       <label className={styles.titre}>Quizz de sensibilisation</label> <br />
       <label className={styles.label}>{sensibilisationQuestion?.question}</label> <br />
@@ -112,7 +98,7 @@ const Quizz: React.FC = () => {
         </div>
       )}
     </div>
-  ) : null;
+  );
 };
 
 export default Quizz;

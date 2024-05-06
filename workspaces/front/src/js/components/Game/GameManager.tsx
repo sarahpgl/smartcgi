@@ -62,9 +62,7 @@ export default function GameManager() {
 
     const onSensibilisationAnswered: Listener<ServerPayloads[ServerEvents.SensibilisationAnswered]> = () => {
       console.log('Reception SensibilisationAnswered');
-      setTimeout(() => {
-        setSensibilisationQuestion(null);
-      }, 2000);
+      setSensibilisationQuestion(null);
     }
 
     const onPlayerPast: Listener<ServerPayloads[ServerEvents.PlayerPassed]> = (data) => {

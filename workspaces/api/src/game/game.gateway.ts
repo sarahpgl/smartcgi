@@ -22,6 +22,7 @@ import { BestPracticeAnswerType } from '@shared/common/Game';
 import { Question_Content } from '@app/entity/question_content';
 import { SensibilisationQuestion } from '@shared/common/Game';
 
+@UsePipes(new WsValidationPipe())
 @WebSocketGateway()
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger: Logger = new Logger(GameGateway.name);
@@ -126,6 +127,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     if (!client.gameData.lobby) {
       throw new ServerException(SocketExceptions.GameError, 'Not in lobby');
     }
+    this.logger.log(`Client ${client.gameData.playerName} answered sensibilisation question with answer index: ${data.answer.answer}`);
     client.gameData.lobby.instance.answerSensibilisationQuestion(client.gameData.clientInGameId, data.answer);
   }
 
