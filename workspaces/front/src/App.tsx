@@ -24,6 +24,7 @@ import { SocketManagerProvider } from '@components/websocket/SocketManagerProvid
 import Test from './components/game/test'
 import RequireAuth from './components/auth/RequireAuth';
 import SummaryPage from './js/pages/summary/summary';
+import Credits from './js/pages/credits/credits';
 
 function App() {
 
@@ -92,6 +93,7 @@ function App() {
             <Route path="/rules" element={<Rules />} />
             <Route path="/viewCards" element={<ViewCards />} />
             <Route path="/greenIt" element={<GreenIt />} />
+            <Route path="/credits" element={<Credits />} />
           </Routes>
 
         </BrowserRouter>
