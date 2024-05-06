@@ -54,7 +54,7 @@ const QuestionnairePick = () => {
     return (
         <div className={styles.container}>
             <label className={styles.label}>
-                Voulez vous influencer votre pioche en utilisant vos points de formation ?
+                Voulez-vous influencer votre pioche en utilisant vos points de sensibilisation ?
             </label> <br />
             <div className={styles.buttonContainer}>
                 <button className={answered ? styles.buttonDisabled : styles.button} onClick={() => handleAnswer('random')} disabled={answered}>Random</button>
