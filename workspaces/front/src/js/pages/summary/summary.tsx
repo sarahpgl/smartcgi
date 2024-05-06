@@ -4,7 +4,7 @@ import EndGameSummary from '@app/js/components/EndGameSummary/EndGameSummary';
 import MyEndGameSummary from '@app/js/components/MyEndGameSummary/MyEndGameSummary';
 import { useRecoilState } from 'recoil';
 import { CurrentGameReport } from '@app/js/components/Game/states';
-import stylesRules from '../rules/rules.module.css';
+import styles from './summary.module.css';
 
 
 function SummaryPage() {
@@ -44,23 +44,27 @@ function SummaryPage() {
         { type: 'BadPractice', id: '32', title: 'Carte 3', contents: 'blabla blabla blabla blabla blabla blabla blabla blabla blabla ', targetedPlayer: 'Pierre' },
     ];
 
+    let classement=[{name:"gregouz",score:100},{name:"lou",score:50},{name:"glantrel",score:25}];
+
 
     return (
-        <div>
+        <>
             <Header />
-            {showMessage && <label className={stylesRules.label}>Coucou</label>}
+            <label className={styles.label}>Vainqueur</label>
+            <label className={styles.label1}>{classement[0].name}</label>
+
             {gameReport ? (
-                <>
+                <div className={styles.container}>
                     <EndGameSummary cards={gameReport.mostPopularCards} />
                     <MyEndGameSummary cards={gameReport.myArchivedCards} />
-                </>
+                </div>
             ) : (
-                <>
-                    <EndGameSummary cards={cards} />
-                    <MyEndGameSummary cards={cards2} />
-                </>
+                <div className={styles.container}>
+                    <EndGameSummary cards={cards2} />
+                    <MyEndGameSummary cards={cards} />
+                </div>
             )}
-        </div>
+        </>
     )
 }
 

@@ -8,7 +8,7 @@ import ExpertCard from "@app/js/components/ExpertCard/ExpertCard";
 
 const RulesPage1: React.FC = () => {
     const cards= [
-        { cardType: 'BestPractice', id: '32', title: 'Titre de la bonne pratique', contents: 'Description ', carbon_loss : 50 },
+        { cardType: 'BestPractice', id: '32', title: 'Titre de la bonne pratique', contents: 'Description DescriptionDescription DescriptionDescription DescriptionDescription Description Description Description Description DescriptionDescriptionDescription DescriptionDescriptionDescription Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description', carbon_loss : 50 },
         { cardType: 'BadPractice', id: '32', title: 'Titre de la mauvaise pratique', contents: 'Description ', targetedPlayer: 'Architect' },
         { cardType: 'Expert', id: '32', actor: 'ProductOwner', title: 'Type dexpertise', contents: '' },
         { cardType: 'Formation', id: '32', actor: 'Developer', title: 'Nom de la ressource', contents: 'Description' },
