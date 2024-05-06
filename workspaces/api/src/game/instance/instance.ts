@@ -181,8 +181,8 @@ export class Instance {
     if (this.answerCount === this.lobby.clients.size) {
       this.currentSensibilisationQuestion = null;
       this.lobby.dispatchPracticeAnswered();
-      if(playerState.sensibilisationPoints > 0){
-        const isBlocked: boolean = (playerState.badPractice == null) ? false : true;
+      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
+        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
         const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
         let formationCardLeft: boolean = true;
         if(formationCards.length === 0){
@@ -212,8 +212,8 @@ export class Instance {
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
       this.lobby.dispatchPracticeAnswered();
-      if(playerState.sensibilisationPoints > 0){
-        const isBlocked: boolean = (playerState.badPractice == null) ? false : true;
+      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
+        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
         const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
         let formationCardLeft: boolean = true;
         if(formationCards.length === 0){
