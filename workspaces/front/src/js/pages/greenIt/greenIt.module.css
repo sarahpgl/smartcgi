@@ -3,24 +3,57 @@
   src: url('../PlayerStatus/InriaSans-Regular.ttf') format('truetype');
 }
 
-.container {
-  
+.cover{
+  width: 90%;
+  height: 50%;
+  position: absolute;
+  top: 25%;
+  left: 2%;
+  padding:40px;
+  background-color: #9C968C;
+  border-radius: 20px;
+
 }
 
 .pageLeft {
-  padding: 40px;
-  position: fixed;
-  top: 50%;
-  left: 30%;
+  width: 45%;
+  height: 80%;
+  padding: 20px;
+  position: absolute;
+  top: 1%;
+  left: 1%;
 }
 
 .pageRight {
-  padding: 40px;
-  position: fixed;
-  top: 50%;
-  left: 70%;
+  width: 45%;
+  height: 80%;
+  padding: 20px;
+  position: absolute;
+  top: 1%;
+  left: 49%;
+  transition: transform 0.5s; /* Ajoute une transition pour l'animation */
+  transform-style: preserve-3d; /* Indique que les transformations s'appliquent à l'élément et à ses enfants en 3D */
+  transform-origin: left center; /* Point d'origine pour la rotation */
 }
 
+.pageAnimation {
+  width: 45%;
+  height: 80%;
+  padding: 20px;
+  position: absolute;
+  top: 1%;
+  left: 49%;
+  transition: transform 0.5s, opacity 0.5s; /* Ajoute une transition pour l'animation */
+  transform-style: preserve-3d; /* Indique que les transformations s'appliquent à l'élément et à ses enfants en 3D */
+  transform-origin: left center; /* Point d'origine pour la rotation */
+  transform: rotateY(90deg); /* Initialisation de la rotation de 90 degrés */
+  opacity: 0; /* Initialisation de l'opacité à 0 */
+}
+
+.pageAnimation.visible {
+  transform: rotateY(0deg); /* Réinitialise la rotation à 0 degrés */
+  opacity: 1; /* Définit l'opacité à 1 */
+}
 
 .label {
   position: fixed;
@@ -56,6 +89,15 @@
   height: auto; 
 }
 
+.navigationButtons img:hover:not(.disabled) {
+  opacity: 0.5; 
+}
+
+.navigationButtons img.disabled {
+  opacity: 0.1; 
+  cursor: default;
+}
+
 .prevButton {
   position: fixed;
   top: 90%;
@@ -72,3 +114,4 @@
 .navigationButtons img:hover{
   cursor: pointer;
 }
+

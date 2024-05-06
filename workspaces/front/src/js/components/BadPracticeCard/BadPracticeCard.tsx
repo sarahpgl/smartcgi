@@ -4,6 +4,17 @@ import styles from './BadPracticeCard.module.css';
 import iconMPDeveloper from '../../images/MP_dev.webp';
 import iconMPProductOwner from '../../images/MP_product_owner.webp';
 import iconMPLeadTech from '../../images/MP_lead_tech.webp';
+
+import actorDevIcon from '../../images/nobg_Expert_dev.webp';
+import actorLeadTechIcon from '../../images/nobg_Expert_lead_tech.webp';
+import actorProductOwnerIcon from '../../images/nobg_Expert_product_owner.webp';
+
+import networkGain from '../../images/networkGain.webp';
+import cpuGain from '../../images/cpuGain.webp';
+import storageGain from '../../images/storageGain.webp';
+import memoryGain from '../../images/memoryGain.webp';
+
+
 import actorIcon from '@app/icons/actor_icon.webp';
 
 
@@ -22,6 +33,13 @@ function BadPracticeCard(card:Bad_Practice_Card) {
     }
     else {
         imgSrc = iconMPDeveloper;
+    }
+
+    let actorIcon = actorDevIcon;
+    if (card.actor === "Architect") {
+        actorIcon = actorLeadTechIcon;
+    } else if (card.actor === "ProductOwner") {
+        actorIcon = actorProductOwnerIcon;
     }
 
     return (
@@ -58,9 +76,21 @@ function BadPracticeCard(card:Bad_Practice_Card) {
                 </div>
                 <div className={styles.gains}>
                     <p>Gains</p>
-                    <div className={styles.footericon}>
-                        <img src={actorIcon} alt="actorIcon" />
-                        </div>
+                    <div className={styles.footericonGains}>
+                        {card.network_gain===true ?
+                        <img src={networkGain} alt="actorIcon" />
+                        : null}
+                        {card.cpu_gain===true ?
+                        <img src={cpuGain} alt="actorIcon" />
+                        : null}
+                        {card.storage_gain===true ?
+                        <img src={storageGain} alt="actorIcon" />
+                        : null}
+                        {card.memory_gain===true ?
+                        <img src={memoryGain} alt="actorIcon" />
+                        : null}
+
+                    </div>
                 </div>
                 <div className={styles.difficulty}>
                     <p>Difficulté</p>

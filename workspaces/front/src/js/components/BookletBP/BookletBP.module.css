@@ -20,7 +20,6 @@
   border-radius: 20px;
   font-family: 'Inria';
   overflow-y: auto;
-  position: relative;
 }
 
 .label{
@@ -32,10 +31,9 @@
 
 .container p{
   color: #1f1f1f;
-  margin: 4px;
-  font-size: 14px;
-  margin-top: 30px;
-  margin-right: 110px;
+  margin: 20px;
+  font-size: 16px;
+  margin-top: 40px;
   font-family: 'Inria';
   text-align: left; 
 }
@@ -44,26 +42,41 @@
   font-family: 'Inria-bold';
 }
 
-.linkButton {
-  width: 11%;
-  height: 11%;
-  background-color: #8CADC4;
-  position:absolute;
-  left:83%;
-  margin-top: 0px ;
-  font-size: 14px;
-  border-radius: 20px;
-  transition: box-shadow 0.3s ease;
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+
+.table th {
+  background-color: #f2f2f2;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tr:nth-child(odd) {
+  background-color: #e8e8e8;
+}
+
+.table tr:hover {
+  background-color: #dddddd;
+}
+
+.table th:hover {
   cursor: pointer;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  line-height: 3;
+  background-color: #e8e8e8;
 }
 
-.linkButton:hover {
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+.button {
+  font-size: 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 1px 4px;
 }
-
-
-
