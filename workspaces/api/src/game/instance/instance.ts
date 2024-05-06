@@ -89,7 +89,20 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchCardPlayed(card, playerState.clientInGameId, playerState.playerName, true);
     if (card.cardType === 'Expert' || card.cardType === 'Formation') {
-      this.transitionToNextTurn('random');
+      if(this.playerStates[this.currentPlayerId].sensibilisationPoints > 0){
+        const isBlocked: boolean = (this.playerStates[this.currentPlayerId].badPractice == null) ? false : true;
+        const formationCards = this.cardDeck.filter(card => card.cardType === 'Formation');
+        let formationCardLeft: boolean = true;
+        if(formationCards.length === 0){
+          formationCardLeft = false;
+        }
+        const ExpertCards = this.cardDeck.filter(card => card.cardType === 'Expert');
+        let expertCardLeft: boolean = true;
+        if(ExpertCards.length === 0){
+          expertCardLeft = false;
+        }
+        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+      }
     }
   }
 
