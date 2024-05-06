@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './connexionForm.module.css';
 import { useNavigate } from "react-router-dom";
+import {notifications} from "@mantine/notifications";
 
 const ConnexionForm = ({ onShowRegisterForm }) => {
     const navigate = useNavigate();
@@ -32,6 +33,12 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
 
             if (response.ok) {
                 const data = await response.json(); // Récupération de la réponse JSON
+                notifications.show({
+                    title: 'Bienvenue !',
+                    message: 'Vous êtes maintenant connecté.',
+                    color: 'transparent',
+                    icon: '👋',
+                });
                 localStorage.setItem('token', data.access_token); // Stockage du token dans le Local Storage
                 const token = localStorage.getItem('token');
                 console.log('Token:', token);
@@ -39,7 +46,13 @@ const ConnexionForm = ({ onShowRegisterForm }) => {
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message || 'Une erreur s\'est produite lors de la connexion.');
-                setOpenSnackbar(true);
+                notifications.show({
+                    title: 'Connexion échouée',
+                    message: 'Veuillez vérifier votre mot de passe ou identifiant.',
+                    color: 'transparent',
+                    icon: '🚨',
+                });
+                setOpenSnackbar(false);
             }
         } catch (error) {
             console.error('Erreur de connexion:', error.message);

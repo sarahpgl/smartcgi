@@ -47,7 +47,7 @@ export class AuthService {
       // Vérifiez si l'utilisateur existe déjà
       const existingUser = await this.usersService.findOne(mail);
       if (existingUser) {
-        return { success: false, message: 'Mail already exists' };
+        return { success: false, message: 'Mail already exists'};
       }
 
       // Hash du mot de passe
