@@ -19,7 +19,7 @@
   padding: 20px;
   border-radius: 20px;
   font-family: 'Inria';
-  overflow-y: auto;
+  overflow-y: hidden;
   position: relative;
 }
 
