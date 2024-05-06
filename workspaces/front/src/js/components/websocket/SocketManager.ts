@@ -145,11 +145,14 @@ export default class SocketManager {
         }
       }
 
-      notifications.show({
-        title: data.exception,
-        message: body,
-        color: 'red',
-      });
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/createGame' && currentPath !== '/joinGame') {
+        notifications.show({
+          title: data.exception,
+          message: body,
+          color: 'red',
+        });
+      }
       console.error(`Error ${data.exception}`, `Message: ${data.message}`);
     });
   }
