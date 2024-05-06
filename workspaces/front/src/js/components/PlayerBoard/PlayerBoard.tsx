@@ -83,29 +83,38 @@ import { ClientEvents } from '@shared/client/ClientEvents';
 import { Bad_Practice_Card } from '@shared/common/Cards';
 import { PlayerStateInterface } from '@shared/common/Game';
 import CardsHistory from '../CardsHistory/CardsHistory';
+import lockerIcon from '../../../icons/locked.webp';
 
 function PlayerBoard({ MPSelected, noMPSelected, playerState, myTurn }: {
-  MPSelected: (card: Bad_Practice_Card) => void,
-  noMPSelected: () => void,
-  playerState: PlayerStateInterface,
-  myTurn: boolean,
+    MPSelected: (card: Bad_Practice_Card) => void,
+    noMPSelected: () => void,
+    playerState: PlayerStateInterface,
+    myTurn: boolean,
 }) {
-  const [gameState] = useRecoilState(CurrentGameState);
-  const [historyDisplay, setHistoryDisplay] = useState(false);
+    const [gameState] = useRecoilState(CurrentGameState);
+    const [historyDisplay, setHistoryDisplay] = useState(false);
 
 
-  useEffect(() => {
-    //console.log('gameState dans playerBoard ', gameState);
-  });
+    useEffect(() => {
+        //console.log('gameState dans playerBoard ', gameState);
+    });
 
-  const handleHistoryClick = () => {
-    setHistoryDisplay(true);
-}
+    const handleHistoryClick = () => {
+        setHistoryDisplay(true);
+    }
 
     return (
         <div className={styles.board}>
             {playerState && (
                 <>
+                    {playerState.canPlay === false &&
+                        <img className={styles.lockerIcon} src={lockerIcon} alt="locker icon" />
+                    }
+                    {myTurn ? (
+                        <div className={styles.namePlayerMyTurn}>{playerState.playerName}</div>
+                    ) : (
+                        <div className={styles.namePlayer}>{playerState.playerName}</div>
+                    )}
                     <div className={styles.status}>
                         <PlayerStatus playerstate={playerState} me={1} />
                     </div>
@@ -117,15 +126,15 @@ function PlayerBoard({ MPSelected, noMPSelected, playerState, myTurn }: {
                     </div>
                 </>
             )}
-                {historyDisplay && (
-                    <>
+            {historyDisplay && (
+                <>
                     <div className={styles.fond}></div>
-                        <CardsHistory cards={playerState.cardsHistory} />
-                        <div className={styles.closeButton} onClick={() => setHistoryDisplay(false)}>X</div>
-                    </>
-                )}
+                    <CardsHistory cards={playerState.cardsHistory} />
+                    <div className={styles.closeButton} onClick={() => setHistoryDisplay(false)}>X</div>
+                </>
+            )}
         </div>
-        
+
     );
 }
 

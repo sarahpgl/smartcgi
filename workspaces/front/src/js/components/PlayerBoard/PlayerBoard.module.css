@@ -30,6 +30,37 @@
     margin-bottom: 0px;
 }
 
+.namePlayer{
+    align-self: center;
+    margin-bottom: 0px;
+    position:absolute;
+    top:0px;
+    left:30px;
+    font-family: 'Inria';
+    font-size: 20px;
+}
+.namePlayerMyTurn{
+    align-self: center;
+    margin-bottom: 0px;
+    position:absolute;
+    top:-10px;
+    left:30px;
+    font-size: 30px;
+    font-family: 'Inria';
+    color: rgb(2, 2, 87);
+}
+
+.lockerIcon{
+    height: 20px;
+    text-align: left;
+    color: #1f1f1f;
+    margin: 0px;
+    font-size: 15px;
+    margin-right: -10px;
+    position: absolute;
+    align-self: flex-start;
+}
+
 .fond{
     position: fixed;
     left: 0;
