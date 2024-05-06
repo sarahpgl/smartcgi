@@ -1,11 +1,11 @@
 body {
-    user-select: none; /* Rend le contenu non sélectionnable */
+    user-select: none; 
 }
 
 
 .container {
-    width: 1510px; /* Utilise la largeur totale de l'écran */
-    max-width: 1510px; /* Limite la largeur maximale du conteneur */
+    width: 1510px;
+    max-width: 1510px; 
     height: 100%;
     max-height: 610px;
     display: flex;
@@ -83,7 +83,7 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    z-index: 9999; /* Définit la pile de l'élément au-dessus des autres */
+    z-index: 9999; 
   }
   
   .modalContent {
@@ -92,16 +92,16 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     position: relative;
-    z-index: 10000; /* Assure que le contenu est au-dessus du backdrop */
-    pointer-events: auto; /* Autorise les événements de pointer sur le contenu */
+    z-index: 10000; 
+    pointer-events: auto; 
   }
 
   .quizzSensibilisation {
-        position: fixed; /* Positionnement fixe pour le placer par-dessus le contenu */
-        top: 50%; /* Le placer à 50% du haut de la fenêtre */
-        left: 50%; /* Le placer à 50% de la largeur de la fenêtre */
-        transform: translate(-50%, -50%); /* Centrer horizontalement et verticalement */
-        z-index: 9999; /* Pour afficher au premier plan */
+        position: fixed; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        z-index: 9999; 
         width: 500px;
         align-items: center;
         justify-content: center;
@@ -112,11 +112,11 @@ body {
   }
 
   .quizzPractice {
-    position: fixed; /* Positionnement fixe pour le placer par-dessus le contenu */
-    top: 50%; /* Le placer à 50% du haut de la fenêtre */
-    left: 50%; /* Le placer à 50% de la largeur de la fenêtre */
-    transform: translate(-50%, -50%); /* Centrer horizontalement et verticalement */
-    z-index: 9999; /* Pour afficher au premier plan */
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 9999; 
     width: 1100px;
     align-items: center;
     justify-content: center;

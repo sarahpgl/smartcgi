@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Get, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Get } from '@nestjs/common';
 import { BookletService } from './booklet.service';
 import { BookletDto } from './dtos';
 

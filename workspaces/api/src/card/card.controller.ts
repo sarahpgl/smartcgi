@@ -3,7 +3,6 @@ import { CardService } from './card.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Card } from '@shared/common/Cards';
-import { Best_Practice_Card } from '@app/entity/best_practice_card';
 
 @Controller('card')
 export class CardController {

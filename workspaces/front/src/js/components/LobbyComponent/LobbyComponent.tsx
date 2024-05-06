@@ -13,10 +13,10 @@ const LobbyComponent: React.FC = () => {
 
   const handleCodeClick = () => {
     setIsCopied(true);
-    // Logic to copy the code can be added here
+
     navigator.clipboard.writeText(lobbyState?.connectionCode || '');
-    // You can set a timeout to reset the isCopied state after a certain time
-    setTimeout(() => setIsCopied(false), 2000); // Reset isCopied after 2000 milliseconds (2 seconds)
+
+    setTimeout(() => setIsCopied(false), 2000); 
   };
 
   const handleStartGame = () => {

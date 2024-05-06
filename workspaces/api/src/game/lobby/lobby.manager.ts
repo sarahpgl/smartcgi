@@ -4,14 +4,11 @@ import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
 import { LOBBY_MAX_LIFETIME } from '@app/game/constants';
-import { ServerEvents } from '@shared/server/ServerEvents';
-import { ServerPayloads } from '@shared/server/ServerPayloads';
 import { CO2Quantity } from '@app/game/lobby/types';
 import { Cron } from '@nestjs/schedule'
 import { CardService } from '@app/card/card.service';
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
-import { IsNull } from 'typeorm';
 
 export class LobbyManager {
   public server: Server;

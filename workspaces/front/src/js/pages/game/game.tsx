@@ -24,7 +24,6 @@ function GamePage() {
   const [sensibilisationQuestion] = useRecoilState(CurrentSensibilisationQuestion);
   const [practiceQuestion] = useRecoilState(CurrentPracticeQuestion);
   const { sm } = useSocketManager();
-  const playerAbleToMP = ["Top"];
 
   const [MP, setMP] = useState<Bad_Practice_Card | null>(null);
   const [showQuizz, setShowQuizz] = useState(true);
@@ -43,7 +42,6 @@ function GamePage() {
     if (MP !== null) {
 
       if (playerState.badPractice === null && !(playerState.expertCards.includes(MP.actor))) {
-        //window.alert("MPSelected for " + playerState.playerName);
         console.log("La mauvaise pratique est", MP);
         sm.emit({
           event: ClientEvents.PlayCard,
@@ -63,11 +61,9 @@ function GamePage() {
   }
 
   useEffect(() => {
-    //console.log('gameState dans game', gameState);
   });
 
   let pos = 0;
-  const positions = ['Right', 'Left', 'Top'];
 
   return (
     <div className={styles.page}>
@@ -120,7 +116,6 @@ function GamePage() {
             } else if (pos === 2) {
               positionClass = styles.opponentBoardTop;
             }
-            //console.log('playerSate', playerState.co2Saved);
             pos = (pos + 1) % 3;
             return (
               <div key={index} className={`${positionClass} ${MP !== null ? ((playerState.badPractice === null &&!(playerState.expertCards.includes(MP.actor) ))? styles.opponentBoardOk : styles.opponentBoardMPImpossible) : positionClass}`}>

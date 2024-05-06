@@ -15,9 +15,6 @@ import storageGain from '../../images/storageGain.webp';
 import memoryGain from '../../images/memoryGain.webp';
 
 
-import actorIcon from '@app/icons/actor_icon.webp';
-
-
 import { Bad_Practice_Card, Difficulty } from '@shared/common/Cards';
 
 function BadPracticeCard(card:Bad_Practice_Card) {

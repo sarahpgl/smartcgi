@@ -52,7 +52,7 @@ const CreateGame: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <label className={styles.label}>kg de CO2 à économiser</label> <br />
+            <label className={styles.label}>kg de CO2 à économiser (entre 500kg et 1000kg)</label> <br />
             <input className={styles.inputco2} type="text" value={co2Value} onChange={handleInputChange} /> <br />
             {errorMessage && <p className={styles.error}>{errorMessage}</p>}
             <label className={styles.label}>Rejoindre avec le pseudo : </label> <br />

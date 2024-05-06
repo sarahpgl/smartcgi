@@ -1,21 +1,14 @@
 import { Lobby } from '@app/game/lobby/lobby';
 import { ServerException } from '@app/game/server.exception';
 import { AuthenticatedSocket } from '@app/game/types';
-import { SECOND } from '@app/game/constants';
-import { Socket } from 'socket.io';
 import { SocketExceptions } from '@shared/server/SocketExceptions';
-import { ServerPayloads } from '@shared/server/ServerPayloads';
-import { ServerEvents } from '@shared/server/ServerEvents';
 import { Card, Best_Practice_Card, Bad_Practice_Card, Expert_Card, Formation_Card } from '@shared/common/Cards';
 import { CO2Quantity } from '@app/game/lobby/types';
 import { PlayerState } from '@app/game/instance/playerState';
-import { Inject } from '@nestjs/common';
 import { CardService } from '@app/card/card.service';
-import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswer, PracticeAnswerType, SensibilisationQuestionAnswer, SensibilisationQuestion } from '@shared/common/Game';
+import { BestPracticeAnswerType, BadPracticeAnswerType, PracticeAnswerType, SensibilisationQuestionAnswer, SensibilisationQuestion } from '@shared/common/Game';
 import { DrawMode } from './types';
-import { Actor } from '@shared/common/Cards';
 import { SensibilisationService } from '@app/sensibilisation/sensibilisation.service';
-import { Question_Content } from '@app/entity/question_content';
 import { GameService } from '../game.service';
 
 export class Instance {
@@ -64,12 +57,15 @@ export class Instance {
     this.lobby.dispatchGameStart(this.currentSensibilisationQuestion);
   }
 
-  public triggerFinish(winnerId: string, winnerName: string): void {
+  public async triggerFinish(winnerId: string, winnerName: string): Promise<void> {
+    // TODO: Implement the save to Database
     // this.saveToDatabase(winnerId);
 
+    this.cardDeck = await this.cardService.getDeck();
+    const mostPopularCards: Card[] = this.generateGeneralGameReport();
     Object.keys(this.playerStates).forEach((playerId) => {
-      const gameReport = this.generateGameReport(playerId);
-      this.lobby.emitGameReport(gameReport, playerId, winnerName);
+      const myArchivedCards = this.generatePersonalGameReport(playerId);
+      this.lobby.emitGameReport({ myArchivedCards, mostPopularCards }, playerId, winnerName);
     });
 
   }
@@ -278,9 +274,7 @@ export class Instance {
 
   }
 
-
-  private generateGameReport(clientInGameId: string): { myArchivedCards: Card[], mostPopularCards: Card[] } {
-
+  private generatePersonalGameReport(clientInGameId: string): Card[] {
     const myArchivedCards: Card[] = [];
     const bestPracticeAnswers = this.playerStates[clientInGameId].bestPracticeAnswers;
     for (const answer of bestPracticeAnswers) {
@@ -303,14 +297,18 @@ export class Instance {
         myArchivedCards.push(card);
       }
     }
+    return myArchivedCards;
+  }
+
+  private generateGeneralGameReport(): Card[] {
 
     const mostPopularCards: Card[] = [];
-    const popularBestPracticeCards = {};
-    const popularBadPracticeCards = {};
+    const popularBestPracticeCards: { [key: string]: number } = {};
+    const popularBadPracticeCards: { [key: string]: number } = {};
 
-    const nbPlayer = Object.keys(this.playerStates).length;
-    for (let init = 0; init < nbPlayer; init++) {
-      const historyBestPracticeByPlayer = this.playerStates[init].bestPracticeAnswers;
+    const playerIds = Object.keys(this.playerStates);
+    for (let init = 0; init < playerIds.length; init++) {
+      const historyBestPracticeByPlayer = this.playerStates[playerIds[init]].bestPracticeAnswers;
       for (const answer of historyBestPracticeByPlayer) {
         if (answer.answer === BestPracticeAnswerType.APPLICABLE) {
           const bestPracticeCard = this.cardDeck.find((bestPracticeCard) => bestPracticeCard.id === answer.cardId);
@@ -324,7 +322,7 @@ export class Instance {
           }
         }
       }
-      const historyBadPracticeByPlayer = this.playerStates[init].badPracticeAnswers;
+      const historyBadPracticeByPlayer = this.playerStates[playerIds[init]].badPracticeAnswers;
       for (const answer of historyBadPracticeByPlayer) {
         if (answer.answer === BadPracticeAnswerType.TO_BE_BANNED) {
           const badPracticeCard = this.cardDeck.find((badPracticeCard) => badPracticeCard.id === answer.cardId);
@@ -362,10 +360,13 @@ export class Instance {
       }
     }
 
-    return { myArchivedCards, mostPopularCards };
+    return mostPopularCards;
   }
 
   private saveToDatabase(winnerId: string): void {
+    // NOTE: This isn't working yet;
+    // The idea is to save the game to the database and save the player's met
+    // to Green_IT_Booklet table 
     this.gameService.createGame(Number(winnerId));
   }
 

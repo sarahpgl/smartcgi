@@ -1,5 +1,5 @@
 import { Actor, Card } from "@shared/common/Cards";
-import { PlayerStateInterface, BestPracticeAnswer, BadPracticeAnswer, PracticeAnswer } from "@shared/common/Game";
+import { PlayerStateInterface, BestPracticeAnswer, BadPracticeAnswer } from "@shared/common/Game";
 
 export class PlayerState implements PlayerStateInterface {
 

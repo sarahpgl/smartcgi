@@ -13,9 +13,6 @@ import memoryGain from '../../images/memoryGain.webp';
 
 import { Best_Practice_Card, Difficulty } from '@shared/common/Cards';
 
-import Tooltip from '../Tooltip/Tooltip';
-
-
 
 
 function BestPracticeCard(card:Best_Practice_Card) {

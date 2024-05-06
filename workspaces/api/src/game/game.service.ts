@@ -26,7 +26,7 @@ export class GameService {
         newGame.questions = [];
         newGame.users = [];
         try {
-            const temp = await this.game_repository.create(newGame);
+            const temp = this.game_repository.create(newGame);
             await this.game_repository.save(temp);
             console.log('game_id : ', temp.id);
             return {game_id: temp.id};
