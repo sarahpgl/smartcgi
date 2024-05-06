@@ -193,7 +193,7 @@ export class Instance {
         if(ExpertCards.length === 0){
           expertCardLeft = false;
         }
-        this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
       }else{
         this.transitionToNextTurn('random');
       }
@@ -224,7 +224,7 @@ export class Instance {
         if(ExpertCards.length === 0){
           expertCardLeft = false;
         }
-        this.lobby.emitUseSensibilisationPoints(playerState.sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
+        this.lobby.emitUseSensibilisationPoints(this.playerStates[this.currentPlayerId].sensibilisationPoints, this.currentPlayerId, isBlocked, formationCardLeft, expertCardLeft);
       }else{
         this.transitionToNextTurn('random');
       }
