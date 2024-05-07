@@ -21,7 +21,7 @@ export class Instance {
   private startingPlayerId: string;
 
   public gameStarted: boolean = false;
-  private gameFinished: boolean = false;
+  private winningPlayer: string | null = null;
   private answerCount: number = 0;
   private currentSensibilisationQuestion: SensibilisationQuestion | null = null;
 
@@ -160,8 +160,8 @@ export class Instance {
     playerState.bestPracticeAnswers.push({ cardId, answer: answer as BestPracticeAnswerType })
     this.answerCount++;
     if (this.answerCount === this.lobby.clients.size) {
-      if (this.gameFinished) {
-        this.triggerFinish(playerState.clientInGameId, playerState.playerName);
+      if (this.winningPlayer !== null) {
+        this.triggerFinish(this.winningPlayer, playerState.playerName);
       }
       this.currentSensibilisationQuestion = null;
       this.lobby.dispatchPracticeAnswered();
@@ -227,7 +227,7 @@ export class Instance {
     this.answerCount = 0;
     this.lobby.dispatchGameState();
     if (playerState.co2Saved <= 0) {
-      this.gameFinished = true;
+      this.winningPlayer = playerState.clientInGameId;
     }
   }
 

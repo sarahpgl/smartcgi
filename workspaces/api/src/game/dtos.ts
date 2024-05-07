@@ -1,12 +1,14 @@
 import { PracticeAnswer, SensibilisationQuestionAnswer } from '@shared/common/Game';
 import { CardType } from '@shared/common/Cards';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { DrawMode } from './instance/types';
+import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+
 export class LobbyCreateDto {
   @IsString()
   playerName: string;
 
   @IsNumber()
+  @Min(500)
+  @Max(1000)
   co2Quantity: number;
 }
 

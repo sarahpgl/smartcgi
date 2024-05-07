@@ -54,6 +54,8 @@ npm run server
 npm run client
 ```
 3. Vous pouvez désormais accéder à l'application sur `http://localhost:5173`
+> [!TIP]
+> Pour lancer une partie il faut utiliser plusieurs naviguateurs différents. 1 pour chaque client dans la partie
 
 ## Participer au projet
 
@@ -71,7 +73,7 @@ npm run client
 - [x] Quizz de sensibilisation
 - [x] Défausser une carte
 - [x] Visualiser les règles du jeu
-- [ ] Utiliser les points de sensibilisation pour influencer la pioche
+- [x] Utiliser les points de sensibilisation pour influencer la pioche
 - [ ] Enregistrer les parties dans la BD
 - [ ] Carnet Green IT (Composant Front OK)
 - [ ] Visualiser l'ensemble des cartes (Composant Front OK)
